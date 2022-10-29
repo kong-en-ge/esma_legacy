@@ -1,16 +1,6 @@
-#include <dos.h>
-#include <dir.h>
-#include <graphics.h>
-#include <string.h>
-#include <stdio.h>
 #include "button.hpp"
-#include "drawpl.hpp"
-#include "flibrt.hpp"
-#include "mouse.hpp"
-#include "globalda.hpp"
 #include "menuall.hpp"
 #include "menuall2.hpp"
-#include "test.hpp"
 
 int far pascal error2but(){
  GRwnd wnd(170,100,450,180,"Žè¨¡ª !",LIGHTRED,1,1);
@@ -43,7 +33,7 @@ struct PRINTPARAM {
   void *retfunc;
 };
 
-int pascal printwnd(int xmin,int ymin,int xmax,int ymax,int mask1,int mask2) {
+int pascal printwnd(int xmin,int ymin,int xmax,int ymax,int /*mask1*/,int /*mask2*/) {
    int h,size;
    if ((h=open("printer.bin",O_BINARY | O_RDONLY))==-1) return -1;
    size=filelength(h);
@@ -63,5 +53,6 @@ int pascal printwnd(int xmin,int ymin,int xmax,int ymax,int mask1,int mask2) {
    ((void pascal (*)(void *))proc)(&pr);
    close(h);
    delete buf;
+   return 0;
 }
 

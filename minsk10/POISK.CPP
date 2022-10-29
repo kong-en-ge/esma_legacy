@@ -1,11 +1,7 @@
-#include "dbf.hpp"
 #include "geomodel.hpp"
 #include "flibrt.hpp"
 #include "menuall2.hpp"
-#include "test.hpp"
 #include "tpedit.hpp"
-#include "fwrite.hpp"
-#include <alloc.h>
 #include "globalda.hpp"
 
 #define  max(arg1,arg2) (((arg1)>(arg2)) ? (arg1):(arg2))
@@ -42,7 +38,7 @@ double DXDISEKR(int dx) {
  return d>32767.0 ? 32767 : d;
 }
 
-int poisk(int regim,int *x,int *y,double *doub) {
+int poisk(int /*regim*/,int *x,int *y,double *doub) {
 	int nobj,k;OBJND obj[6];F_SPR spr;double Dp;
 	GRwnd wns(487,252,632,302,"Поиск объекта",LIGHTBLUE,1,1);
 	wns.text("Укажите точку объекта");

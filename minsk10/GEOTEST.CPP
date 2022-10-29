@@ -1,18 +1,8 @@
 #include "library.hpp"
-#include "fstmod.hpp"
-#include "drawpl.hpp"
 #include "button.hpp"
 #include "globalda.hpp"
-#include "menuall.hpp"
-#include "drawrazd.hpp"
 #include "mouse.hpp"
-#include "flibrt.hpp"
 #include "textfile.hpp"
-#include "test.hpp"
-#include "atribut.hpp"
-#include "textpack.hpp"
-#include "set.hpp"
-#include "tpedit.hpp"
 
 extern unsigned _stklen=10240;
 void errorproc(int num);

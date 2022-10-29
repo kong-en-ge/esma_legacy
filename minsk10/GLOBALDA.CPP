@@ -1,12 +1,5 @@
 #include <graphics.h>
 #include "globalda.hpp"
-#include "fstmod.hpp"
-#include "button.hpp"
-#include "dbf.hpp"
-#include "flibrt.hpp"
-#include "test.hpp"
-#include "set.hpp"
-#include "atribut.hpp"
 
 int XMAXMAPE=479;
 int YMAXMAPE=349;

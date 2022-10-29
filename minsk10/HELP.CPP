@@ -1,5 +1,3 @@
-#include "grwnd.hpp"
-#include "button.hpp"
 #include "txtpacks.hpp"
 #include "textfile.hpp"
 #include "mouse.hpp"

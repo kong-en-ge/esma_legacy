@@ -1,5 +1,24 @@
 /minsk10/outward
 /minsk10/*.sym
 /minsk10/*.dsk
+/minsk10/*.swp
 
 /files/outward
+/files/*.sym
+/files/*.dsk
+/files/*.swp
+
+/dbf/outward
+/dbf/*.sym
+/dbf/*.dsk
+/dbf/*.swp
+
+/servis/outward
+/servis/*.sym
+/servis/*.dsk
+/servis/*.swp
+
+/graphics/outward
+/graphics/*.sym
+/graphics/*.dsk
+/graphics/*.swp

@@ -1,19 +1,8 @@
-#include <dir.h>
-#include <dos.h>
-#include <fcntl.h>
-#include <io.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <ctype.h>
 
 #include "button.hpp"
-#include "globalda.hpp"
 #include "dbf.hpp"
-#include "fwrite.hpp"
 #include "files.hpp"
-#include "tpedit.hpp"
-#include "mouse.hpp"
 #include "txtpacks.hpp"
 #include "menuall2.hpp"
 

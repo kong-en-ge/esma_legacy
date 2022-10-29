@@ -1,22 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-#include "dbf.hpp"
-#include "geomodel.hpp"
-#include "bigpath.hpp"
-#include "tpedit.hpp"
-#include "button.hpp"
 #include "globalda.hpp"
 #include "flibrt.hpp"
-#include "textfile.hpp"
 #include "txtpacks.hpp"
-#include "mouse.hpp"
 #include "drawpl.hpp"
 #include "fatr.hpp"
 #include "menuall2.hpp"
-#include "globalda.hpp"
 
 void predproc(int);
 FLIB* findobj(SPR *spr);
