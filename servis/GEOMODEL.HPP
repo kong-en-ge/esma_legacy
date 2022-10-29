@@ -1,0 +1,123 @@
+#ifndef geomodel
+ #define geomodel
+#include <io.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <mem.h>
+#include "files.hpp"
+
+struct SPR {
+  unsigned rez1,nom;
+  char clcod[8];
+  unsigned char loc,rez2;
+  int xmin,ymin,xmax,ymax;
+  unsigned stblm,enblm,stblh;
+  int rez[2];
+};
+
+struct FORM {
+	char nom[ 16],     //Код номенклатуры
+	  kob[  2],        //Код обработки
+	  tikm[ 2],        //Тип ИКМ
+	  nosi[ 2],        //Номер оси
+	  time[10],        //Время создания
+	  nkom[ 2],        //Номер комплекса
+	  nrm[  2],        //Номер рабочего места
+	  nseg[ 2],        //Номер сегмента
+	  rez1[ 4];        //Резерв
+ unsigned maxn;         //Максимальный номер объекта
+ unsigned rez2[10];     //Резерв
+	char nmen[ 2];     //Номер меню
+ unsigned scale;        //Знаменатель масштаба /1000
+	 int pak,          //Признак автоматического контроля
+	  rez3;            //Резерв
+	char sd[   2],     //Шаг дискретизации
+	  sp[   4];        //Шаг планшета(не используется)
+	 int rez4[ 9];     //Резерв
+    float sgp;          //Широта главной параллели
+	 int xuz,yuz,      //Координаты углов карты
+	  xsz,ysz,         //в дискретах
+	  xsv,ysv,         //
+	  xuv,yuv;         //
+    float xuzf,yuzf,    //Координаты углов карты
+	  xszf,yszf,       //в географических координатах
+	  xsvf,ysvf,       //
+	  xuvf,yuvf;       //
+    float xuzt,yuzt,    //Теоретические координаты углов рамки
+	  xszt,yszt,       //
+	  xsvt,ysvt,       //
+	  xuvt,yuvt;       //
+	char cp[   2];     //Код проекции
+    float par1,         //Первый параметр проекции
+	  par2,            //Второй
+	  par3;            //Третий
+	long zscal;        //Знаменатель масштаба
+	char gsys[ 3],     //Геодезическая система
+	  al[   3];        //Эллипсоид
+    float shnt,dlnt;    //Широта+Долгота начальной точки
+    float xuzp,yuzp,    //Прямоугольные координаты углов
+	  xszp,yszp,       //x изменяется вверх
+	  xsvp,ysvp,       //
+	  xuvp,yuvp;       //
+	char pkoor[ 3],    //Представление координат
+	  ezmk[  3];       //Единицы измерения координат
+    float rkoor;        //Разрешение координат
+	 int rez5[123];    //Резерв
+	 int razd,         //Разделитель, признак нового формуляра
+	  rez6[  3];       //Резерв
+	char sertc,        //Сертификатор С структуры
+	  sertu,           //Сертификатор узлов
+	  serts,           //Сертификатор семантики
+	  sertm;           //Сертификатор метрики
+};
+unsigned pascal size_methar(const void *buf);
+void     pascal gab_ram(const void *metr,SPR *spr);
+int pascal writemet_har(const void *met_har,Files *f,unsigned *fbl,unsigned *ebl);
+int pascal readmet_har(void **met_har,Files *f,int no,int fbl,int ebl);
+
+//возврат -1 - нет справки,-2 - нет метрики,-3 - нет характерист
+int pascal isexistmodel(char *path,char *mod);
+
+struct FINDHAR  {
+  char *atr;      //Атрибут поиска (без значения или с точным значнием)
+  int  blok,smes; //Начальный блок и смещение в блоке
+  FINDHAR() {setmem(this,sizeof(FINDHAR),0);}
+};
+
+class GEO_MODEL {
+public:
+int xminm,yminm,xmaxm,ymaxm;
+int xminw,yminw,xmaxw,ymaxw;
+char path[80],mod[3];
+int maxn;
+Files hsp,hmt,hhr; //handle-описатели файлов
+  pascal GEO_MODEL();
+  pascal ~GEO_MODEL();
+  int pascal openexist(const char *name,const char *model,int spbsize=320,
+				   int mtsize=80,int hrsize=20);
+  int pascal close();
+  int pascal readform(void *buff);
+  int pascal writeform(const void *buff);
+  int pascal readsprb(void **sprp,unsigned no);//Читает из буфера файла
+  int pascal readspr (void  *spr,unsigned no); //Читает в буфер пользоват
+  int pascal readmet (void **metp,unsigned no);//Читает из буфера файла
+  int pascal readhar (void **harp,unsigned no);//Читает из буфера файла
+  int pascal readmets(void **metp,SPR *spr);   //Читает из буфера файла
+  int pascal readhars(void **harp,SPR *spr);   //Читает из буфера файла
+  int pascal readhars(void **harp,SPR *spr,char *attr);
+  int pascal readhars(SPR *spr,char *attr,char *str,int n);
+  //помещает атрибут в строку str не более n символов
+  int pascal readdoublehars(SPR *spr,char *attr,double *at);
+  int pascal findhar(FINDHAR *f);
+//Возвращает -1 - ошибка ; 0 - не найден объект ; иначе номер объекта
+
+//записывается метрика из внутреннего буфера файла
+  int pascal writemetbuff(SPR *spr);
+  int pascal writeharbuff(SPR *spr);
+  int pascal writespr (const SPR  *spr);
+  int pascal writemets(const void *metr,SPR *spr);
+  int pascal writehars(const void *har,SPR *spr);
+//с построением габаритной рамки
+  int pascal writemetsgb(const void *metr,SPR *spr);
+};
+#endif
