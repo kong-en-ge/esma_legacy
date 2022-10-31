@@ -1,5 +1,4 @@
 #include <dos.h>
-#include <graphics.h>
 #include <fcntl.h>
 #include <io.h>
 #include <stdio.h>

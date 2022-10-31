@@ -1,6 +1,6 @@
 #include <bios.h>
 #include <dos.h>
-#include <graphics.h>
+#include "graphics.h"
 #include <mem.h>
 #include <string.h>
 #include "mouse.hpp"

@@ -1,5 +1,5 @@
 #include  <mem.h>
-#include  <graphics.h>
+#include  "graphics.h"
 
 char DRIVER=-1,BMODE=-1,MODE=-1;
 char CUR_COLOR;
