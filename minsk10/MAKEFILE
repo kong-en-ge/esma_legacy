@@ -1,0 +1,54 @@
+.silent
+
+PROJECT_NAME=city
+PROJECT_TYPE=exe
+
+!include ..\common\make.inc
+
+LIB_DIR=LIB
+GRAPHICS_LIB=LIB\GRAPHICS.LIB
+FILES_LIB=LIB\FILES.LIB
+SERVIS_LIB=LIB\SERVIS.LIB
+DBF_LIB=LIB\DBF.LIB
+
+..\GRAPHICS\OUTWARD\GRAPHICS.LIB:
+  cd ..\graphics
+  $(MAKE) project
+  cd ..\minsk10
+
+..\FILES\OUTWARD\FILES.LIB:
+  cd ..\files
+  $(MAKE) project
+  cd ..\minsk10
+
+..\SERVIS\OUTWARD\SERVIS.LIB:
+  cd ..\servis
+  $(MAKE) project
+  cd ..\minsk10
+
+..\DBF\OUTWARD\DBF.LIB:
+  cd ..\dbf
+  $(MAKE) project
+  cd ..\minsk10
+
+$(GRAPHICS_LIB): ..\GRAPHICS\OUTWARD\GRAPHICS.LIB
+  copy $** $@
+
+$(FILES_LIB): ..\FILES\OUTWARD\FILES.LIB
+  copy $** $@
+
+$(SERVIS_LIB): ..\SERVIS\OUTWARD\SERVIS.LIB
+  copy $** $@
+
+$(DBF_LIB): ..\DBF\OUTWARD\DBF.LIB
+  copy $** $@
+
+$(LIB_DIR):
+  $(ENSURE_DIR)
+
+libs: $(LIB_DIR) $(GRAPHICS_LIB) $(SERVIS_LIB) $(DBF_LIB) $(FILES_LIB)
+
+update:: libs
+
+run:
+  outward\city.exe /workpath:data
