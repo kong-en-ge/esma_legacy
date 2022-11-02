@@ -15,6 +15,8 @@ char modelmod []="00";
 void drawcram();
 void all();
 
+const char cWorkPathSwitch[] = "/workpath:";
+
 int Init(int carg) {
 	 setgraphbufsize(8000);
 	 int gd,gm;
@@ -107,7 +109,21 @@ int Init(int carg) {
 	 return rr;
 }
 
-int main(int argc,char *argv[]) {
+void UpdateWorkingDirectory(int argc, char *argv[])
+{
+  for (int i = 1; i < argc; i++)
+  {
+    char *arg = argv[i];
+    if (strstr(arg, cWorkPathSwitch) == arg)
+    {
+      chdir(arg + sizeof(cWorkPathSwitch) - 1);
+      return;
+    }
+  }
+}
+
+int org_main(int argc, char *argv[])
+{
 	 GRwnd wndmain2(487,8,632,31,"ŽŽŽ '‘Œ€'",LIGHTBLUE,0,0);
 	 int ii;double dxv,dyv;
 	 char* stpar=NULL;
@@ -151,5 +167,18 @@ label0:
 	if (!GdEGA) delete(bram);
 exit:
 	 closegraph();
+
+}
+
+int main(int argc,char *argv[]) {
+   char szSaveDir[MAXDIR];
+   getcurdir(0, szSaveDir);
+   UpdateWorkingDirectory(argc, argv);
+
+
+   org_main(argc, argv);
+
+   chdir("\\");
+   chdir(szSaveDir);
 	 return 0;
 };

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys\stat.h>
-#include <graphics.h>
+#include "graphics.h"
 #include "mouse.hpp"
 
 //#define SAVEDEMO

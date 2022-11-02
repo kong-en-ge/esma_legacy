@@ -1,7 +1,7 @@
 #ifndef GRWND
   #define GRWND
 #include <mem.h>
-#include <graphics.h>
+#include "graphics.h"
 int const BORD_S = 6;
 #define BLACK 15
 #define WHITE 0
