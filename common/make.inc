@@ -9,10 +9,14 @@ ENSURE_DIR=IF NOT EXIST $@ md $@
 .mak{$(OUTPUT_DIR)}.lib:
   $(MAKE) -f$** $@
 
+.mak{$(OUTPUT_DIR)}.exe:
+  $(MAKE) -f$** $@
+
 $(OUTPUT_DIR):
   $(ENSURE_DIR)
+  ATTRIB +H $@
 
-update: $(OUTPUT_DIR)
+update:: $(OUTPUT_DIR)
 
 $(PROJECT_NAME).prj: update
 
