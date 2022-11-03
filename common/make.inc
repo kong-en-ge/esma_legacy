@@ -1,5 +1,6 @@
 OUTPUT_DIR=outward
 APP_OUTPUT_NAME=$(OUTPUT_DIR)\$(PROJECT_NAME)
+APP_OUTPUT_FILE=$(APP_OUTPUT_NAME).$(PROJECT_TYPE)
 
 ENSURE_DIR=IF NOT EXIST $@ md $@
 
@@ -20,4 +21,7 @@ update:: $(OUTPUT_DIR)
 
 $(PROJECT_NAME).prj: update
 
-project: $(APP_OUTPUT_NAME).$(PROJECT_TYPE)
+project: $(APP_OUTPUT_FILE)
+
+release: project
+  tdstrip $(APP_OUTPUT_FILE)

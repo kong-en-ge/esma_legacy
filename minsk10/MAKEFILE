@@ -5,43 +5,25 @@ PROJECT_TYPE=exe
 
 !include ..\common\make.inc
 
+GET_LIB=$(MAKE) -f..\common\get_lib.mak LIB_NAME=lib_name RETURN_DIR=..\minsk10
+
 LIB_DIR=LIB
-GRAPHICS_LIB=LIB\GRAPHICS.LIB
-FILES_LIB=LIB\FILES.LIB
-SERVIS_LIB=LIB\SERVIS.LIB
-DBF_LIB=LIB\DBF.LIB
+GRAPHICS_LIB=$(LIB_DIR)\GRAPHICS.LIB
+FILES_LIB=$(LIB_DIR)\FILES.LIB
+SERVIS_LIB=$(LIB_DIR)\SERVIS.LIB
+DBF_LIB=$(LIB_DIR)\DBF.LIB
 
-..\GRAPHICS\OUTWARD\GRAPHICS.LIB:
-  cd ..\graphics
-  $(MAKE) project
-  cd ..\minsk10
+$(GRAPHICS_LIB):
+  $(GET_LIB:lib_name=graphics)
 
-..\FILES\OUTWARD\FILES.LIB:
-  cd ..\files
-  $(MAKE) project
-  cd ..\minsk10
+$(FILES_LIB):
+  $(GET_LIB:lib_name=files)
 
-..\SERVIS\OUTWARD\SERVIS.LIB:
-  cd ..\servis
-  $(MAKE) project
-  cd ..\minsk10
+$(SERVIS_LIB):
+  $(GET_LIB:lib_name=servis)
 
-..\DBF\OUTWARD\DBF.LIB:
-  cd ..\dbf
-  $(MAKE) project
-  cd ..\minsk10
-
-$(GRAPHICS_LIB): ..\GRAPHICS\OUTWARD\GRAPHICS.LIB
-  copy $** $@
-
-$(FILES_LIB): ..\FILES\OUTWARD\FILES.LIB
-  copy $** $@
-
-$(SERVIS_LIB): ..\SERVIS\OUTWARD\SERVIS.LIB
-  copy $** $@
-
-$(DBF_LIB): ..\DBF\OUTWARD\DBF.LIB
-  copy $** $@
+$(DBF_LIB):
+  $(GET_LIB:lib_name=dbf)
 
 $(LIB_DIR):
   $(ENSURE_DIR)
