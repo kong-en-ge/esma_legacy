@@ -24,4 +24,7 @@ $(PROJECT_NAME).prj: update
 project: $(APP_OUTPUT_FILE)
 
 release: project
+!if ("$(PROJECT_TYPE)"=="EXE") || ("$(PROJECT_TYPE)"=="exe")
   tdstrip $(APP_OUTPUT_FILE)
+!endif
+

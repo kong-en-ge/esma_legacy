@@ -5,7 +5,7 @@ PROJECT_TYPE=exe
 
 !include ..\common\make.inc
 
-GET_LIB=$(MAKE) -f..\common\get_lib.mak LIB_NAME=lib_name RETURN_DIR=..\minsk10
+GET_LIB=$(MAKE) -f..\common\get_lib.mak LIB_NAME=lib_name
 
 LIB_DIR=LIB
 GRAPHICS_LIB=$(LIB_DIR)\GRAPHICS.LIB
@@ -25,10 +25,7 @@ $(SERVIS_LIB):
 $(DBF_LIB):
   $(GET_LIB:lib_name=dbf)
 
-$(LIB_DIR):
-  $(ENSURE_DIR)
-
-libs: $(LIB_DIR) $(GRAPHICS_LIB) $(SERVIS_LIB) $(DBF_LIB) $(FILES_LIB)
+libs: $(GRAPHICS_LIB) $(SERVIS_LIB) $(DBF_LIB) $(FILES_LIB)
 
 update:: libs
 
