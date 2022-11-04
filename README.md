@@ -22,7 +22,8 @@ You may complie any of them manually via opening and compiling projects in IDE, 
 
 Make files provided are set up to allow "one click" project building including any required dependencies. Just type and execute regular Make tool command line: **make [target]**
 
-Some useful targets are:
+Some of useful targets are:
+* update -- creates auxiliary folders, and compiles the required libraries
 * project -- builds the project in current folder
 * release -- the same as project target, but with stripping application debug information
 * run -- runs the application using the some environment set up command line
