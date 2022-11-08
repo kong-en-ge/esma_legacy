@@ -4,6 +4,12 @@
 /minsk10/*.dsk
 /minsk10/*.swp
 
+/minsk20/outward
+/minsk20/lib
+/minsk20/*.sym
+/minsk20/*.dsk
+/minsk20/*.swp
+
 /files/outward
 /files/*.sym
 /files/*.dsk

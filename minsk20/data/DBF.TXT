@@ -1,0 +1,5 @@
+XCOORD//
+YCOORD//
+NAME/Название/
+ADRESS/Адрес/
+FONE/Телефон/
