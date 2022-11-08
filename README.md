@@ -15,7 +15,7 @@ You might also need some MS DOS emulation environment. DOSBox looks to be good e
 
 ## Projects
 
-Four utility libraries: *Graphics*, *Files*, *Dbf*, and *Servis*, are required to build the main project *City* in Minsk10 folder.
+Four utility libraries: *Graphics*, *Files*, *Dbf*, and *Servis*, are required to build the main projects *City* in Minsk10 and Minsk20 folders.
 You may complie any of them manually via opening and compiling projects in IDE, or using provided makefiles.
 
 ## Using Make utility for project building
