@@ -10,22 +10,22 @@
 /minsk20/*.dsk
 /minsk20/*.swp
 
-/files/outward
-/files/*.sym
-/files/*.dsk
-/files/*.swp
+/rtl/files/outward
+/rtl/files/*.sym
+/rtl/files/*.dsk
+/rtl/files/*.swp
 
-/dbf/outward
-/dbf/*.sym
-/dbf/*.dsk
-/dbf/*.swp
+/rtl/dbf/outward
+/rtl/dbf/*.sym
+/rtl/dbf/*.dsk
+/rtl/dbf/*.swp
 
-/servis/outward
-/servis/*.sym
-/servis/*.dsk
-/servis/*.swp
+/rtl/servis/outward
+/rtl/servis/*.sym
+/rtl/servis/*.dsk
+/rtl/servis/*.swp
 
-/graphics/outward
-/graphics/*.sym
-/graphics/*.dsk
-/graphics/*.swp
+/rtl/graphics/outward
+/rtl/graphics/*.sym
+/rtl/graphics/*.dsk
+/rtl/graphics/*.swp

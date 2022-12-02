@@ -1,0 +1,6 @@
+.silent
+
+PROJECT_NAME=dbf
+PROJECT_TYPE=lib
+
+!include ..\..\common\make.inc

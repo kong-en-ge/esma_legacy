@@ -1,6 +1,0 @@
-.silent
-
-PROJECT_NAME=graphics
-PROJECT_TYPE=lib
-
-!include ..\common\make.inc

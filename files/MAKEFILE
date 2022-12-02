@@ -1,6 +1,0 @@
-.silent
-
-PROJECT_NAME=files
-PROJECT_TYPE=lib
-
-!include ..\common\make.inc
