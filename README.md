@@ -1,6 +1,7 @@
 ![](assets/esma.gif)
 
 ## Abstract
+
 The repository is dedicated to the legacy of the Belarusan ESMA company. To its MS DOS period at least.
 
 A lot of old software in the world is lost even as released applications, and even more can never be recompiled because of lack of source code. But the backup CD had been burned here more than 20 years ago to resque floppy content, and now it goes on the github.
@@ -15,8 +16,8 @@ You might also need some MS DOS emulation environment. DOSBox looks to be good e
 
 ## Projects
 
-Four utility libraries: *Graphics*, *Files*, *Dbf*, and *Servis*, are required to build the main projects *City* in Minsk10 and Minsk20 folders.
-You may complie any of them manually via opening and compiling projects in IDE, or using provided makefiles.
+Four utility libraries: *rtl\Graphics*, *rtl\Files*, *rtl\Dbf*, and *rtl\Servis*, are required to build the main projects *City* in MinskMap\1.0 and MinskMap\2.0 folders.
+You may complie any of them manually via opening and compiling projects in IDE, or using provided makefiles. If you prefer using IDE you might need to create some auxiliary folders manually according to compiler/linker error messages (since git doesn't store empty directories).
 
 ## Using Make utility for project building
 
