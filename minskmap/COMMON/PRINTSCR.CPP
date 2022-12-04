@@ -12,7 +12,7 @@ int far pascal error2but()
   Menu_but menu;
   menu + &b1 + &b2;
   return menu.menu_key();
-};
+}
 
 int far pascal warn2but()
 {
@@ -27,7 +27,7 @@ int far pascal warn2but()
   Menu_but menu;
   menu + &b1 + &b2;
   return menu.menu_key() == -1 ? 0 : 1;
-};
+}
 
 struct PRINTPARAM
 {
@@ -37,7 +37,7 @@ struct PRINTPARAM
   void *retfunc;
 };
 
-int pascal printwnd(int xmin, int ymin, int xmax, int ymax, int /*mask1*/, int /*mask2*/)
+int printwnd(int xmin, int ymin, int xmax, int ymax, int /*mask1*/, int /*mask2*/)
 {
   int h, size;
   if ((h = open("printer.bin", O_BINARY | O_RDONLY)) == -1)

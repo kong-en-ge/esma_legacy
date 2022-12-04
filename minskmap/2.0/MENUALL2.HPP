@@ -1,5 +1,6 @@
 #ifndef menuall2
 #define menuall2
+
 #include "dbf.hpp"
 #include "library.hpp"
 #include "mouse.hpp"
@@ -37,4 +38,5 @@ double YDISRAZ(int x);
 double XDISRAZ(int y);
 void predproc(int num);
 void errorproc(int num);
+
 #endif

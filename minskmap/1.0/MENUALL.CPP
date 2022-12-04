@@ -13,7 +13,7 @@ int poisk(int regim, int *x = NULL, int *y = NULL, double *d = NULL);
 long poiskdbf(int *x = NULL, int *y = NULL);
 int setviewMAP();
 int draw_one_obj(int obj, int color);
-int pascal printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
+int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 int obj_enabled(F_SPR *spr);
 void draw_kr();
 int M_K_R_status(void (*dr)() = draw_kr, int (*keyhandler)(int) = NULL);
@@ -25,31 +25,32 @@ void pnt_dbf();
 void red_rec();
 void help();
 
-double pascal XEKRAZD(int y)
+double XEKRAZD(int y)
 {
   return (YMAXMAPE - y) * (XMAXV - XMINV) / YMAXMAPE + XMINV;
 };
 
-double pascal YEKRAZD(int x)
+double YEKRAZD(int x)
 {
   return x * (YMAXV - YMINV) / XMAXMAPE + YMINV;
 };
 
-int pascal XRAZEKR(float y)
+int XRAZEKR(float y)
 {
   return float((y - YMINV) * (XMAXMAPE + 1) / (YMAXV - YMINV));
 };
 
-int pascal YRAZEKR(float x)
+int YRAZEKR(float x)
 {
   return float((XMAXV - x) * (YMAXMAPE + 1) / (XMAXV - XMINV));
 };
 
-double pascal XDISRAZ(int y)
+double XDISRAZ(int y)
 {
   return (y - model.fm.ymin) * (XMAXM - XMINM) / (model.fm.ymax - model.fm.ymin) + XMINM;
 }
-double pascal YDISRAZ(int x)
+
+double YDISRAZ(int x)
 {
   return (x - model.fm.xmin) * (YMAXM - YMINM) / (model.fm.xmax - model.fm.xmin) + YMINM;
 }

@@ -27,12 +27,12 @@ void finddbf(void);
 void xycoord(void);
 void polygon(int);
 void pascal clearm(int);
-double pascal YEKRAZD(int x);
-double pascal XEKRAZD(int y);
-int pascal XRAZEKR(float y);
-int pascal YRAZEKR(float x);
-double pascal YDISRAZ(int x);
-double pascal XDISRAZ(int y);
+double YEKRAZD(int x);
+double XEKRAZD(int y);
+int XRAZEKR(float y);
+int YRAZEKR(float x);
+double YDISRAZ(int x);
+double XDISRAZ(int y);
 void predproc(int num);
 void errorproc(int num);
 

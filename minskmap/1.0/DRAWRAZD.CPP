@@ -11,10 +11,10 @@
 int control(int);
 int next_model(int startpos, int nc = 0);
 int next_dbf(int pos, int m2);
-int pascal XRAZDIS(double y);
-int pascal YRAZDIS(double x);
-int pascal XRAZEKR(float y);
-int pascal YRAZEKR(float x);
+int XRAZDIS(double y);
+int YRAZDIS(double x);
+int XRAZEKR(float y);
+int YRAZEKR(float x);
 int setviewMAP();
 int DXM;
 void draw_one_d(double _x, double _y, int color = -1);
@@ -89,6 +89,7 @@ int obj_enabled(F_SPR *spr)
 }
 
 int FULL_MAP; //=1;
+
 int drawrazd(void)
 {
 #ifdef DEMO
@@ -165,9 +166,9 @@ l1:
   STARTTIME();
 #endif
   return pos;
-};
+}
 
-void pascal drawingline(int *metr, int num)
+void drawingline(int *metr, int num)
 {
   setlinesstyle(fliblin + num);
   polyline(metr);
@@ -243,7 +244,16 @@ int setviewMAP()
   model.yminw = yminm;
   model.xmaxw = xmaxm;
   model.ymaxw = ymaxm;
-  asm mov cx, XMAXE asm sub cx, XMINE asm mov ax, xmaxm asm sub ax, xminm asm mov dx, 3 asm mul dx asm add cx, 3 asm div cx asm mov DXM, ax return 1;
+  asm mov cx, XMAXE
+  asm sub cx, XMINE
+  asm mov ax, xmaxm
+  asm sub ax, xminm
+  asm mov dx, 3
+  asm mul dx
+  asm add cx, 3
+  asm div cx
+  asm mov DXM, ax
+  return 1;
 }
 
 int drawmap()
@@ -310,7 +320,29 @@ void dr_bl_n(int *metr, F_SPR *spr, char *clcod)
 void rotate_metr(int *metr)
 {
   int size = size_methar(metr);
-  asm mov cx, size asm mov ax, cx asm shr cx, 1 asm shr cx, 1 asm jz r_en asm sub ax, 3 asm shl ax, 1 asm les di, metr asm mov si, di asm add si, ax asm mov bx, 2 r_loop : asm mov ax, es : [di] asm xchg ax, es : [si] asm mov es : [di], ax asm mov ax, es : [di + bx] asm xchg ax, es : [si + bx] asm mov es : [di + bx], ax asm add di, 4 asm sub si, 4 asm loop r_loop r_en : return;
+  asm mov cx, size
+  asm mov ax, cx
+  asm shr cx, 1
+  asm shr cx, 1
+  asm jz r_en
+  asm sub ax, 3
+  asm shl ax, 1
+  asm les di, metr
+  asm mov si, di
+  asm add si, ax
+  asm mov bx, 2
+r_loop:
+  asm mov ax, es : [di]
+  asm xchg ax, es : [si]
+  asm mov es : [di], ax
+  asm mov ax, es : [di + bx]
+  asm xchg ax, es : [si + bx]
+  asm mov es : [di + bx], ax
+  asm add di, 4
+  asm sub si, 4
+  asm loop r_loop
+r_en:
+  return;
 }
 
 void dr_st_n(F_SPR *spr, int *metr)
