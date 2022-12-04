@@ -1,5 +1,6 @@
 #ifndef menuall2
 #define menuall2
+
 #include "dbf.hpp"
 #include "library.hpp"
 #include "mouse.hpp"
@@ -18,7 +19,7 @@ void rasst(void);
 void slide(void);
 void find_rg(void);
 void find_st(void);
-int find_bl(char* parst=NULL,int parbl=0);
+int find_bl(char *parst = NULL, int parbl = 0);
 void onoff(void);
 void chmark(void);
 void whatisitd(int mode);
@@ -34,4 +35,5 @@ double pascal YDISRAZ(int x);
 double pascal XDISRAZ(int y);
 void predproc(int num);
 void errorproc(int num);
+
 #endif

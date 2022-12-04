@@ -1,33 +1,33 @@
 #pragma inline
-long pascal longmul(int m1,int m2) {
-asm	mov	ax,m1
-asm	imul	m2
+
+long longmul(int m1, int m2)
+{
+  asm mov ax, m1
+  asm imul m2
 }
 
-unsigned long pascal ulongmul(unsigned int m1,unsigned int m2) {
-asm	mov	ax,m1
-asm	mul	m2
+unsigned long ulongmul(unsigned int m1, unsigned int m2)
+{
+  asm mov ax, m1
+  asm mul m2
 }
 
-double pascal length(int m1,int m2) {
-asm {
-	FILD	word ptr m1
-	FMUL	st,st
-	FILD	word ptr m2
-	FMUL 	st,st
-	FADD
-	FSQRT
-}
+double length(int m1, int m2)
+{
+  asm FILD	word ptr m1
+	asm FMUL	st, st
+	asm FILD	word ptr m2
+	asm FMUL 	st, st
+	asm FADD
+	asm FSQRT
 }
 
-double pascal length(double m1,double m2) {
-
-asm {
-	fld	qword ptr m1
-	fmul	st,st
-	fld	qword ptr m2
-	fmul 	st,st
-	fadd
-	fsqrt
-}
+double length(double m1, double m2)
+{
+  asm	fld	qword ptr m1
+	asm fmul	st, st
+  asm fld	qword ptr m2
+	asm fmul 	st, st
+	asm fadd
+  asm fsqrt
 }

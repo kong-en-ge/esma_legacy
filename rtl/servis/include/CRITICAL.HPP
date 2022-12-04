@@ -1,13 +1,17 @@
 #ifndef CRITICALHPP
- #define CRITICALHPP
+#define CRITICALHPP
 #include "grwnd.hpp"
-struct CRITICAL{
+
+struct CRITICAL
+{
   char *mem;
+
   CRITICAL();
   ~CRITICAL();
-  void pascal store();
-  void pascal restore();
+  void store();
+  void restore();
 };
 
 extern CRITICAL HANDLER24;
+
 #endif

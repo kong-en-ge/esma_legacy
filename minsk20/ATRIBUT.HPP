@@ -1,33 +1,36 @@
 #ifndef atribhpp
- #define atribhpp
+#define atribhpp
+
 //максимальный размер атрибута
-#define MAX_ATR_SIZE  70
+#define MAX_ATR_SIZE 70
 
-#define ERROR_STR  -1
+#define ERROR_STR -1
 
-#define	O_NOT	0	//Отсутствие атрибута
-#define O_IS	1       //Наличие атрибута
-#define O_EQ	2	//==
-#define O_NE	3       //!=
-#define O_GR	4       //>
-#define O_GE	5       //>=
-#define O_LS	6       //<
-#define O_LE	7	//<=
+#define O_NOT 0 //Отсутствие атрибута
+#define O_IS 1  //Наличие атрибута
+#define O_EQ 2  //==
+#define O_NE 3  //!=
+#define O_GR 4  //>
+#define O_GE 5  //>=
+#define O_LS 6  //<
+#define O_LE 7  //<=
 
 //#define P_OR	0
 //#define P_AND	1
 
 #include "GEOMODEL.hpp"
 //Структура атрибут-значение
-struct atribut {
+struct atribut
+{
   char atr[3];
-  char zna[MAX_ATR_SIZE+1];
+  char zna[MAX_ATR_SIZE + 1];
 };
 //Структура записи файла имен атрибутов
 //структура для получения атрибута из файла характеристики модели данных
-struct mk_atr : public atribut {
-  char *har;//указатель в файле атрибутов
-	    //указывает на текущий атрибут
+struct mk_atr : public atribut
+{
+  char *har; //указатель в файле атрибутов
+             //указывает на текущий атрибут
 };
 
 //функция получения атрибута из файла характеристики модели данных
@@ -36,11 +39,12 @@ struct mk_atr : public atribut {
 int make_atr(mk_atr *m_a);
 
 //вспомогательная структура для поиска по атрибутам
-struct f_attr : public atribut {
-  char type;   //тип атрибута
-  int  prp;    //принцип поиска (наличие - отсутствие - совпадение - несовпадение);
-//  int  orp;    //выражение (и - или)
-  int  tpr;    //текущий признак
+struct f_attr : public atribut
+{
+  char type; //тип атрибута
+  int prp;   //принцип поиска (наличие - отсутствие - совпадение - несовпадение);
+             //  int  orp;    //выражение (и - или)
+  int tpr;   //текущий признак
 };
 /*
 //структура для поиска по одному атрибуту
@@ -65,12 +69,13 @@ struct FINDobj {
 */
 
 //структура для поиска по нескольким атрибутам без кода
-struct FINDatrs {
+struct FINDatrs
+{
   f_attr atr[5];
-  int  natr;
-  unsigned  blok,smes; //Начальный блок и смещение в блоке по файлу атрибутов
+  int natr;
+  unsigned blok, smes; //Начальный блок и смещение в блоке по файлу атрибутов
 };
 
-int findobj(GEO_MODEL *model,FINDatrs *fa);
+int findobj(GEO_MODEL *model, FINDatrs *fa);
 
 #endif

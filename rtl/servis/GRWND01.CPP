@@ -1,7 +1,8 @@
 #pragma inline
 #include "grwnd.hpp"
 
-int pascal xyinregion(int x,int y,REGION *reg) {
+int xyinregion(int x, int y, REGION *reg)
+{
 asm	push	ds
 asm 	lds	bx,reg
 asm	mov	ax,x
@@ -22,7 +23,9 @@ l01:
 asm	pop	ds
 	return _AX;
 }
-int pascal regionregion(REGION *reg1,REGION *reg2) {
+
+int regionregion(REGION *reg1, REGION *reg2)
+{
 asm	push	ds
 asm	lds	si,reg1
 asm	les	bx,reg2
@@ -47,7 +50,8 @@ asm     pop	ds
 	return 	_AX;
 }
 
-int pascal xydregion(int x,int y,int delta,REGION *reg) {
+int xydregion(int x, int y, int delta, REGION *reg)
+{
 REGION r;
 asm     mov  	ax,x
 asm	mov	bx,ax

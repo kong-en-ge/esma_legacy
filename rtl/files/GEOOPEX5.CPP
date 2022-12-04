@@ -3,10 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "geomodel.hpp"
-#pragma inline
-int pascal GEO_MODEL::readhars(SPR *spr,char *attr,char *str,int n) {
-int ret;char *harp;
-  if ((ret=readhars((void **)&harp,spr,attr))==0) {
+
+int GEO_MODEL::readhars(SPR *spr,  char *attr,  char *str,  int n)
+{
+  int ret;
+  char *harp;
+  if ((ret=readhars((void **)&harp, spr, attr))==0)
+  {
 asm {
     push ds
     lds  si,harp

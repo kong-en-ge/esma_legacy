@@ -1,5 +1,5 @@
 #ifndef FASTMODEL
- #define FASTMODEL
+#define FASTMODEL
 
 #include "buffiles.hpp"
 /*
@@ -24,43 +24,51 @@
  границу слова. За последней записью - двойной разделитель.
 */
 
-
-struct F_FORM {
-  unsigned maxn;          //Максимальный номер
-  int xmin,ymin,xmax,ymax;//Габариты в дискретах
-  double xminm,yminm,xmaxm,ymaxm;//Габариты в метрах
-  unsigned sbh;		  //Начальные блок и смещение
-  unsigned ssh;           //характеристик в файле метрики
+struct F_FORM
+{
+  unsigned maxn;                     //Максимальный номер
+  int xmin, ymin, xmax, ymax;        //Габариты в дискретах
+  double xminm, yminm, xmaxm, ymaxm; //Габариты в метрах
+  unsigned sbh;                      //Начальные блок и смещение
+  unsigned ssh;                      //характеристик в файле метрики
 };
 
-
-
-struct F_SPR {
-	int xmin,ymin,xmax,ymax;	// габаритная рамка
-	unsigned sbm;        		// нач блок метр
-	unsigned lnm;     		// длина метрики
-	unsigned sbh;     		// нач блок хар
-	unsigned lnh;    	 	// длина характеристики
-	unsigned char ssm;		// нач смещ метр
-	unsigned char ssh;		// нач смещ хар
-	unsigned numincl; 		// номер в классификаторе
+struct F_SPR
+{
+  int xmin, ymin, xmax, ymax; // габаритная рамка
+  unsigned sbm;               // нач блок метр
+  unsigned lnm;               // длина метрики
+  unsigned sbh;               // нач блок хар
+  unsigned lnh;               // длина характеристики
+  unsigned char ssm;          // нач смещ метр
+  unsigned char ssh;          // нач смещ хар
+  unsigned numincl;           // номер в классификаторе
 };
 
-struct FAST_MODEL {
-	F_FORM fm;
-	int xminw,yminw,xmaxw,ymaxw;
-	XMSFiles  hs,hm,hh; //handles справки и метрики
-	int pascal open(const char *name,const char *model);
-	int pascal close();
-	int pascal readspr (F_SPR* spr,unsigned no) {
-		return hs.readtobuf(no,no,(void *)spr);
-	}
-	int pascal readspr (F_SPR** spr,unsigned no) {
-		return hs.read(no,no,(void **)spr);
-	}
-	int pascal readmets(int **metp,F_SPR *spr);
-	int pascal readhars(int **harp,F_SPR *spr);
-	~FAST_MODEL();
+struct FAST_MODEL
+{
+  F_FORM fm;
+  int xminw, yminw, xmaxw, ymaxw;
+  XMSFiles hs, hm, hh; // handles справки и метрики
+
+  ~FAST_MODEL();
+
+  int open(const char *name, const char *model);
+  int close();
+  int readspr(F_SPR *spr, unsigned no);
+  int readspr(F_SPR **spr, unsigned no);
+  int readmets(int **metp, F_SPR *spr);
+  int readhars(int **harp, F_SPR *spr);
 };
+
+inline int FAST_MODEL::readspr(F_SPR *spr, unsigned no)
+{
+  return hs.readtobuf(no, no, (void *)spr);
+}
+
+inline int FAST_MODEL::readspr(F_SPR **spr, unsigned no)
+{
+  return hs.readtobuf(no, no, (void **)spr);
+}
 
 #endif

@@ -2,8 +2,11 @@
 #include <dos.h>
 #include <stdio.h>
 #include <string.h>
+
 #include "geomodel.hpp"
-void pascal gab_ram(const void *metr,SPR *spr) {
+
+void gab_ram(const void *metr, SPR *spr)
+{
    asm  push  ds         //построение габаритных рамок
    asm  lds   si,metr    //CX-xmin;BX-xmax;DX-ymin;DI-ymax;
    asm  add   si,8
@@ -43,35 +46,52 @@ gben:
    asm  mov   [si+20],di
    asm  pop   ds
 }
-int pascal GEO_MODEL::writeform(const void *buff) {
- return hsp.writehead(buff)!=512 ? -1 : 0;}
-int pascal GEO_MODEL::writespr (const SPR  *buff) {
- int nom,ret=0;
- if ((nom=buff->nom)!=0)
-   if (nom<=hsp.filelen) ret=hsp.write(nom-1,1,buff);
-    else {
-	 SPR *b;
-	 if ((b=new SPR[16])==NULL) return -1;
-	 memset(b,0,512);
-	 while ((nom&0xfff0)>hsp.filelen)
-	   if ((ret=hsp.write(hsp.filelen,16,b))==-1)goto l1;
-	 memmove(b+(nom-1)%16,buff,32);
-	 ret=hsp.write((nom-1)&0xfff0,16,b);
-l1:
-	 delete b;
+
+int GEO_MODEL::writeform(const void *buff)
+{
+  return hsp.writehead(buff) != 512 ? -1 : 0;
+}
+
+int GEO_MODEL::writespr(const SPR *buff)
+{
+  int nom, ret = 0;
+  if ((nom = buff->nom) != 0)
+    if (nom <= hsp.getFileLen())
+      ret = hsp.write(nom - 1, 1, buff);
+    else
+    {
+      SPR *b;
+      if ((b = new SPR[16]) == NULL)
+        return -1;
+      memset(b, 0, 512);
+      while ((nom & 0xfff0) > hsp.getFileLen())
+        if ((ret = hsp.write(hsp.getFileLen(), 16, b)) == -1)
+          goto l1;
+      memmove(b + (nom - 1) % 16, buff, 32);
+      ret = hsp.write((nom - 1) & 0xfff0, 16, b);
+    l1:
+      delete b;
     };
- if (nom==0) return 1;
- if (ret!=-1) return 0;
- return -1;
-};
-int pascal GEO_MODEL::writemetsgb(const void *metr,SPR *spr){
+
+  if (nom == 0)
+    return 1;
+
+  if (ret != -1)
+    return 0;
+
+  return -1;
+}
+
+int GEO_MODEL::writemetsgb(const void *metr, SPR *spr)
+{
   gab_ram(metr,spr);
   return writemet_har(metr,&hmt,&spr->stblm,&spr->enblm);
 }
 
-int pascal writemet_har(const void *met_har,Files *f,
-			 unsigned *fbl,unsigned *ebl){
-  unsigned bl=f->filelen-2,fre;int *efb,*efb2;
+int writemet_har(const void *met_har, Files *f,
+			 unsigned *fbl, unsigned *ebl)
+{
+  unsigned bl=f->getFileLen()-2,fre;int *efb,*efb2;
   unsigned db=0;
   unsigned len;
   int *memp,mem;
@@ -101,24 +121,25 @@ wne07:
   if (fre+len>512) {
     db=((fre+len-512+511)/512)*2;
     unsigned sd=0;
-    if (f->filelen<f->bufsize) {
-     if (db>f->bufsize-f->filelen) sd=db-(f->bufsize-f->filelen);
+    if (f->getFileLen()<f->getBufSize()) {
+     if (db>f->getBufSize()-f->getFileLen()) sd=db-(f->getBufSize()-f->getFileLen());
     } else {
      sd=db;
     }
     if (sd!=0) {
-      memmove(f->buf,f->buf+(f->recsize*sd),(f->bufsize-sd)*f->recsize);
+      memmove(f->buf,f->buf+(f->recsize*sd),(f->getBufSize()-sd)*f->recsize);
       f->start+=sd;
       sd=(f->recsize*sd)/2;
       efb -=sd;
       efb2-=sd;
     }
-    f->end  +=db;
+    f->end+=db;
   }
-  memmove(efb,met_har,len*2);
-  if (f->write(bl,2+db,efb2)==-1) goto wex01;
-  *fbl=1+((fre>256) ? bl+1 : bl);
-  *ebl=1+bl+(fre+len-4)/256;
+  memmove(efb, met_har, len * 2);
+  if (f->write(bl, 2 + db, efb2) == -1)
+    goto wex01;
+  *fbl = 1 + ((fre > 256) ? bl + 1 : bl);
+  *ebl = 1 + bl + (fre + len - 4) / 256;
   *memp=mem;
   return 0;
 wex07:
@@ -126,15 +147,31 @@ wex07:
 wex01:
   *memp=mem;
   return -1;
-};
-int pascal GEO_MODEL::writemetbuff(SPR *spr) {
-    if (hmt.writefrombuf(spr->stblm-1,
-    spr->enblm-spr->stblm+1)==-1) return -1; else return 0;
 }
-int pascal GEO_MODEL::writeharbuff(SPR *spr) {
-    if (hhr.writefrombuf(spr->stblh-1,2)==-1) return -1; else return 0;
+
+int GEO_MODEL::writemetbuff(SPR *spr)
+{
+  if (hmt.writefrombuf(spr->stblm - 1, spr->enblm - spr->stblm + 1) == -1)
+    return -1;
+  else
+    return 0;
 }
-int pascal GEO_MODEL::writemets(const void *metr,SPR *spr) {
-    return writemet_har(metr,&hmt,&spr->stblm,&spr->enblm);}
-int pascal GEO_MODEL::writehars(const void *har,SPR *spr) {
-    unsigned a;return writemet_har(har,&hhr,&spr->stblh,&a);}
+
+int GEO_MODEL::writeharbuff(SPR *spr)
+{
+  if (hhr.writefrombuf(spr->stblh - 1, 2) == -1)
+    return -1;
+  else
+    return 0;
+}
+
+int GEO_MODEL::writemets(const void *metr, SPR *spr)
+{
+  return writemet_har(metr, &hmt, &spr->stblm, &spr->enblm);
+}
+
+int GEO_MODEL::writehars(const void *har, SPR *spr)
+{
+  unsigned a;
+  return writemet_har(har, &hhr, &spr->stblh, &a);
+}

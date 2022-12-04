@@ -1,9 +1,10 @@
-#include <dir.h>
-#include <dos.h>
 #include "disks.hpp"
 
-int pascal is_disk_valid(int drive) {
-  if ((drive < 1) || (drive > 'Z'-'A'+1)) return -1;
+int is_disk_valid(int drive) 
+{
+  if ((drive < 1) || (drive > 'Z' - 'A' + 1)) 
+    return -1;
+
   int aaxx;char ddrr;
   asm	mov	ax,0x4408
   asm	mov	bx,drive
@@ -18,6 +19,7 @@ int pascal is_disk_valid(int drive) {
    asm   mov     aaxx,ax
    if (aaxx!=0) return -1;
   }
+
   if ((aaxx!=0) && (aaxx!=1)) return -1;
     return _AX;
 }

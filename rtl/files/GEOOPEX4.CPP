@@ -3,12 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 #include "geomodel.hpp"
+
 #pragma inline
-int pascal GEO_MODEL::findhar(FINDHAR *f) {
+
+int GEO_MODEL::findhar(FINDHAR *f)
+{
  char *start,*atr=f->atr;int _ret,size,sizeatr;
  int numobj=0;
  if (f->blok<hhr.start || f->blok>=hhr.end) {
-   if ((_ret=hhr.read(f->blok,f->blok+hhr.bufsize-1,(void **)&start))==-1) return -1;
+   if ((_ret=hhr.read(f->blok,f->blok+hhr.getBufSize()-1,(void **)&start))==-1) return -1;
  }
  start=hhr.buf+(f->blok-hhr.start)*hhr.recsize+f->smes;
  size=(hhr.end-f->blok)*hhr.recsize-f->smes;
@@ -52,7 +55,7 @@ asm {
   push  di           //сдвиг указателей
   push  cx
   }
-  if (hhr.end>=hhr.filelen)  {
+  if (hhr.end>=hhr.getFileLen())  {
    if ((int)_CX>=sizeatr) asm {
 	pop cx
 	pop di
@@ -61,7 +64,7 @@ asm {
    }
    _ret=-1;
   } else  {
-	if ((_ret=hhr.read(hhr.end-2,hhr.end+hhr.bufsize-3,(void**)&start))<=2)
+	if ((_ret=hhr.read(hhr.end-2,hhr.end+hhr.getBufSize()-3,(void**)&start))<=2)
 	  _ret=-1;else asm {   //дочтение произведено и успешно
 	    mov  ax,_ret
 	    sub  al,2
