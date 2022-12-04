@@ -1,6 +1,6 @@
 #include "graphics.h"
 #include <math.h>
-#include <mem.h>
+#include <memory.h>
 #include <string.h>
 
 #include "font.hpp"
@@ -9,18 +9,16 @@
 #define CN cn1/cn2
 #define SN sn1/sn2
 
-int scales[]={1,2,3,4,5,7,10,15}; // масштабы вывода
-float _KX,_KY;
+int scales[] = {1,2,3,4,5,7,10,15}; // масштабы вывода
+float _KX, _KY;
 
-FONT::FONT(void (*Font)(),float S){
+FONT::FONT(void (*Font)(), float S)
+{
  unsigned numread;
  fontptr=NULL;
  fontptr=Font;
  setfontptrs();
  Scales=S;
-}
-
-FONT::~FONT(void){
 }
 
 int FONT::assign(int x1,int y1,int x2,int y2){
@@ -77,14 +75,20 @@ int FONT::checkfont(void){
  return !strncmp(prefptr->fontsignature,st,6);
 }
 
-int FONT::stringlength(char *s){
+int FONT::stringlength(const char *s)
+{
  int l=0;
- for (int i=0;s[i];i++) l+=symbolwidth(s[i]);
+
+ for (int i=0;s[i];i++)
+   l+=symbolwidth(s[i]);
+
  l+=gap*i;
+
  return l;
 }
 
-void FONT::outsymbol(unsigned char c){
+void FONT::outsymbol(unsigned char c)
+{
  unsigned j,a;
  int xx,yy,ex,ey;
  j=offs[c-bgifontdscptr->firstsymbol]/2;
@@ -112,7 +116,8 @@ void FONT::setparameters(float mxx,float myy,int g){
  gap=g;
 }
 
-void FONT::perevodmetr(int *in_metr,long *out_metr){
+void FONT::perevodmetr(const int *in_metr,long *out_metr)
+{
  int i,j;
  for(i=j=0;in_metr[i]!=-16360;i+=2){
 	out_metr[j]=(in_metr[i]-R1.left)*_KX;
@@ -131,7 +136,8 @@ void FONT::set_angle(void){
  if (a<3*M_PI/8) {cn1=sn1=7;sn2=cn2=10;} else {cn1=0;sn1=1;cn2=sn2=1;}
 }
 
-void FONT::outstring(char *s,void *metr,fonttype *f){
+void FONT::outstring(const char *s,void *metr,fonttype *f)
+{
  // Строка, метрика, тип шрифта
  int  i=2,j=0,k=0,wd,sc,space=0;
  char c;
@@ -171,7 +177,8 @@ void FONT::outstring(char *s,void *metr,fonttype *f){
  set_angle();
  setcolor(f->color);
  int t;
- for(i=0;c=s[i];){
+ for(i = 0; (c = s[i]) != 0; )
+ {
 	j+=wd=symbolwidth(c)+gap;
 	if (j>(w[k]+gap)){
 //	 space+=w[k];
@@ -200,7 +207,8 @@ void FONT::outstring(char *s,void *metr,fonttype *f){
  delete m;
 }
 
-void FONT::outstring(char *s,int x1,int y1,int x2,int y2){
+void FONT::outstring(const char *s,int x1,int y1,int x2,int y2)
+{
  fonttype ft;
  ft.size=0;
  ft.color=getcolor();
@@ -208,8 +216,11 @@ void FONT::outstring(char *s,int x1,int y1,int x2,int y2){
  outstring(s,x1,y1,x2,y2,&ft);
 }
 
-void FONT::outstring(char *s,int x1,int y1,int x2,int y2,fonttype *ft) {
- if (!strlen(s)) return;
+void FONT::outstring(const char *s, int x1, int y1, int x2, int y2, fonttype *ft)
+{
+ if (!strlen(s))
+   return;
+
  char c;
  int a,b1,b2;
  if (x1>x2) {
@@ -217,7 +228,9 @@ void FONT::outstring(char *s,int x1,int y1,int x2,int y2,fonttype *ft) {
   a=y1;y1=y2;y2=a;
  }
  double h=hypot(x1-x2,y1-y2);
- if (h<1) return;
+ if (h<1)
+   return;
+
  b1=5*(y2-y1)/h;
  b2=5*(x1-x2)/h;
  x1+=b1;y1+=b2;x2+=b1;y2+=b2;
@@ -244,7 +257,8 @@ void FONT::outstring(char *s,int x1,int y1,int x2,int y2,fonttype *ft) {
           break;//полностью
  }
  set_angle();
- for (int i=0;c=s[i];i++){
+ for (int i = 0; (c=s[i]) != 0; i++)
+ {
   outsymbol(c);
   x1=symbolwidth(c)+gap;
   x0+=x1*_cn+0.5;
@@ -252,58 +266,73 @@ void FONT::outstring(char *s,int x1,int y1,int x2,int y2,fonttype *ft) {
  }
 }
 
-void FONT::textxy(char *s,int x,int y,int dir){
- char c;
- int cn=1;
- int sn=0;
- if (dir) {cn=0;sn=-1;}
- x0=x;
- y0=y;
- int x1;
- for (int i=0;c=s[i];i++){
-  outsymbol(c);
-  x1=symbolwidth(c)+gap;
-  x0+=x1*cn;
-  y0+=x1*sn;
- }
+void FONT::textxy(const char *s, int x, int y, int dir)
+{
+  char c;
+  int cn=1;
+  int sn=0;
+  if (dir)
+  {
+    cn=0;
+    sn=-1;
+  }
+  x0=x;
+  y0=y;
+  int x1;
+  for (int i = 0; (c=s[i]) != 0; i++)
+  {
+   outsymbol(c);
+   x1=symbolwidth(c)+gap;
+   x0+=x1*cn;
+   y0+=x1*sn;
+  }
 }
 
-SCRIPT::SCRIPT(void){
- f[0]=new FONT(small_font,1.0);
- f[1]=new FONT(complex_font,0.3);
+SCRIPT::SCRIPT(void)
+{
+  f[0] = new FONT(small_font, 1.0);
+  f[1] = new FONT(complex_font, 0.3);
 }
 
-SCRIPT::~SCRIPT(void){
+SCRIPT::~SCRIPT(void)
+{
  delete f[0];
  delete f[1];
 }
 
-void SCRIPT::outstring(char *s,int x1,int y1,int x2,int y2,int _font){
+void SCRIPT::outstring(const char *s,int x1,int y1,int x2,int y2,int _font)
+{
  f[_font]->outstring(s,x1,y1,x2,y2);
 }
 
-void SCRIPT::outstring(char *s,void *metr,fonttype *ft){
+void SCRIPT::outstring(const char *s, void *metr, fonttype *ft)
+{
  f[ft->font]->outstring(s,metr,ft);
 }
 
-void SCRIPT::outstring(char *s,int x1,int y1,int x2,int y2,fonttype *ft){
+void SCRIPT::outstring(const char *s,int x1,int y1,int x2,int y2,fonttype *ft)
+{
  f[ft->font]->outstring(s,x1,y1,x2,y2,ft);
 }
 
-void SCRIPT::textxy(char *s,int x,int y,int dir,int _font){
+void SCRIPT::textxy(const char *s,int x,int y,int dir,int _font)
+{
  f[_font]->textxy(s,x,y,dir);
 }
 
-int SCRIPT::assign(int x1,int y1,int x2,int y2){
+int SCRIPT::assign(int x1,int y1,int x2,int y2)
+{
  f[0]->assign(x1,y1,x2,y2);
  return f[1]->assign(x1,y1,x2,y2);
 }
 
-void SCRIPT::setparameters(float xx,float yy,int g){
+void SCRIPT::setparameters(float xx,float yy,int g)
+{
  for (int i=0;i<1;i++) f[i]->setparameters(xx,yy,g);
 }
 
-int SCRIPT::assign_map(int x1,int y1,int x2,int y2){
+int SCRIPT::assign_map(int x1,int y1,int x2,int y2)
+{
  f[0]->assign_map(x1,y1,x2,y2);
  return f[1]->assign_map(x1,y1,x2,y2);
 }
