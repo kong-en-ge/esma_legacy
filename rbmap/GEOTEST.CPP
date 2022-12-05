@@ -24,6 +24,21 @@ char modelmod []="00";
 void drawcram();
 void all();
 
+const char cWorkPathSwitch[] = "/workpath:";
+
+void UpdateWorkingDirectory(int argc, char *argv[])
+{
+  for (int i = 1; i < argc; i++)
+  {
+    char *arg = argv[i];
+    if (strstr(arg, cWorkPathSwitch) == arg)
+    {
+      chdir(arg + sizeof(cWorkPathSwitch) - 1);
+      return;
+    }
+  }
+}
+
 int Init() {
 	 setgraphbufsize(8000);
 	 int gd,gm;
@@ -115,7 +130,8 @@ int Init() {
 	 return rr;
 }
 
-int main() {
+int org_main(int argc, char *argv[])
+{
 	 GRwnd wndmain2(487,8,632,31,"ŽŽŽ '‘Œ€'",LIGHTBLUE,0,0);
 	 int ii;double dxv,dyv;
 	 if ((ii=Init())!=0) {
@@ -153,4 +169,17 @@ label0:
 exit:
 	 closegraph();
 	 return 0;
-};
+}
+
+int main(int argc, char *argv[])
+{
+  char szSaveDir[MAXDIR];
+  getcurdir(0, szSaveDir);
+  UpdateWorkingDirectory(argc, argv);
+
+  org_main(argc, argv);
+
+  chdir("\\");
+  chdir(szSaveDir);
+  return 0;
+}
