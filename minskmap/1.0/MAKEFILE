@@ -29,5 +29,5 @@ libs: $(GRAPHICS_LIB) $(SERVIS_LIB) $(DBF_LIB) $(FILES_LIB)
 
 update:: libs
 
-run:
-  outward\city.exe /workpath:data
+run: $(APP_OUTPUT_FILE)
+  $(APP_OUTPUT_FILE) /workpath:data
