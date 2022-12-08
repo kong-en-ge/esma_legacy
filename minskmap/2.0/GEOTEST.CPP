@@ -12,6 +12,7 @@
 #include "textpack.hpp"
 #include "set.hpp"
 #include "tpedit.hpp"
+
 extern unsigned _stklen = 10240;
 void errorproc(int num);
 void predproc(int num);
@@ -22,21 +23,6 @@ char modelname[] = "minsk";
 char modelmod[] = "00";
 void drawcram();
 void all();
-
-const char cWorkPathSwitch[] = "/workpath:";
-
-void UpdateWorkingDirectory(int argc, char *argv[])
-{
-  for (int i = 1; i < argc; i++)
-  {
-    char *arg = argv[i];
-    if (strstr(arg, cWorkPathSwitch) == arg)
-    {
-      chdir(arg + sizeof(cWorkPathSwitch) - 1);
-      return;
-    }
-  }
-}
 
 int Init(int carg)
 {
@@ -225,17 +211,4 @@ label0:
 exit:
   closegraph();
   return 0;
-};
-
-int main(int argc, char *argv[])
-{
-  char szSaveDir[MAXDIR];
-  getcurdir(0, szSaveDir);
-  UpdateWorkingDirectory(argc, argv);
-
-  org_main(argc, argv);
-
-  chdir("\\");
-  chdir(szSaveDir);
-  return 0;
-};
+}
