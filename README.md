@@ -10,14 +10,14 @@ No code has been changed since 1990-s except some minor changes in order to prov
 
 ## Prerequisites
 
-Currently, you need an installed instance of Borland C++ 3.0 for MS DOS to compile source code. The preferrable location is c:\bc (it should also be included into the PATH variable value). Otherwise you should manually update each project file settings for include and library directories.
+Currently, you need an installed instance of Borland C++ 3.1 for MS DOS to compile source code. The preferrable location is c:\bc (it should also be included into the PATH variable value). Otherwise you should manually update each project file settings for include and library directories.
 
 You might also need some MS DOS emulation environment. DOSBox looks to be good enough. At least it successfully was used on our side.
 
 ## Projects
 
-Four utility libraries: *rtl\Graphics*, *rtl\Files*, *rtl\Dbf*, and *rtl\Servis*, are required to build the main projects *City* in MinskMap\1.0 and MinskMap\2.0 folders.
-You may complie any of them manually via opening and compiling projects in IDE, or using provided makefiles. If you prefer using IDE you might need to create some auxiliary folders manually according to compiler/linker error messages (since git doesn't store empty directories).
+Four utility libraries: *rtl\Graphics*, *rtl\Files*, *rtl\Dbf*, and *rtl\Servis*, are required to build the main projects *City* in MinskMap\1.0 and MinskMap\2.0 folders, and project *RB_map* in RBMAP folder.
+You may complie any of them manually via opening and compiling projects in IDE, or using provided makefiles. If you prefer using IDE you might need to create some auxiliary folders manually according to compiler/linker error messages (since git doesn't store empty directories). See the section below for using Make utility.
 
 ## Using Make utility for project building
 
