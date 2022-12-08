@@ -1,6 +1,19 @@
 .silent
 
 PROJECT_NAME=files
-PROJECT_TYPE=lib
+ROOT_DIR=..\..
 
-!include ..\..\common\make.inc
+!include $(ROOT_DIR)\common\make_lib.inc
+
+PUBLISHED_HEADERS=\
+  $(PH:name=xms.h)\
+  $(PH:name=buffiles.hpp)\
+  $(PH:name=fastmod.hpp)\
+  $(PH:name=files.hpp)\
+  $(PH:name=fwrite.hpp)\
+  $(PH:name=geomodel.hpp)\
+  $(PH:name=newmodel.hpp)\
+  $(PH:name=textfile.hpp)
+
+!include $(ROOT_DIR)\common\publish.inc
+

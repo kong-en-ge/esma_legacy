@@ -1,6 +1,26 @@
 .silent
 
 PROJECT_NAME=servis
-PROJECT_TYPE=lib
+ROOT_DIR=..\..
 
-!include ..\..\common\make.inc
+!include $(ROOT_DIR)\common\make_lib.inc
+
+PUBLISHED_HEADERS=\
+  $(PH:name=bigpath.hpp)\
+  $(PH:name=button.hpp)\
+  $(PH:name=critical.hpp)\
+  $(PH:name=dbffield.hpp)\
+  $(PH:name=disks.hpp)\
+  $(PH:name=font.hpp)\
+  $(PH:name=grwnd.hpp)\
+  $(PH:name=mouse.hpp)\
+  $(PH:name=set.hpp)\
+  $(PH:name=textpack.hpp)\
+  $(PH:name=tpedit.hpp)
+
+!include $(ROOT_DIR)\common\publish.inc
+
+update:: null_target
+  $(GET_HEADERS:name=dbf)
+  $(GET_HEADERS:name=files)
+  $(GET_HEADERS:name=graphics)

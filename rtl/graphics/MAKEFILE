@@ -1,6 +1,13 @@
 .silent
 
 PROJECT_NAME=graphics
-PROJECT_TYPE=lib
+ROOT_DIR=..\..
 
-!include ..\..\common\make.inc
+!include $(ROOT_DIR)\common\make_lib.inc
+
+PUBLISHED_HEADERS=\
+  $(PH:name=graphics.h)\
+  $(PH:name=drawpl.hpp)
+
+!include $(ROOT_DIR)\common\publish.inc
+

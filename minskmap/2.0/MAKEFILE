@@ -1,33 +1,7 @@
 .silent
 
 PROJECT_NAME=city
-PROJECT_TYPE=exe
 ROOT_DIR=..\..
-!include $(ROOT_DIR)\common\make.inc
 
-GET_LIB=$(MAKE) -f$(ROOT_DIR)\common\get_lib.mak LIB_NAME=lib_name ROOT_DIR=$(ROOT_DIR)
+!include $(ROOT_DIR)\common\make_app.inc
 
-LIB_DIR=LIB
-GRAPHICS_LIB=$(LIB_DIR)\GRAPHICS.LIB
-FILES_LIB=$(LIB_DIR)\FILES.LIB
-SERVIS_LIB=$(LIB_DIR)\SERVIS.LIB
-DBF_LIB=$(LIB_DIR)\DBF.LIB
-
-$(GRAPHICS_LIB):
-  $(GET_LIB:lib_name=graphics)
-
-$(FILES_LIB):
-  $(GET_LIB:lib_name=files)
-
-$(SERVIS_LIB):
-  $(GET_LIB:lib_name=servis)
-
-$(DBF_LIB):
-  $(GET_LIB:lib_name=dbf)
-
-libs: $(GRAPHICS_LIB) $(SERVIS_LIB) $(DBF_LIB) $(FILES_LIB)
-
-update:: libs
-
-run: $(APP_OUTPUT_FILE)
-  $(APP_OUTPUT_FILE) /workpath:data

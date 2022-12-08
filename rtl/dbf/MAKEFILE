@@ -1,6 +1,16 @@
 .silent
 
 PROJECT_NAME=dbf
-PROJECT_TYPE=lib
+ROOT_DIR=..\..
 
-!include ..\..\common\make.inc
+!include $(ROOT_DIR)\common\make_lib.inc
+
+PUBLISHED_HEADERS=\
+  $(PH:name=parse.h)\
+  $(PH:name=u4error.h)\
+  $(PH:name=base.hpp)\
+  $(PH:name=convert.hpp)\
+  $(PH:name=dbf.hpp)
+
+!include $(ROOT_DIR)\common\publish.inc
+
