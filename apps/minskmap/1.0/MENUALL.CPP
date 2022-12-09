@@ -23,7 +23,7 @@ void del_dbf();
 void act_dbf();
 void pnt_dbf();
 void red_rec();
-void help();
+void help(const char * help_file);
 
 double XEKRAZD(int y)
 {
@@ -521,7 +521,7 @@ void main_menu(char *parst, int parbl)
       whatisitd(1);
       break;
     case 25:
-      help();
+      help("M_M.hlp");
       break;
     }
   } while (keym != -1);

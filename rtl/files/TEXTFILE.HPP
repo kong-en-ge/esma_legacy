@@ -20,7 +20,7 @@ public:
   ~TEXTFILE();
 
   int status();
-  int open(char *name, int bufsize);
+  int open(const char *name, int bufsize);
   void close();
   int read();
   int readstr(char *str, int maxlen);

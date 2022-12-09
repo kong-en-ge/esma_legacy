@@ -18,7 +18,7 @@ TEXTFILE::~TEXTFILE()
     delete buf;
 }
 
-int TEXTFILE::open(char *name, int bufs)
+int TEXTFILE::open(const char *name, int bufs)
 {
   if ((handle = ::open(name, O_RDONLY | O_TEXT)) != -1)
   {

@@ -4,11 +4,11 @@
 #include "textfile.hpp"
 #include "mouse.hpp"
 
-void help()
+void help(const char * help_file)
 {
   TEXTFILE fhlp;
-  fhlp.open("M_M.HLP", 4000);
-  int nstr[40];
+  fhlp.open(help_file, 4000);
+  int nstr[30];
   int i = 0, *ip = nstr;
   char sthlp[47];
   TEXT_PACK_MENUS tphlp(160, 100, 460, 10, "Справка", "", 1, 1000, 30);

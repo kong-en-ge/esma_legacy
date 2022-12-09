@@ -497,10 +497,10 @@ class BigMB : public Big_Menu
   void draw_one(int num);
 
 public:
-  pascal BigMB(int md);
+  BigMB(int md);
 };
 
-pascal BigMB::BigMB(int md) : Big_Menu(150, 100, 470, 10, "Базы", "", 1)
+BigMB::BigMB(int md) : Big_Menu(150, 100, 470, 10, "Базы", "", 1)
 {
   maxn = LBSsize;
   mode = md;
@@ -553,11 +553,14 @@ void onoff(void)
 class DBF_bar : public M_bar
 {
 public:
-  pascal DBF_bar();
+  DBF_bar();
   void draw_one(int x, int y, int mode);
 };
 
-pascal DBF_bar::DBF_bar() : M_bar(56, 222, 12, 5, 34, 20, 22, 18){};
+DBF_bar::DBF_bar() : M_bar(56, 222, 12, 5, 34, 20, 22, 18)
+{
+}
+
 void DBF_bar::draw_one(int x, int y, int mode)
 {
   SVS svs;
