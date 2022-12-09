@@ -1,7 +1,6 @@
 #ifndef __drawrazd_hpp__
 #define __drawrazd_hpp__
 
-void errorproc(int num);
 int drawmap();
 void drawingline(int *metr, int num);
 int drawrazd(void);

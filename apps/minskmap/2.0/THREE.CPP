@@ -1,53 +1,42 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-#include <alloc.h>
 #include <values.h>
-#include "geomodel.hpp"
-#include "bigpath.hpp"
-#include "tpedit.hpp"
-#include "button.hpp"
+
 #include "globalda.hpp"
 #include "flibrt.hpp"
-#include "textfile.hpp"
-#include "txtpacks.hpp"
-#include "mouse.hpp"
-#include "drawpl.hpp"
 #include "fatr.hpp"
 #include "menuall2.hpp"
 #include "globalda.hpp"
-void control(int);
+#include "apputils.hpp"
+
 int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
 {
-  OBSTOP *kudan;
+  OBSTOP *kudan, *peres, *otkudan;
   char ss[90], sss[90], ssss[90], sssss[90];
-  int r, ckot, ckkd, ckuz, j2 = 0, jj = 0, xmt, ymt, xot, yot, xkd, ykd;
+  int r, ckot, ckkd, ckuz, j2 = 0, xot, yot, xkd, ykd;
   mk_atrf maot, makd, mauz;
   F_SPR sprot, sprkd, spruz;
   char mrot[55], mrkd[55], mruz1[55], mruz2[55], mruz3[55];
   char nstot[40], nstkd[40], nstuz[40];
-  int ret, at, kl;
-  OBSTOP *peres, *otkudan;
-  peres = (OBSTOP *)new char[21 * sizeof(OBSTOP)];
+  int ret, kl;
+  peres = new OBSTOP[21];
   if (peres == NULL)
   {
-    errorproc(0);
+    displayError(0);
     return 0;
   }
-  kudan = (OBSTOP *)new char[21 * sizeof(OBSTOP)];
+  kudan = new OBSTOP[21];
   if (kudan == NULL)
   {
-    errorproc(0);
-    delete peres;
+    displayError(0);
+    delete[] peres;
     return 0;
   }
-  otkudan = (OBSTOP *)new char[21 * sizeof(OBSTOP)];
+  otkudan = new OBSTOP[21];
   if (otkudan == NULL)
   {
-    errorproc(0);
-    delete peres;
-    delete kudan;
+    displayError(0);
+    delete[] peres;
+    delete[] kudan;
     return 0;
   }
   int num, num1, nm1 = 0, ob = 0, nm2 = 0, obo = 0;
@@ -99,13 +88,13 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
     }
     if (num != -1)
     {
-      memmove(&kudan[nm1], &kuda[num], sizeof(OBSTOP));
+      kudan[nm1] = kuda[num];
       ob++;
       nm1++;
     }
     if (num1 != -1)
     {
-      memmove(&otkudan[nm2], &otkuda[num1], sizeof(OBSTOP));
+      otkudan[nm2] = otkuda[num1];
       obo++;
       nm2++;
     }
@@ -116,16 +105,13 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
   { // on uzel
     while (iv < koluz)
     { //
-      xmt = uzel[iv].x;
-      ymt = uzel[iv].y;
       ss[0] = 0;
       xot = yot = xkd = ykd = 0;
       hh = 0;
       for (int k = 1; k <= 4; k++)
       { // for2
-        int iot, iuz;
+        int iot;
         iot = 0;
-        iuz = 0;
         mruz1[0] = 0;
         while ((otkudan[iot].vt != k) && (iot < obo))
           iot++;
@@ -168,7 +154,6 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
                 }
                 else
                 { // atribute ot
-                  at = 1;
                   maot.har += 4;
                   do
                   {
@@ -249,6 +234,7 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
           } // wh otkuda
         }
       } // for2
+
       if (strlen(ss) != 0)
       { // откуда есть в узле
         hh = 0;
@@ -302,7 +288,6 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
                     }
                     else
                     { // atribute kd
-                      at = 1;
                       makd.har += 4;
                       do
                       {
@@ -546,8 +531,8 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
       iv++;
     } //
   }   // on uzel
-  delete peres;
-  delete kudan;
-  delete otkudan;
+  delete[] peres;
+  delete[] kudan;
+  delete[] otkudan;
   return j2;
 }

@@ -1,3 +1,4 @@
+
 #include "library.hpp"
 #include "fstmod.hpp"
 #include "drawpl.hpp"
@@ -12,10 +13,9 @@
 #include "textpack.hpp"
 #include "set.hpp"
 #include "tpedit.hpp"
+#include "apputils.hpp"
 
 extern unsigned _stklen = 10240;
-void errorproc(int num);
-void predproc(int num);
 void main_menu();
 void DBF_FIL();
 char VERSION[] = "RB_MAP 1.0";
@@ -23,6 +23,21 @@ char modelname[] = "belarus";
 char modelmod[] = "00";
 void drawcram();
 void all();
+
+const char *errorMessages[] = 
+{
+  "Нет памяти для работы программы",                         // 0
+  "Ошибка чтения карты",                                     // 1
+  "Фатальные ошибки инициализации.  Продолжение невозможно", // 2
+  "Ошибка записи слайда"                                     // 3
+};
+
+const char * warningMessages[] =
+{
+  "Не найден объект в указанной точке",         // 0
+  "Достигнут максимальный масштаб отображения", // 1
+  "Не найден заданный объект"                   // 2
+};
 
 int Init()
 {
@@ -74,7 +89,7 @@ int Init()
   setcolor(BLACK);
   if (farcoreleft() <= 0x18000l)
   {
-    errorproc(0);
+    displayError(0);
     return -1;
   }
   DBF_FIL();
@@ -111,7 +126,7 @@ int Init()
       return -1;
     if ((bram = new char[filelength(hnd)]) == NULL)
     {
-      errorproc(0);
+      displayError(0);
       return -1;
     }
     read(hnd, bram, filelength(hnd));
@@ -143,15 +158,18 @@ int Init()
   return rr;
 }
 
-int org_main(int argc, char *argv[])
+int org_main(int /* argc */, char * /*argv*/ [])
 {
+  setErrorMessages(errorMessages, sizeof(errorMessages) / sizeof(errorMessages[0]));
+  setWarningMessages(warningMessages, sizeof(warningMessages) / sizeof(warningMessages[0]));
+
   GRwnd wndmain2(487, 8, 632, 31, "ООО 'ЭСМА'", LIGHTBLUE, 0, 0);
   int ii;
   double dxv, dyv;
   if ((ii = Init()) != 0)
   {
     if (ii == -1)
-      errorproc(2);
+      displayError(2);
     goto exit;
   }
   memmove(&XMING, &model.fm.xminm, 4 * sizeof(XMING));

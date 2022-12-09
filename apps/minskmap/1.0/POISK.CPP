@@ -3,6 +3,7 @@
 #include "menuall2.hpp"
 #include "tpedit.hpp"
 #include "globalda.hpp"
+#include "apputils.hpp"
 
 #define max(arg1, arg2) (((arg1) > (arg2)) ? (arg1) : (arg2))
 #define min(arg1, arg2) (((arg1) < (arg2)) ? (arg1) : (arg2))
@@ -228,9 +229,8 @@ int poisk(int /*regim*/, int *x, int *y, double *doub)
     }
   }
   else
-  {
-    predproc(0);
-  }
+    displayWarning(0);
+
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
 ex1:
   return -1;

@@ -17,15 +17,14 @@
 #include "fatr.hpp"
 #include "menuall2.hpp"
 #include "globalda.hpp"
+#include "apputils.hpp"
 
 int next_model(int startpos, int nc = 0, int prp = 0);
-void predproc(int);
 FLIB *findobj(SPR *spr);
 int findobjn(SPR *spr);
 int setviewMAP();
 int poisk(int regim = 0, int *x = NULL, int *y = NULL, double *b = NULL);
 int drawrazd();
-int control(int);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
 int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst);
 int ATRFR(TEXT_PACK_MENUS *tp, int j1);
@@ -40,14 +39,13 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd);
 int stmetro();
 int stuzel(int kh);
 int comuzel();
-double XDISRAZ(int y);
-double YDISRAZ(int x);
 void draw_one_d(int, int, int, int);
 int obj_enabled(F_SPR *spr);
 void draw_fld();
 void drawcram();
 PERES *ps;
 TWOPERES *pstwo;
+
 struct OTK_KUD
 {
   char otk[40];
@@ -58,8 +56,10 @@ struct OTK_KUD
   int notk;
   int nkud;
 };
+
 PERESU *psu;
 OTK_KUD otk_kud[21], o_k[21];
+
 const unsigned mscur[] = {
     0xffff, 0xffff, 0xffff, 0xfc1f, 0xf3e7, 0xf777, 0xee3b, 0xec9b,
     0xe9cb, 0xec9b, 0xee3b, 0xf777, 0xf3e7, 0xfc1f, 0xffff, 0xffff,
@@ -221,7 +221,7 @@ void find_rg(void)
                          "", 1, 4000, 200, 1, 1);
       if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
       {
-        errorproc(0);
+        displayError(0);
         return;
       }
       at = ATR(&tp, ret);
@@ -237,7 +237,7 @@ void find_rg(void)
     }
   } while (ret < 0xff00);
   if (count == 0)
-    predproc(2);
+    displayWarning(2);
   return;
 }
 
@@ -321,7 +321,7 @@ void find_st(void)
       TEXT_PACK_MENUS tp(450, 185, 632, 7, "Улица", "", 1, 4000, 200, 1, 1);
       if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
       {
-        errorproc(0);
+        displayError(0);
         return;
       }
       at = ATR(&tp, ret);
@@ -337,7 +337,7 @@ void find_st(void)
     }
   } while (ret < 0xff00);
   if (count == 0)
-    predproc(2);
+    displayWarning(2);
   return;
 }
 
@@ -379,7 +379,7 @@ int find_bl(char *st, int bl)
     }
     if (ii == ATRN[ia].ncod)
     {
-      predproc(2);
+      displayWarning(2);
       return -1;
     }
     fa.atr[0].znk = ii;
@@ -435,7 +435,7 @@ int find_bl(char *st, int bl)
       TEXT_PACK_MENUS tp(450, 185, 632, 7, "Здание", "", 1, 4000, 200, 1, 1);
       if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
       {
-        errorproc(0);
+        displayError(0);
         return -1;
       }
       at = ATR(&tp, ret);
@@ -452,7 +452,7 @@ int find_bl(char *st, int bl)
   } while (ret < 0xff00);
   if (count == 0)
   {
-    predproc(2);
+    displayWarning(2);
     return -1;
   }
   return 0;
@@ -1020,7 +1020,6 @@ int ATRFR(TEXT_PACK_MENUS *tp, int j1)
 void whatisit(int, int s)
 {
   char str[80];
-  int key, at;
   int x, y;
   int ret = poisk(s, &x, &y);
   if (ret == -1)
@@ -1029,13 +1028,13 @@ void whatisit(int, int s)
     TEXT_PACK_MENUS tp(450, 185, 632, 7, "Что это?", "", 1, 4000, 200, 1, 1);
     if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
     {
-      errorproc(0);
+      displayError(0);
       goto ex;
     }
-    at = ATR(&tp, ret);
+    ATR(&tp, ret);
     tp.draw();
     tp.textxy(1, 9, "Esc,Enter - выход");
-    key = tp.menu_key2();
+    tp.menu_key2();
     tp.restore();
     tp.del();
   }
@@ -1047,17 +1046,16 @@ ex:
 
 void howstop()
 {
-  obstop = (OBSTOP *)new char[20 * sizeof(OBSTOP)];
+  obstop = new OBSTOP[20];
   OBSTOP *obs;
-  obs = (OBSTOP *)new char[4 * sizeof(OBSTOP)];
+  obs = new OBSTOP[4];
   char str[80];
-  int key, at;
   int x, y, ob = 0, num, nm1 = 0;
   int ret = poisk(1, &x, &y);
   if (!ret)
   {
-    delete obstop;
-    delete obs;
+    delete[] obstop;
+    delete[] obs;
     return;
   }
   {
@@ -1085,7 +1083,7 @@ void howstop()
       }
       if (num != -1)
       {
-        memmove(&obs[nm1], &obstop[num], sizeof(OBSTOP));
+        obs[nm1] = obstop[num];
         ob++;
         nm1++;
       }
@@ -1093,27 +1091,27 @@ void howstop()
     TEXT_PACK_MENUS tp(450, 185, 632, 11, "Транспорт", "", 1, 4000, 200, 1, 1);
     if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
     {
-      errorproc(0);
-      delete obstop;
-      delete obs;
+      displayError(0);
+      delete[] obstop;
+      delete[] obs;
       goto ex;
     }
     setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
     for (int i = 0; i < ob; i++)
       draw_one_obj(obs[i].nobj, 12, 1);
     settwink(12, 15);
-    at = ATRTR(&tp, ob, obs);
+    ATRTR(&tp, ob, obs);
     tp.draw();
     tp.textxy(1, 13, "Esc,Enter - выход");
-    key = tp.menu_key2();
+    tp.menu_key2();
     tp.restore();
     tp.del();
     nottwink();
     for (int ii = 0; ii < ob; ii++)
       draw_one_obj(obs[ii].nobj, -1, 1);
     setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
-    delete obstop;
-    delete obs;
+    delete[] obstop;
+    delete[] obs;
   }
 ex:
 }
@@ -1127,9 +1125,8 @@ int stmetro()
   char nstot[40];
   while ((ret = next_model(ret)) > 0)
   { // who
-    int spp;
     int nkl = models[ret - 1].numkl;
-    if ((spp = strncmp(flibrt[nkl].clcod, "62132", 5)) != 0)
+    if (strncmp(flibrt[nkl].clcod, "62132", 5) != 0)
       continue;
     if (flibrt[nkl].loc != 1)
       continue;
@@ -1188,7 +1185,6 @@ int stuzel(int kh)
   int klm = 0;
   float koeff;
   char nstot[40], nmu0[25], nmu1[55], nmu2[55], nmu3[55];
-  float dok = sqrt(pow((xco - xck), 2) + pow((yco - yck), 2));
   for (i = 0; i < comuz; i++)
   { // for
     if (model.readspr(&spr, uzly[i].n) != 1)
@@ -1262,9 +1258,8 @@ int comuzel()
   int klm = 0;
   while ((ret = next_model(ret, 0, 1)) > 0)
   { // who
-    int spp;
     int nkl = models[ret - 1].numkl;
-    if ((spp = strncmp(flibrt[nkl].clcod, "655", 3)) != 0)
+    if (strncmp(flibrt[nkl].clcod, "655", 3) != 0)
       continue;
     if (flibrt[nkl].loc != 1)
       continue;
@@ -1284,10 +1279,10 @@ int comuzel()
 
 void where_from()
 {
-  obstop = (OBSTOP *)new char[21 * sizeof(OBSTOP)];
+  obstop = new OBSTOP[21];
   retot = poisk(1, &xo, &yo);
   if (pr == 1)
-    delete otkuda;
+    delete[] otkuda;
   if (!retot)
   {
     setviewport(0, 0, getmaxx(), getmaxy(), 1);
@@ -1296,12 +1291,12 @@ void where_from()
       pr = 0;
       drawcram();
     }
-    delete obstop;
+    delete[] obstop;
     return;
   }
   xco = xo;
   yco = yo;
-  otkuda = (OBSTOP *)new char[21 * sizeof(OBSTOP)];
+  otkuda = new OBSTOP[21];
   int at = 0, key, kl = 0;
   while ((obstop[at].vt != 1) && (at < retot))
     at++;
@@ -1338,7 +1333,8 @@ void where_from()
   if (!GdEGA)
     drawcram();
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
-  delete obstop;
+
+  delete[] obstop;
 }
 
 void where()
@@ -1347,13 +1343,13 @@ void where()
     return;
   F_SPR spr;
   OBSTOP *kuda;
-  obstop = (OBSTOP *)new char[21 * sizeof(OBSTOP)];
+  obstop = new OBSTOP[21];
   int key, at, ob, ob3, ob4, flag = 0;
   int retkd = poisk(1, &xo, &yo);
   int j1 = 0, j2 = 0, j3 = 0, j4 = 0, j5 = 0;
   if (!retkd)
   {
-    delete obstop;
+    delete[] obstop;
     setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
     return;
   }
@@ -1364,7 +1360,7 @@ void where()
     gogo = 1;
   if (gogo == 0)
   { // пешком не дойдешь
-    kuda = (OBSTOP *)new char[21 * sizeof(OBSTOP)];
+    kuda = new OBSTOP[21];
     at = 0;
     while ((obstop[at].vt != 1) && (at < retkd))
       at++;
@@ -1581,24 +1577,24 @@ void where()
       { // откуда на метро
         if (prmt == 0)
         {
-          if ((metro = (METRO *)new char[21 * sizeof(METRO)]) == NULL)
+          if ((metro = new METRO[21]) == NULL)
           {
-            errorproc(0);
+            displayError(0);
             goto ex;
           }
           kolmet = stmetro();
           prmt = 1;
         }
-        if ((ps = (PERES *)new char[11 * sizeof(PERES)]) == NULL)
+        if ((ps = new PERES[11]) == NULL)
         {
-          errorproc(0);
+          displayError(0);
           goto ex;
         }
         j2 = otk_met_kuda(ps, kuda, retkd, otkuda[0].nobj);
         if (j2 != 0)
           flag = 1;
         else
-          delete ps;
+          delete[] ps;
         if (j2 <= 2)
           ob = j2;
         else
@@ -1608,17 +1604,17 @@ void where()
       { // куда на метро
         if (prmt == 0)
         {
-          if ((metro = (METRO *)new char[21 * sizeof(METRO)]) == NULL)
+          if ((metro = new METRO[21]) == NULL)
           {
-            errorproc(0);
+            displayError(0);
             goto ex;
           }
           kolmet = stmetro();
           prmt = 1;
         }
-        if ((ps = (PERES *)new char[11 * sizeof(PERES)]) == NULL)
+        if ((ps = new PERES[11]) == NULL)
         {
-          errorproc(0);
+          displayError(0);
           goto ex;
         }
         j2 = otk_met_kuda(ps, otkuda, retot, kuda[0].nobj);
@@ -1626,12 +1622,12 @@ void where()
         {
           if (model.readspr(&sprkd, kuda[0].nobj) == -1)
           {
-            errorproc(1);
+            displayError(1);
             goto ex;
           }
           if (model.readhars((int **)&makd.har, &sprkd) == -1)
           {
-            errorproc(1);
+            displayError(1);
             goto ex;
           }
           else
@@ -1650,7 +1646,7 @@ void where()
           flag = 2;
         }
         else
-          delete ps;
+          delete[] ps;
         if (j2 <= 2)
           ob = j2;
         else
@@ -1658,51 +1654,51 @@ void where()
       } // куда на метро
       if (uzl == 0)
       {
-        if ((uzly = (UZLY *)new char[120 * sizeof(UZLY)]) == NULL)
+        if ((uzly = new UZLY[120]) == NULL)
         {
-          errorproc(0);
+          displayError(0);
           goto ex;
         }
         uzl = 1;
         comuz = comuzel();
       }
-      if ((uzel = (UZEL *)new char[41 * sizeof(UZEL)]) == NULL)
+      if ((uzel = new UZEL[41]) == NULL)
       {
-        errorproc(0);
+        displayError(0);
         goto ex;
       }
       koluz = stuzel(40);
       j3 = 0;
       if (koluz != 0)
       {
-        if ((psu = (PERESU *)new char[11 * sizeof(PERESU)]) == NULL)
+        if ((psu = new PERESU[11]) == NULL)
         {
-          errorproc(0);
+          displayError(0);
           goto ex;
         }
         j3 = peresad(psu, kuda, retkd);
       }
-      delete uzel;
+      delete[] uzel;
       if (j3 == 0)
-        delete psu;
+        delete[] psu;
       if (j3 <= 2)
         ob3 = j3;
       else
         ob3 = 3;
       if ((j2 == 0) && (j3 == 0))
       { // две пересадки
-        if ((uzel = (UZEL *)new char[51 * sizeof(UZEL)]) == NULL)
+        if ((uzel = new UZEL[51]) == NULL)
         {
-          errorproc(0);
+          displayError(0);
           goto ex;
         }
         koluz = stuzel(50);
         j4 = 0;
         if (koluz != 0)
         {
-          if ((pstwo = (TWOPERES *)new char[11 * sizeof(TWOPERES)]) == NULL)
+          if ((pstwo = new TWOPERES[11]) == NULL)
           {
-            errorproc(0);
+            displayError(0);
             goto ex;
           }
           j4 = twoperes(pstwo, kuda, retkd);
@@ -1720,13 +1716,13 @@ void where()
           j5 = three(pstwo, kuda, retkd);
           if (j5 == 0)
           {
-            predproc(4);
-            delete pstwo;
+            displayWarning(4);
+            delete[] pstwo;
           }
           else
             ob4 = 1;
         }
-        delete uzel;
+        delete[] uzel;
       } // две пересадки
     }   // определить пересадку
   }     // пешком не дойдешь
@@ -1735,7 +1731,7 @@ void where()
     TEXT_PACK_MENUS tp(400, 185, 632, 10, "Как доехать", "", 1, 4000, 200, 1, 1);
     if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
     {
-      errorproc(0);
+      displayError(0);
       goto ex;
     }
     if (gogo == 1)
@@ -1755,7 +1751,7 @@ void where()
             ATRMT(&tp, ob);
           else if (flag == 2)
             ATRTM(&tp, ob);
-          delete ps;
+          delete[] ps;
           setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
         }
         if (j3 != 0)
@@ -1763,14 +1759,14 @@ void where()
           if (j2 != 0)
             tp.add("         ИЛИ        ");
           ATRPER(&tp, ob3);
-          delete psu;
+          delete[] psu;
           setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
         }
       } // 1 peresad
       else if (j4 != 0)
       { // 2 peresad
         ATR2PER(&tp, ob4);
-        delete pstwo;
+        delete[] pstwo;
         setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
       } // 2 peresad
       else if (j5 != 0)
@@ -1825,7 +1821,7 @@ void where()
         tp.add(ssa);
         tp.add("  ДАЛЕЕ  ");
         ATR2PER(&tp, ob4);
-        delete pstwo;
+        delete[] pstwo;
         setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
       } // 3 peresad
     }   // с п
@@ -1842,9 +1838,9 @@ ex:
   if (!GdEGA)
     drawcram();
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
-  delete kuda;
-  delete otkuda;
-  delete obstop;
+  delete[] kuda;
+  delete[] otkuda;
+  delete[] obstop;
 }
 
 class BigMB : public Big_Menu
@@ -2222,7 +2218,7 @@ void rasst(void)
   if (mous_buf != NULL)
   {
     mouse_restore(mous_buf);
-    delete mous_buf;
+    delete[] mous_buf;
   }
   setcolor(col);
   mouse_show(ON);

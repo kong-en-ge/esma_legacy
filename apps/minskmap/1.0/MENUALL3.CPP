@@ -6,8 +6,8 @@
 #include "drawpl.hpp"
 #include "fatr.hpp"
 #include "menuall2.hpp"
+#include "apputils.hpp"
 
-void predproc(int);
 FLIB *findobj(SPR *spr);
 int findobjn(SPR *spr);
 int setviewMAP();
@@ -183,7 +183,7 @@ void find_rg(void)
                          "", 1, 4000, 200, 1, 1);
       if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
       {
-        errorproc(0);
+        displayError(0);
         return;
       }
       at = ATR(&tp, ret);
@@ -199,7 +199,7 @@ void find_rg(void)
     }
   } while (ret < 0xff00);
   if (count == 0)
-    predproc(2);
+    displayWarning(2);
   return;
 }
 
@@ -283,7 +283,7 @@ void find_st(void)
       TEXT_PACK_MENUS tp(450, 185, 632, 7, "Улица", "", 1, 4000, 200, 1, 1);
       if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
       {
-        errorproc(0);
+        displayError(0);
         return;
       }
       at = ATR(&tp, ret);
@@ -299,7 +299,7 @@ void find_st(void)
     }
   } while (ret < 0xff00);
   if (count == 0)
-    predproc(2);
+    displayWarning(2);
   return;
 }
 
@@ -341,7 +341,7 @@ int find_bl(char *st, int bl)
     }
     if (ii == ATRN[ia].ncod)
     {
-      predproc(2);
+      displayWarning(2);
       return -1;
     }
     fa.atr[0].znk = ii;
@@ -397,7 +397,7 @@ int find_bl(char *st, int bl)
       TEXT_PACK_MENUS tp(450, 185, 632, 7, "Здание", "", 1, 4000, 200, 1, 1);
       if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
       {
-        errorproc(0);
+        displayError(0);
         return -1;
       }
       at = ATR(&tp, ret);
@@ -414,7 +414,7 @@ int find_bl(char *st, int bl)
   } while (ret < 0xff00);
   if (count == 0)
   {
-    predproc(2);
+    displayWarning(2);
     return -1;
   }
   return 0;
@@ -475,7 +475,7 @@ void whatisit(int m, int s)
     TEXT_PACK_MENUS tp(450, 185, 632, 7, "Что это?", "", 1, 4000, 200, 1, 1);
     if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
     {
-      errorproc(0);
+      displayError(0);
       goto ex;
     }
     at = ATR(&tp, ret);
@@ -520,7 +520,7 @@ void BigMB::draw_one(int num)
   draw_one_d(VPR_menu::right - 32, VPR_menu::top + num * 12 + 6,
              colordbf[par->mark[1] - 'A'], par->mark[0] - 'A');
   restoresettings(&svs);
-};
+}
 
 void onoff(void)
 {

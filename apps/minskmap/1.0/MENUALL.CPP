@@ -5,6 +5,7 @@
 #include "menuall2.hpp"
 #include "tpedit.hpp"
 #include "fatr.hpp"
+#include "apputils.hpp"
 
 #define max(arg1, arg2) (((arg1) > (arg2)) ? (arg1) : (arg2))
 #define min(arg1, arg2) (((arg1) < (arg2)) ? (arg1) : (arg2))
@@ -28,22 +29,22 @@ void help(const char * help_file);
 double XEKRAZD(int y)
 {
   return (YMAXMAPE - y) * (XMAXV - XMINV) / YMAXMAPE + XMINV;
-};
+}
 
 double YEKRAZD(int x)
 {
   return x * (YMAXV - YMINV) / XMAXMAPE + YMINV;
-};
+}
 
 int XRAZEKR(float y)
 {
   return float((y - YMINV) * (XMAXMAPE + 1) / (YMAXV - YMINV));
-};
+}
 
 int YRAZEKR(float x)
 {
   return float((XMAXV - x) * (YMAXMAPE + 1) / (XMAXV - XMINV));
-};
+}
 
 double XDISRAZ(int y)
 {
@@ -236,7 +237,7 @@ void fragment(void)
 {
   if (CURRENTSCALE < 2.8 * SCALEMIN)
   {
-    predproc(1);
+    displayWarning(1);
     return;
   }
   double xminm, yminm, dxm, dym;
@@ -296,13 +297,13 @@ void centr(void)
   YMAXV = _DYM + dym;
   cor_V();
   drawrazd();
-};
+}
 
 void plmash(void)
 {
   if (CURRENTSCALE < 2.8 * SCALEMIN)
   {
-    predproc(1);
+    displayWarning(1);
     return;
   }
   double dxm = (XMAXV - XMINV) / 4, dym = (YMAXV - YMINV) / 4;
@@ -315,7 +316,7 @@ void plmash(void)
   if ((YMAXV - YMINV) < 200)
     YMAXV = YMINV + 200;
   drawrazd();
-};
+}
 
 void minmash(void)
 {
@@ -333,7 +334,7 @@ void minmash(void)
   YMAXV += dym;
   cor_V();
   drawrazd();
-};
+}
 
 void all(void)
 {
@@ -341,7 +342,7 @@ void all(void)
     return;
   memmove(&XMINV, &XMING, 4 * sizeof(double));
   drawrazd();
-};
+}
 
 void outtxt(int x, int y, char *str)
 {
@@ -380,7 +381,7 @@ void outtxt(int x, int y, char *str)
   settextstyle(t.font, t.direction, t.charsize);
   settextjustify(t.horiz, t.vert);
   restoresettings(&svs);
-};
+}
 
 char *ston = "Вкл. N";
 char *stoff = "Выкл. N";

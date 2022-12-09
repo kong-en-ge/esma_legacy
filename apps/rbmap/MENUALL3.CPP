@@ -17,8 +17,8 @@
 #include "fatr.hpp"
 #include "menuall2.hpp"
 #include "globalda.hpp"
+#include "apputils.hpp"
 
-void predproc(int);
 FLIB *findobj(SPR *spr);
 int findobjn(SPR *spr);
 int setviewMAP();
@@ -244,7 +244,7 @@ void find_punct(void)
   }
   if (!cpunct)
   {
-    predproc(2);
+    displayWarning(2);
     return;
   }
   for (ret = 0; ret < cpunct; ret++)
@@ -259,7 +259,7 @@ void find_punct(void)
     TEXT_PACK_MENUS tp(450, 185, 632, 7, "Нас.пункт", "", 1, 4000, 200, 1, 1);
     if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
     {
-      errorproc(0);
+      displayError(0);
       return;
     }
     at = ATR(&tp, punct[ret].nob);
@@ -321,7 +321,7 @@ void find_rg(void)
       TEXT_PACK_MENUS tp(450, 185, 632, 7, "Район", "", 1, 4000, 200, 1, 1);
       if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
       {
-        errorproc(0);
+        displayError(0);
         return;
       }
       at = ATR(&tp, ret);
@@ -337,7 +337,7 @@ void find_rg(void)
     }
   } while (ret < 0xff00);
   if (count == 0)
-    predproc(2);
+    displayWarning(2);
   return;
 }
 
@@ -395,7 +395,7 @@ void whatisit(int m, int s)
     TEXT_PACK_MENUS tp(450, 185, 632, 7, "Что это?", "", 1, 4000, 200, 1, 1);
     if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
     {
-      errorproc(0);
+      displayError(0);
       goto ex;
     }
     at = ATR(&tp, ret);

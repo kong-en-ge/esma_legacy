@@ -5,6 +5,7 @@
 #include "tpedit.hpp"
 #include <alloc.h>
 #include "fatr.hpp"
+#include "apputils.hpp"
 
 #define max(arg1, arg2) (((arg1) > (arg2)) ? (arg1) : (arg2))
 #define min(arg1, arg2) (((arg1) < (arg2)) ? (arg1) : (arg2))
@@ -237,7 +238,7 @@ void fragment(void)
 {
   if (CURRENTSCALE < 2.8 * SCALEMIN)
   {
-    predproc(1);
+    displayWarning(1);
     return;
   }
   double xminm, yminm, dxm, dym;
@@ -303,7 +304,7 @@ void plmash(void)
 {
   if (CURRENTSCALE < 2.8 * SCALEMIN)
   {
-    predproc(1);
+    displayWarning(1);
     return;
   }
   double dxm = (XMAXV - XMINV) / 4, dym = (YMAXV - YMINV) / 4;

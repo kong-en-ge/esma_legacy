@@ -43,9 +43,9 @@ struct Sreg : public REGION
 struct GRwnd : public Sreg
 {
   int nst, titlec; //номер строки,цвет фона заголовка
-  char *title;     //заголовок
+  char const *title; //заголовок
 
-  GRwnd(int xl, int yt, int xr, int yb, char *,
+  GRwnd(int xl, int yt, int xr, int yb, char const *,
         int titlec_ = LIGHTBLUE, int rm = 0, int drw = 0);
   void draw(void);
   void text(const char *string, int center = 0);

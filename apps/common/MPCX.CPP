@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#include "apputils.hpp"
 #include "globalda.hpp"
 #include "grwnd.hpp"
 
@@ -25,8 +26,6 @@ struct PCXheader
   unsigned int paletteinfo;
   char reserved2[58];
 };
-
-void errorproc(int);
 
 void getpalettereg(int RegN, char *pal, char *pal2)
 {
@@ -276,8 +275,8 @@ void slide()
     return;
   int retsl = pcx_d_f(pathf, 0, 0, XMAXMAPE, YMAXMAPE);
   if (retsl == -1)
-    errorproc(0);
+    displayError(0);
   else if (retsl == -2)
-    errorproc(3);
+    displayError(3);
   return;
 }

@@ -16,8 +16,8 @@
 #include "mouse.hpp"
 #include "txtpacks.hpp"
 #include "menuall2.hpp"
+#include "apputils.hpp"
 
-void predproc(int num);
 int scaleminmax(REC_RAZD *r);
 void draw_one_d(double _x, double _y, int color = -1);
 void draw_one_d(int, int, int, int);
@@ -326,8 +326,8 @@ long poiskdbf()
   }
   if (!cfdb)
   {
-    predproc(0);
-    return (0);
+    displayWarning(0);
+    return 0;
   }
   //  setviewport(XMINE,YMINE,XMAXE,YMAXE,1);
   ret2 = 0;
@@ -488,7 +488,7 @@ void BigFB::draw_one(int num)
   draw_one_d(VPR_menu::right - 32, VPR_menu::top + num * 12 + 6,
              colordbf[par->mark[1] - 'A'], par->mark[0] - 'A');
   restoresettings(&svs);
-};
+}
 
 class OneB : public Big_Menu
 {

@@ -1,4 +1,3 @@
-void errorproc(int num);
 int drawmap();
 void drawingline(int *metr, int num);
 int drawrazd(void);

@@ -1,52 +1,42 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <math.h>
 #include <string.h>
-#include <ctype.h>
-#include <alloc.h>
-#include "geomodel.hpp"
-#include "bigpath.hpp"
-#include "tpedit.hpp"
-#include "button.hpp"
-#include "globalda.hpp"
+
 #include "flibrt.hpp"
-#include "textfile.hpp"
-#include "txtpacks.hpp"
-#include "mouse.hpp"
-#include "drawpl.hpp"
 #include "fatr.hpp"
-#include "menuall2.hpp"
 #include "globalda.hpp"
+#include "apputils.hpp"
 
 int poisk(int regim = 0, int *x = NULL, int *y = NULL, double *b = NULL);
-void control(int);
+
 int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn)
 {
-  OBSTOP *kudan;
-  int r, ckot, ckkd, j2 = 0, jj = 0;
+  OBSTOP *kudan, *peres;
+  int r, ckot, ckkd, j2 = 0;
   mk_atrf maot, makd;
   F_SPR sprot, sprkd;
   char ss[55], ss1[55];
   char mrot[55], mrkd[55], nstot[40], nstkd[40];
   int ret, xmt, ymt, at, kl;
-  OBSTOP *peres;
-  peres = (OBSTOP *)new char[21 * sizeof(OBSTOP)];
+
+  peres = new OBSTOP[21];
   if (peres == NULL)
   {
-    errorproc(0);
+    displayError(0);
     return 0;
   }
-  kudan = (OBSTOP *)new char[21 * sizeof(OBSTOP)];
+  kudan = new OBSTOP[21];
   if (kudan == NULL)
   {
-    errorproc(0);
-    delete peres;
+    displayError(0);
+    delete[] peres;
     return 0;
   }
   if (model.readspr(&sprot, nn) == -1)
   {
-    errorproc(1);
-    delete peres;
-    delete kudan;
+    displayError(1);
+    delete[] peres;
+    delete[] kudan;
     return 0;
   }
   int xn = sprot.xmin, yn = sprot.ymin;
@@ -75,7 +65,7 @@ int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn)
     }
     if (num != -1)
     {
-      memmove(&kudan[nm1], &otkd[num], sizeof(OBSTOP));
+      kudan[nm1] = otkd[num];
       ob++;
       nm1++;
     }
@@ -99,7 +89,7 @@ int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn)
       {
         if (obstop[at].vt != 1)
         {
-          memmove(&peres[kl], &obstop[at], sizeof(OBSTOP));
+          peres[kl] = obstop[at];
           kl++;
         }
         at++;

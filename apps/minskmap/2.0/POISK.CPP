@@ -5,8 +5,8 @@
 //#include "test.hpp"
 #include "tpedit.hpp"
 #include "fwrite.hpp"
-#include <alloc.h>
 #include "globalda.hpp"
+#include "apputils.hpp"
 
 #define max(arg1, arg2) (((arg1) > (arg2)) ? (arg1) : (arg2))
 #define min(arg1, arg2) (((arg1) < (arg2)) ? (arg1) : (arg2))
@@ -313,7 +313,7 @@ int poisk(int regim, int *x, int *y, double *doub)
   else
   {
     if (regim != 2)
-      predproc(0);
+      displayWarning(0);
   }
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
 ex1:

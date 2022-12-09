@@ -31,7 +31,5 @@ int XRAZEKR(float y);
 int YRAZEKR(float x);
 double YDISRAZ(int x);
 double XDISRAZ(int y);
-void predproc(int num);
-void errorproc(int num);
 
 #endif

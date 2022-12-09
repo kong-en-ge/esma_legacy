@@ -7,8 +7,7 @@
 #include "textpack.hpp"
 #include "tpedit.hpp"
 #include "dbf.hpp"
-
-void errorproc(int);
+#include "apputils.hpp"
 
 char *DBFCOD;
 int *DBFCODP, DBFSIZE;
@@ -22,7 +21,7 @@ void DBF_FIL()
   TEXT_PACK txp(7160, 150);
   if ((txp.text == NULL) || (txp.sm == NULL))
   {
-    errorproc(0);
+    displayError(0);
     return;
   }
   if (fpar.open("DBF.TXT", 2048) != 0)
