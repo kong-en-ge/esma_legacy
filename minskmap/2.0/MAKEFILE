@@ -1,7 +1,0 @@
-.silent
-
-PROJECT_NAME=city
-ROOT_DIR=..\..
-
-!include $(ROOT_DIR)\common\make_app.inc
-

@@ -16,7 +16,7 @@ You might also need some MS DOS emulation environment. DOSBox looks to be good e
 
 ## Projects
 
-Four utility libraries: *rtl\Graphics*, *rtl\Files*, *rtl\Dbf*, and *rtl\Servis*, are required to build the main projects *City* in MinskMap\1.0 and MinskMap\2.0 folders, and project *RB_map* in RBMAP folder.
+Four utility libraries: *rtl\Graphics*, *rtl\Files*, *rtl\Dbf*, and *rtl\Servis*, are required to build main projects *City* in apps\MinskMap\1.0 and apps\MinskMap\2.0 folders, and project *RB_map* in apps\RBMAP folder.
 You may complie any of them manually via opening and compiling projects in IDE, or using provided makefiles. If you prefer using IDE you might need to create some auxiliary folders manually according to compiler/linker error messages (since git doesn't store empty directories). See the section below for using Make utility.
 
 ## Using Make utility for project building
