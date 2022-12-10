@@ -68,15 +68,6 @@ void DBF_FIL()
   DBFSIZE = txp.num;
 }
 
-char *fieldfilename(char *fieldn)
-{
-  int len = strlen(fieldn);
-  char *ch;
-  for (int i = 0; i < DBFSIZE; i++)
-    if ((!strncmp(fieldn, ch = DBFCOD + DBFCODP[i], len)) && (*(ch += len) == '/'))
-      return strrchr(ch, '/') + 1;
-}
-
 int dcdpar(char *codp, char *znp, int zn)
 {
   if (DBFSIZE == 0)

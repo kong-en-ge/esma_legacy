@@ -1,5 +1,4 @@
 #include "button.hpp"
-#include "menuall.hpp"
 #include "menuall2.hpp"
 
 int far pascal error2but()

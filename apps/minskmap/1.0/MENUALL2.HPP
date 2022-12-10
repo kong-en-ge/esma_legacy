@@ -6,7 +6,6 @@
 #include "mouse.hpp"
 #include "button.hpp"
 #include "drawrazd.hpp"
-#include "menuall.hpp"
 #include "globalda.hpp"
 #include "textpack.hpp"
 #include "set.hpp"

@@ -3,7 +3,6 @@
 #include "drawpl.hpp"
 #include "button.hpp"
 #include "globalda.hpp"
-#include "menuall.hpp"
 #include "drawrazd.hpp"
 #include "mouse.hpp"
 #include "flibrt.hpp"

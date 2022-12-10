@@ -1,19 +1,10 @@
-#include <dir.h>
-#include <dos.h>
-#include <fcntl.h>
-#include <io.h>
 #include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
 
 #include "button.hpp"
 #include "globalda.hpp"
-#include "dbf.hpp"
-#include "fwrite.hpp"
 #include "files.hpp"
-#include "tpedit.hpp"
-#include "mouse.hpp"
 #include "txtpacks.hpp"
 #include "menuall2.hpp"
 #include "apputils.hpp"
@@ -110,9 +101,8 @@ int getvalf(REC_dbf *rdb)
     }
     if (rdb->type == 'N')
     {
-      double dd;
       char *cc;
-      dd = strtod(rdb->val, &cc);
+      strtod(rdb->val, &cc);
       if ((*cc == 0) && (rdb->val[0] != 0))
         break;
     }
@@ -364,9 +354,9 @@ struct DBF_REC : public TEXT_PACK_MENUS
 {
   int mode;
   DBF_REC(int m) : TEXT_PACK_MENUS(450, m != 1 ? 185 : 178, 632,
-                                          m != 1 ? 7 : 6, m == 0 ? "Что здесь?" : m == 1 ? "Удаление"
-                                                                                         : "Поиск в БД",
-                                          NULL, 1, 2000, 50, 1, m != 1 ? 1 : 3) { mode = m; };
+                                   m != 1 ? 7 : 6, m == 0 ? "Что здесь?" : m == 1 ? "Удаление"
+                                                                                  : "Поиск в БД",
+                                   NULL, 1, 2000, 50, 1, m != 1 ? 1 : 3) { mode = m; };
   int menu_key();
 };
 
@@ -462,7 +452,6 @@ public:
 
 BigFB::BigFB() : Big_Menu_fadd(170, 100, 470, 10, 100, 200, "Поиск", "", 1)
 {
-
 }
 
 int BigFB::initmb()
@@ -629,15 +618,9 @@ void red_rec()
     for (keydb = 1; keydb <= db.F_count(); keydb++)
     {
       if (!strncmpi(db.F_name(keydb), "XCOORD", 6))
-      {
-        dtoa(xd, db.F_ptr(keydb), db.F_width(keydb), db.F_decim(keydb));
         continue;
-      }
       if (!strncmpi(db.F_name(keydb), "YCOORD", 6))
-      {
-        dtoa(yd, db.F_ptr(keydb), db.F_width(keydb), db.F_decim(keydb));
         continue;
-      }
       pdb = (REC_dbf *)wdbf.nitem(k - 1);
       if (pdb->type != 'N')
       {
