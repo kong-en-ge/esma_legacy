@@ -1,4 +1,8 @@
-#include "library.hpp"
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 #include "mouse.hpp"
 #include "globalda.hpp"
 #include "drawrazd.hpp"
@@ -293,7 +297,7 @@ int drawmap()
       goto drawex;
     };
 #endif
-    draw_one_obj(i, -1);
+    draw_one_obj(i, -1, 0);
   };
 drawex:
   return exp;
@@ -433,6 +437,7 @@ void dr_st_n(F_SPR *spr, int *metr)
   // drawingline(mst,1);
   scr.outstring(namst, mst, &ft);
 }
+
 
 int draw_one_obj(unsigned obj, int color, int prp1)
 {

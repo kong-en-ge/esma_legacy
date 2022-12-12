@@ -1,9 +1,13 @@
+#include <alloc.h>
+#include <stdio.h>
+#include <math.h>
+#include <bios.h>
+
 #include "dbf.hpp"
 #include "fstmod.hpp"
 #include "flibrt.hpp"
 #include "menuall2.hpp"
 #include "tpedit.hpp"
-#include <alloc.h>
 #include "fatr.hpp"
 #include "apputils.hpp"
 

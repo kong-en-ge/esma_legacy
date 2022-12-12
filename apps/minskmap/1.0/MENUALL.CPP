@@ -1,4 +1,8 @@
 #include <alloc.h>
+#include <stdio.h>
+#include <math.h>
+#include <bios.h>
+
 #include "dbf.hpp"
 #include "fstmod.hpp"
 #include "flibrt.hpp"

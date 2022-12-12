@@ -1,4 +1,7 @@
-#include "library.hpp"
+#include <math.h>
+#include <string.h>
+#include <stdio.h>
+
 #include "mouse.hpp"
 #include "globalda.hpp"
 #include "drawrazd.hpp"

@@ -1,4 +1,10 @@
-#include "library.hpp"
+#include <alloc.h>
+#include <math.h>
+#include <string.h>
+#include <io.h>
+#include <fcntl.h>
+#include <stdlib.h>
+
 #include "button.hpp"
 #include "globalda.hpp"
 #include "mouse.hpp"

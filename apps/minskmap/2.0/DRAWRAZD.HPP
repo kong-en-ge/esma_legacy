@@ -4,6 +4,6 @@
 int drawmap();
 void drawingline(int *metr, int num);
 int drawrazd(void);
-int draw_one_obj(unsigned num, int color, int prp1 = 0);
+int draw_one_obj(unsigned obj, int color, int prp1);
 
 #endif

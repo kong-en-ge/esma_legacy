@@ -1,9 +1,15 @@
-#include "library.hpp"
+#include <alloc.h>
+#include <string.h>
+#include <math.h>
+#include <io.h>
+#include <fcntl.h>
+#include <stdlib.h>
+
 #include "fstmod.hpp"
 #include "drawpl.hpp"
 #include "button.hpp"
 #include "globalda.hpp"
-#include "menuall.hpp"
+#include "menuall2.hpp"
 #include "drawrazd.hpp"
 #include "mouse.hpp"
 #include "flibrt.hpp"

@@ -2,7 +2,6 @@
 #define menuall2
 
 #include "dbf.hpp"
-#include "library.hpp"
 #include "mouse.hpp"
 #include "button.hpp"
 #include "drawrazd.hpp"

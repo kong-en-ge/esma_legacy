@@ -1,10 +1,12 @@
+#include <alloc.h>
+#include <string.h>
+
 #include "dbf.hpp"
 #include "geomodel.hpp"
 #include "flibrt.hpp"
 #include "menuall2.hpp"
 #include "tpedit.hpp"
 #include "fwrite.hpp"
-#include <alloc.h>
 #include "globalda.hpp"
 #include "apputils.hpp"
 

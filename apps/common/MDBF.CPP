@@ -1,6 +1,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
+#include <dos.h>
 
 #include "button.hpp"
 #include "globalda.hpp"

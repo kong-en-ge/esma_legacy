@@ -1,4 +1,9 @@
-#include "library.hpp"
+#include <alloc.h>
+#include <math.h>
+#include <string.h>
+#include <io.h>
+#include <fcntl.h>
+
 #include "fstmod.hpp"
 #include "drawpl.hpp"
 #include "button.hpp"

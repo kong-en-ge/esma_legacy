@@ -1,5 +1,7 @@
 #include <string.h>
 #include <values.h>
+#include <stdio.h>
+#include <math.h>
 
 #include "globalda.hpp"
 #include "flibrt.hpp"

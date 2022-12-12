@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "geomodel.hpp"
 #include "flibrt.hpp"
 #include "menuall2.hpp"

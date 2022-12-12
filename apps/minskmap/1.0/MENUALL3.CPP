@@ -1,5 +1,10 @@
 #include <string.h>
 #include <ctype.h>
+#include <stdio.h>
+#include <io.h>
+#include <fcntl.h>
+#include <dir.h>
+
 #include "globalda.hpp"
 #include "flibrt.hpp"
 #include "txtpacks.hpp"

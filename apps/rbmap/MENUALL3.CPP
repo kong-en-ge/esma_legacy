@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <io.h>
+#include <fcntl.h>
+#include <dir.h>
 
 #include "dbf.hpp"
 #include "geomodel.hpp"

@@ -1,4 +1,6 @@
 #include <string.h>
+#include <stdio.h>
+#include <math.h>
 
 #include "globalda.hpp"
 #include "flibrt.hpp"

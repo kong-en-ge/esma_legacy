@@ -1,3 +1,6 @@
+#include <io.h>
+#include <fcntl.h>
+
 #include "button.hpp"
 #include "menuall2.hpp"
 

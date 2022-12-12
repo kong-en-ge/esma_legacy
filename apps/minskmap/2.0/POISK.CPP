@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "dbf.hpp"
 #include "geomodel.hpp"
 #include "flibrt.hpp"
@@ -276,7 +278,7 @@ int poisk(int regim, int *x, int *y, double *doub)
       setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
       for (int i = 0; i < nobj; i++)
       {
-        draw_one_obj(obj[i].nobj, 12);
+        draw_one_obj(obj[i].nobj, 12, 0);
         settwink(12, obj[i].color);
         GRwnd wns(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
         wns.text("Этот объект ?");
@@ -289,7 +291,7 @@ int poisk(int regim, int *x, int *y, double *doub)
         if (k == -1)
         {
           nottwink();
-          draw_one_obj(obj[i].nobj, -1);
+          draw_one_obj(obj[i].nobj, -1, 0);
           continue;
         }
         if (x != NULL)

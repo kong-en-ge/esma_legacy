@@ -1,9 +1,13 @@
+#include <alloc.h>
+#include <stdio.h>
+#include <math.h>
+#include <bios.h>
+
 #include "dbf.hpp"
 #include "fstmod.hpp"
 #include "flibrt.hpp"
 #include "menuall2.hpp"
 #include "tpedit.hpp"
-#include <alloc.h>
 #include "fatr.hpp"
 #include "apputils.hpp"
 
@@ -13,7 +17,6 @@
 int poisk(int regim = 0, int *x = NULL, int *y = NULL, double *d = NULL);
 long poiskdbf(int *x = NULL, int *y = NULL);
 int setviewMAP();
-int draw_one_obj(int obj, int color, int prp1 = 0);
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 int obj_enabled(F_SPR *spr);
 void draw_kr();

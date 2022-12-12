@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
+#include <io.h>
+#include <fcntl.h>
+#include <dir.h>
 
 #include "dbf.hpp"
 #include "geomodel.hpp"
@@ -212,7 +216,7 @@ void find_rg(void)
     if (!All_Map)
       all();
     setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
-    draw_one_obj(ret, 12);
+    draw_one_obj(ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -230,7 +234,7 @@ void find_rg(void)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(ret, -1);
+      draw_one_obj(ret, -1, 0);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;
@@ -313,7 +317,7 @@ void find_st(void)
              YDISRAZ(spr.xmax), 24);
     }
     setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
-    draw_one_obj(ret, 12);
+    draw_one_obj(ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -330,7 +334,7 @@ void find_st(void)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(ret, -1);
+      draw_one_obj(ret, -1, 0);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;
@@ -427,7 +431,7 @@ int find_bl(char *st, int bl)
              YDISRAZ(spr.xmax), 64);
       setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
     }
-    draw_one_obj(ret, 12);
+    draw_one_obj(ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -444,7 +448,7 @@ int find_bl(char *st, int bl)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(ret, -1);
+      draw_one_obj(ret, -1, 0);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;
@@ -1040,7 +1044,7 @@ void whatisit(int, int s)
   }
 ex:
   nottwink();
-  draw_one_obj(ret, -1);
+  draw_one_obj(ret, -1, 0);
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
 }
 
