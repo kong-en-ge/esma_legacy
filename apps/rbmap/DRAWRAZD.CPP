@@ -18,8 +18,6 @@
 int control(int);
 int next_model(int startpos, int nc = 0);
 int next_dbf(int pos, int m2);
-int XRAZDIS(double y);
-int YRAZDIS(double x);
 int XRAZEKR(float y);
 int YRAZEKR(float x);
 int setviewMAP();

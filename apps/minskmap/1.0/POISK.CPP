@@ -24,12 +24,12 @@ struct OBJND
   int color;
 };
 
-int pascal XRAZDIS(double y)
+int XRAZDIS(double y)
 {
   return double((y - YMINM) * (model.fm.xmax - model.fm.xmin)) / (YMAXM - YMINM) + model.fm.xmin;
 }
 
-int pascal YRAZDIS(double x)
+int YRAZDIS(double x)
 {
   return double((x - XMINM) * (model.fm.ymax - model.fm.ymin)) / (XMAXM - XMINM) + model.fm.ymin;
 }

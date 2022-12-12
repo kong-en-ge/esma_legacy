@@ -17,7 +17,6 @@
 int poisk(int regim, int *x = NULL, int *y = NULL, double *d = NULL);
 long poiskdbf(int *x = NULL, int *y = NULL);
 int setviewMAP();
-int draw_one_obj(int obj, int color);
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 int obj_enabled(F_SPR *spr);
 void draw_kr();
