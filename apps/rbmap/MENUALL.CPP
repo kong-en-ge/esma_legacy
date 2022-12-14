@@ -195,30 +195,6 @@ ex:
   return ret;
 }
 
-void cor_V()
-{
-  if (XMINV < XMING)
-  {
-    XMAXV += XMING - XMINV;
-    XMINV = XMING;
-  }
-  if (YMINV < YMING)
-  {
-    YMAXV += YMING - YMINV;
-    YMINV = YMING;
-  }
-  if (XMAXV > XMAXG)
-  {
-    XMINV -= XMAXV - XMAXG;
-    XMAXV = XMAXG;
-  }
-  if (YMAXV > YMAXG)
-  {
-    YMINV -= YMAXV - YMAXG;
-    YMAXV = YMAXG;
-  }
-}
-
 void fragment(void)
 {
   if (CURRENTSCALE < 2.8 * SCALEMIN)
@@ -281,43 +257,6 @@ void centr(void)
   XMAXV = _DXM + dxm;
   YMINV = _DYM - dym;
   YMAXV = _DYM + dym;
-  cor_V();
-  drawrazd();
-}
-
-void plmash(void)
-{
-  if (CURRENTSCALE < 2.8 * SCALEMIN)
-  {
-    displayWarning(1);
-    return;
-  }
-  double dxm = (XMAXV - XMINV) / 4, dym = (YMAXV - YMINV) / 4;
-  XMINV += dxm;
-  XMAXV -= dxm;
-  YMINV += dym;
-  YMAXV -= dym;
-  if ((XMAXV - XMINV) < 200)
-    XMAXV = XMINV + 200;
-  if ((YMAXV - YMINV) < 200)
-    YMAXV = YMINV + 200;
-  drawrazd();
-}
-
-void minmash(void)
-{
-  if (All_Map)
-    return;
-  if ((XMAXV - XMINV) > 0.75 * (XMAXG - XMING))
-  {
-    all();
-    return;
-  }
-  double dxm = (XMAXV - XMINV) / 4, dym = (YMAXV - YMINV) / 4;
-  XMINV -= dxm;
-  XMAXV += dxm;
-  YMINV -= dym;
-  YMAXV += dym;
   cor_V();
   drawrazd();
 }

@@ -89,6 +89,8 @@ int Init(int carg)
     return -1;
   }
   DBF_FIL();
+  SCALEMIN = 400;
+  SCALEMAX = 200000;
   SCALEO = (log(SCALEMAX / SCALEMIN) / 256);
   LBSsize = 0;
   LBS = new List_base[100];

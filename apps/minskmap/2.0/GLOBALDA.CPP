@@ -10,7 +10,6 @@
 
 double XMINVC, YMINVC, XMAXVC, YMAXVC; //габаритные координаты контр.окна вид
 double XMINM, YMINM, XMAXM, YMAXM;     //габаритные координаты карты в мск
-float CURRENTSCALE;
 int XMINRE, YMINRE, XMAXRE, YMAXRE; //габаритные координаты окна раздела экр
 int XMINEC, YMINEC, XMAXEC, YMAXEC; //габаритные координаты контр.окна карты на экр
 int xminec, yminec, xmaxec, ymaxec;
@@ -20,9 +19,6 @@ fonttype ft;
 unsigned char SCALES; //степень увеличения
 const int colordbf[] = {RED, YELLOW, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN};
 char *LOC[] = {"точ", "лин", "площ", "текст"};
-
-float SCALEMIN = 400, SCALEMAX = 200000;
-float SCALEO = 0.035; // ln основания степени
 
 int N_on = 0;
 int actdbf = 0;

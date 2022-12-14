@@ -11,6 +11,10 @@ double YEKRAZD(int x);
 double XEKRAZD(int y);
 
 void all(void);
+void plmash(void);
+void minmash(void);
+void cor_V(void);
+
 // the following functions are to be implemented within the project
 int drawrazd(void);
 

@@ -20,9 +20,6 @@ unsigned char SCALES; // степень увеличения
 const int colordbf[] = {RED, YELLOW, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN};
 char *LOC[] = {"точ", "лин", "площ", "текст"};
 
-float SCALEMIN = 50000, SCALEMAX = 10000000;
-float SCALEO = 0.035; // ln основания степени
-
 int actdbf = 0;
 FST_MODEL model;
 List_base *LBS;

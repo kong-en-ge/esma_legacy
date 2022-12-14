@@ -8,6 +8,10 @@ extern double XMING, YMING, XMAXG, YMAXG;     // Максимальные координаты
 extern double XMINV, YMINV, XMAXV, YMAXV;     // габаритные координаты окна вид
 extern int XMINE, YMINE, XMAXE, YMAXE;
 
+extern float CURRENTSCALE;
+extern float SCALEMIN, SCALEMAX; // min/max scale
+extern float SCALEO; // основание степени
+
 extern int All_Map;
 
 extern double otkat[];

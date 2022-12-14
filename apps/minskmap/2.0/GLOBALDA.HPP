@@ -26,7 +26,6 @@ extern int nmodels;         //число подмоделей модели
 extern REC_RAZD Cart[];
 extern int N_on;
 extern int actdbf;
-extern float CURRENTSCALE;
 extern double XMING, YMING, XMAXG, YMAXG;     //Максимальные координаты
 extern double XMINVC, YMINVC, XMAXVC, YMAXVC; //габаритные координаты  контр.окна вид
 extern double XMINM, YMINM, XMAXM, YMAXM;     //габаритные координаты карты в мск
@@ -36,8 +35,6 @@ extern double _DXM, _DYM;
 extern char SYSPATH[50];
 extern char *LOC[];
 extern unsigned char SCALES;     //степень увеличения
-extern float SCALEMIN, SCALEMAX; //минимаксы масштабов
-extern float SCALEO;             //основание степени
 extern const int colordbf[];
 // extern const unsigned int znakidbf[];
 extern GRwnd wndmain;

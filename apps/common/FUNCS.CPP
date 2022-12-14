@@ -8,6 +8,7 @@
 #include "mouse.hpp"
 #include "grwnd.hpp"
 #include "funcs.hpp"
+#include "apputils.hpp"
 
 const unsigned mscur[] = {
     0xffff, 0xffff, 0xffff, 0xfc1f, 0xf3e7, 0xf777, 0xee3b, 0xec9b,
@@ -193,6 +194,30 @@ int upcase(int symb)
   return Russ[symb];
 }
 
+void cor_V(void)
+{
+  if (XMINV < XMING)
+  {
+    XMAXV += XMING - XMINV;
+    XMINV = XMING;
+  }
+  if (YMINV < YMING)
+  {
+    YMAXV += YMING - YMINV;
+    YMINV = YMING;
+  }
+  if (XMAXV > XMAXG)
+  {
+    XMINV -= XMAXV - XMAXG;
+    XMAXV = XMAXG;
+  }
+  if (YMAXV > YMAXG)
+  {
+    YMINV -= YMAXV - YMAXG;
+    YMAXV = YMAXG;
+  }
+}
+
 void all(void)
 {
   if (!All_Map)
@@ -200,5 +225,42 @@ void all(void)
     memmove(&XMINV, &XMING, 4 * sizeof(double));
     drawrazd();
   }
+}
+
+void plmash(void)
+{
+  if (CURRENTSCALE < 2.8 * SCALEMIN)
+  {
+    displayWarning(1);
+    return;
+  }
+  double dxm = (XMAXV - XMINV) / 4, dym = (YMAXV - YMINV) / 4;
+  XMINV += dxm;
+  XMAXV -= dxm;
+  YMINV += dym;
+  YMAXV -= dym;
+  if ((XMAXV - XMINV) < 200)
+    XMAXV = XMINV + 200;
+  if ((YMAXV - YMINV) < 200)
+    YMAXV = YMINV + 200;
+  drawrazd();
+}
+
+void minmash(void)
+{
+  if (All_Map)
+    return;
+  if ((XMAXV - XMINV) > 0.75 * (XMAXG - XMING))
+  {
+    all();
+    return;
+  }
+  double dxm = (XMAXV - XMINV) / 4, dym = (YMAXV - YMINV) / 4;
+  XMINV -= dxm;
+  XMAXV += dxm;
+  YMINV -= dym;
+  YMAXV += dym;
+  cor_V();
+  drawrazd();
 }
 
