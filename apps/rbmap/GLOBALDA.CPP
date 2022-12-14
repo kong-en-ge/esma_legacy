@@ -7,15 +7,11 @@
 #include "set.hpp"
 #include "atribut.hpp"
 
-int XMAXMAPE = 479;
-int YMAXMAPE = 349;
 double XMING, YMING, XMAXG, YMAXG;     // габаритные координаты
-double XMINV, YMINV, XMAXV, YMAXV;     // габаритные координаты окна вид
 double XMINVC, YMINVC, XMAXVC, YMAXVC; // габаритные координаты контр.окна вид
 double XMINM, YMINM, XMAXM, YMAXM;     // габаритные координаты карты в мск
 float CURRENTSCALE;
 int XMINRE, YMINRE, XMAXRE, YMAXRE; // габаритные координаты окна раздела экр
-int XMINE, YMINE, XMAXE, YMAXE;     // габаритные координаты окна карты на экр
 int XMINEC, YMINEC, XMAXEC, YMAXEC; // габаритные координаты контр.окна карты на экр
 int xminec, yminec, xmaxec, ymaxec;
 double _DXM, _DYM;

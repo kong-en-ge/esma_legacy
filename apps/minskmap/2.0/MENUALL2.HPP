@@ -28,8 +28,6 @@ void finddbf(void);
 void xycoord(void);
 void polygon(int);
 void clearm(int);
-double YEKRAZD(int x);
-double XEKRAZD(int y);
 int XRAZEKR(float y);
 int YRAZEKR(float x);
 double YDISRAZ(int x);

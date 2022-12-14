@@ -10,6 +10,7 @@
 #include "tpedit.hpp"
 #include "fatr.hpp"
 #include "apputils.hpp"
+#include "funcs.hpp"
 
 #define max(arg1, arg2) (((arg1) > (arg2)) ? (arg1) : (arg2))
 #define min(arg1, arg2) (((arg1) < (arg2)) ? (arg1) : (arg2))
@@ -29,16 +30,6 @@ void act_dbf();
 void pnt_dbf();
 void red_rec();
 void help(const char * help_file);
-
-double XEKRAZD(int y)
-{
-  return (YMAXMAPE - y) * (XMAXV - XMINV) / YMAXMAPE + XMINV;
-}
-
-double YEKRAZD(int x)
-{
-  return x * (YMAXV - YMINV) / XMAXMAPE + YMINV;
-}
 
 int XRAZEKR(float y)
 {

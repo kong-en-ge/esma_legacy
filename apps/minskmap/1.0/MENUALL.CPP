@@ -29,16 +29,6 @@ void pnt_dbf();
 void red_rec();
 void help(const char * help_file);
 
-double XEKRAZD(int y)
-{
-  return (YMAXMAPE - y) * (XMAXV - XMINV) / YMAXMAPE + XMINV;
-}
-
-double YEKRAZD(int x)
-{
-  return x * (YMAXV - YMINV) / XMAXMAPE + YMINV;
-}
-
 int XRAZEKR(float y)
 {
   return float((y - YMINV) * (XMAXMAPE + 1) / (YMAXV - YMINV));

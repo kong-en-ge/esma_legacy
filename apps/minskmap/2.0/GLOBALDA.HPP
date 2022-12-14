@@ -3,6 +3,7 @@
 #include "dbf.hpp"
 #include "font.hpp"
 #include "fstmod.hpp"
+#include "globals.hpp"
 
 #define WHITE 0
 #define BLACK 15
@@ -27,13 +28,10 @@ extern int NCart;
 extern int All_Map;
 extern int N_on;
 extern int actdbf;
-extern int XMAXMAPE, YMAXMAPE;
 extern float CURRENTSCALE;
 extern double XMING, YMING, XMAXG, YMAXG;     //Максимальные координаты
 extern double XMINVC, YMINVC, XMAXVC, YMAXVC; //габаритные координаты  контр.окна вид
-extern double XMINV, YMINV, XMAXV, YMAXV;     //габаритные координаты окна вид
 extern double XMINM, YMINM, XMAXM, YMAXM;     //габаритные координаты карты в мск
-extern int XMINE, YMINE, XMAXE, YMAXE;
 extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
 extern int xminec, yminec, xmaxec, ymaxec;
 extern double _DXM, _DYM;
