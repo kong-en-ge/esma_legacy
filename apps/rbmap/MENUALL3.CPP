@@ -21,6 +21,7 @@
 #include "menuall2.hpp"
 #include "globalda.hpp"
 #include "apputils.hpp"
+#include "funcs.hpp"
 
 FLIB *findobj(SPR *spr);
 int findobjn(SPR *spr);
@@ -35,48 +36,6 @@ void draw_one_d(int, int, int, int);
 int obj_enabled(F_SPR *spr);
 void draw_fld();
 int next_model(int startpos, int nc = 0);
-
-const char Russ[] = {'”', 'ˆ', '‘', '‚', '“', '€', '', '', '˜', '', '‹',
-                     '„', 'œ', '’', '™', '‡', '‰', 'Š', '›', '…', 'ƒ', 'Œ',
-                     '–', '—', '', 'Ÿ', '', '', '', '†', '•', 'š'};
-
-int upcase(int symb)
-{
-  symb = toupper(symb);
-  if ((symb >= 65) && (symb <= 90))
-    symb -= 65;
-  else
-    switch (symb)
-    {
-    case 34:
-    case 39:
-      symb = 26;
-      break;
-    case 44:
-    case 60:
-      symb = 27;
-      break;
-    case 46:
-    case 62:
-      symb = 28;
-      break;
-    case 58:
-    case 59:
-      symb = 29;
-      break;
-    case 91:
-    case 123:
-      symb = 30;
-      break;
-    case 93:
-    case 125:
-      symb = 31;
-      break;
-    default:
-      return symb;
-    }
-  return Russ[symb];
-}
 
 struct KLSt : public Big_Menu
 {

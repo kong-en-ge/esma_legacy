@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
 //#include "funcs.hpp"
 #include "globals.hpp"
@@ -124,4 +125,46 @@ void rasst(void)
   }
   setcolor(col);
   mouse_show(ON);
+}
+
+const char Russ[] = {'”', 'ˆ', '‘', '‚', '“', '€', '', '', '˜', 'Ž', '‹',
+                     '„', 'œ', '’', '™', '‡', '‰', 'Š', '›', '…', 'ƒ', 'Œ',
+                     '–', '—', '', 'Ÿ', '', '', 'ž', '†', '•', 'š'};
+
+int upcase(int symb)
+{
+  symb = toupper(symb);
+  if ((symb >= 65) && (symb <= 90))
+    symb -= 65;
+  else
+    switch (symb)
+    {
+    case 34:
+    case 39:
+      symb = 26;
+      break;
+    case 44:
+    case 60:
+      symb = 27;
+      break;
+    case 46:
+    case 62:
+      symb = 28;
+      break;
+    case 58:
+    case 59:
+      symb = 29;
+      break;
+    case 91:
+    case 123:
+      symb = 30;
+      break;
+    case 93:
+    case 125:
+      symb = 31;
+      break;
+    default:
+      return symb;
+    }
+  return Russ[symb];
 }
