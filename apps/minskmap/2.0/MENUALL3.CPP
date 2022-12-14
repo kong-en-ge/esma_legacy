@@ -29,7 +29,6 @@ FLIB *findobj(SPR *spr);
 int findobjn(SPR *spr);
 int setviewMAP();
 int poisk(int regim = 0, int *x = NULL, int *y = NULL, double *b = NULL);
-int drawrazd();
 int ATR(TEXT_PACK_MENUS *tp, int obj);
 int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst);
 int ATRFR(TEXT_PACK_MENUS *tp, int j1);

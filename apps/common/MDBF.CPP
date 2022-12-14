@@ -10,6 +10,7 @@
 #include "txtpacks.hpp"
 #include "menuall2.hpp"
 #include "apputils.hpp"
+#include "funcs.hpp"
 
 int scaleminmax(REC_RAZD *r);
 void draw_one_d(double _x, double _y, int color = -1);

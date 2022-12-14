@@ -320,14 +320,6 @@ void minmash(void)
   drawrazd();
 }
 
-void all(void)
-{
-  if (All_Map)
-    return;
-  memmove(&XMINV, &XMING, 4 * sizeof(double));
-  drawrazd();
-}
-
 void outtxt(int x, int y, char *str)
 {
   textsettingstype t;

@@ -192,3 +192,13 @@ int upcase(int symb)
     }
   return Russ[symb];
 }
+
+void all(void)
+{
+  if (!All_Map)
+  {
+    memmove(&XMINV, &XMING, 4 * sizeof(double));
+    drawrazd();
+  }
+}
+

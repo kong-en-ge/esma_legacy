@@ -8,7 +8,6 @@
 #include "set.hpp"
 #include "atribut.hpp"
 
-double XMING, YMING, XMAXG, YMAXG;     //габаритные координаты
 double XMINVC, YMINVC, XMAXVC, YMAXVC; //габаритные координаты контр.окна вид
 double XMINM, YMINM, XMAXM, YMAXM;     //габаритные координаты карты в мск
 float CURRENTSCALE;
@@ -25,7 +24,6 @@ char *LOC[] = {"точ", "лин", "площ", "текст"};
 float SCALEMIN = 400, SCALEMAX = 200000;
 float SCALEO = 0.035; // ln основания степени
 
-int All_Map;
 int N_on = 0;
 int actdbf = 0;
 FST_MODEL model;

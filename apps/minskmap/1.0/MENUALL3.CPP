@@ -19,7 +19,6 @@ int findobjn(SPR *spr);
 int setviewMAP();
 int poisk(int regim, int *x = NULL, int *y = NULL, double *b = NULL);
 int draw_one_obj(unsigned obj, int color);
-int drawrazd();
 int control(int);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
 double XDISRAZ(int y);

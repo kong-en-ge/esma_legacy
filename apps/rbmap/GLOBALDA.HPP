@@ -24,11 +24,8 @@ struct REC_RAZD
 extern PART_MODEL models[]; // части модели
 extern int nmodels;         // число подмоделей модели
 extern REC_RAZD Cart[];
-extern int NCart;
-extern int All_Map;
 extern int actdbf;
 extern float CURRENTSCALE;
-extern double XMING, YMING, XMAXG, YMAXG;     // Максимальные координаты
 extern double XMINVC, YMINVC, XMAXVC, YMAXVC; // габаритные координаты  контр.окна вид
 extern double XMINM, YMINM, XMAXM, YMAXM;     // габаритные координаты карты в мск
 extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
