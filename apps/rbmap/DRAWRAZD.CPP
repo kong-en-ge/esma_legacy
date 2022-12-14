@@ -14,6 +14,7 @@
 #include "atribut.hpp"
 #include "fatr.hpp"
 #include "tpedit.hpp"
+#include "funcs.hpp"
 
 int control(int);
 int next_model(int startpos, int nc = 0);
@@ -27,19 +28,6 @@ void draw_fld();
 
 void STOPTIME();
 void STARTTIME();
-
-void store_otkat()
-{
-  if (otkatn && (!memcmp(&XMINV, &otkat[(otkatn - 1) * 4], 4 * sizeof(double))))
-    return;
-  if (otkatn >= 10)
-  {
-    memmove(otkat, otkat + 4, 4 * sizeof(double) * 9);
-    otkatn = 9;
-  }
-  memmove(otkat + otkatn * 4, &XMINV, 4 * sizeof(double));
-  otkatn++;
-}
 
 int next_model(int pos, int nc)
 {

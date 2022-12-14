@@ -7,6 +7,7 @@
 #include <files.hpp>
 #include "mouse.hpp"
 #include "grwnd.hpp"
+#include "funcs.hpp"
 
 const unsigned mscur[] = {
     0xffff, 0xffff, 0xffff, 0xfc1f, 0xf3e7, 0xf777, 0xee3b, 0xec9b,
@@ -22,6 +23,29 @@ double XEKRAZD(int y)
 double YEKRAZD(int x)
 {
   return x * (YMAXV - YMINV) / XMAXMAPE + YMINV;
+}
+
+void store_otkat(void)
+{
+  if (otkatn && (!memcmp(&XMINV, &otkat[(otkatn - 1) * 4], 4 * sizeof(double))))
+    return;
+
+  if (otkatn >= MAX_STORED_VIEWS)
+  {
+    memmove(otkat, otkat + 4, 4 * sizeof(double) * (MAX_STORED_VIEWS - 1));
+    otkatn = MAX_STORED_VIEWS - 1;
+  }
+  memmove(otkat + otkatn * 4, &XMINV, 4 * sizeof(double));
+  otkatn++;
+}
+
+void restore_otkat(void)
+{
+  if (otkatn <= 1)
+    return;
+  otkatn -= 2;
+  memmove(&XMINV, otkat + otkatn * 4, 4 * sizeof(double));
+  drawrazd();
 }
 
 void rasst(void)

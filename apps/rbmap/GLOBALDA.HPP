@@ -42,8 +42,6 @@ extern float SCALEO;             // основание степени
 extern const int colordbf[];
 // extern const unsigned int znakidbf[];
 extern GRwnd wndmain;
-extern double otkat[];
-extern int otkatn;
 class Menu_but_vrt;
 
 struct List_base

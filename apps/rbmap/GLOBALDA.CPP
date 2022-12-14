@@ -19,8 +19,6 @@ SCRIPT scr;
 fonttype ft;
 unsigned char SCALES; // степень увеличения
 const int colordbf[] = {RED, YELLOW, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN};
-double otkat[4 * 10];
-int otkatn;
 char *LOC[] = {"точ", "лин", "площ", "текст"};
 
 float SCALEMIN = 50000, SCALEMAX = 10000000;
