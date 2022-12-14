@@ -16,7 +16,6 @@ int scaleminmax(REC_RAZD *r);
 void draw_one_d(double _x, double _y, int color = -1);
 void draw_one_d(int, int, int, int);
 int dcdpar(char *codp, char *znp, int zn);
-void outtxt(int, int, char *);
 void draw_kr();
 int M_K_R_status(void (*dr)() = draw_kr, int (*keyhandler)(int) = NULL);
 void draw_one_d(double, double, int, int);

@@ -319,45 +319,6 @@ void minmash(void)
   drawrazd();
 }
 
-void outtxt(int x, int y, char *str)
-{
-  textsettingstype t;
-  SVS svs;
-  savesettings(&svs);
-  gettextsettings(&t);
-  settextstyle(SMALL_FONT, HORIZ_DIR, 4);
-  int wd = textwidth(str), ht = textheight(str), x2, y2, h, v;
-  if (x + wd < XMAXMAPE)
-  {
-    h = LEFT_TEXT;
-    x2 = x + wd;
-  }
-  else
-  {
-    h = RIGHT_TEXT;
-    x2 = x - wd;
-  }
-  if (y + ht < getmaxy())
-  {
-    v = TOP_TEXT;
-    y2 = y + ht - 1;
-  }
-  else
-  {
-    v = BOTTOM_TEXT;
-    y2 = y - ht + 1;
-    y++;
-  }
-  settextjustify(h, v);
-  setfillstyle(SOLID_FILL, WHITE);
-  setcolor(BLACK);
-  bar(x, y - 2, x2, y2);
-  outtextxy(x, y, str);
-  settextstyle(t.font, t.direction, t.charsize);
-  settextjustify(t.horiz, t.vert);
-  restoresettings(&svs);
-}
-
 char *ston = "Вкл. N";
 char *stoff = "Выкл. N";
 
