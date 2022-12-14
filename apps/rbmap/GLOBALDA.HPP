@@ -15,22 +15,13 @@ class SET;
 struct SCRIPT;
 struct fonttype;
 struct linesstyle;
-struct FST_MODEL;
-struct REC_RAZD
-{
-  char name[9], // DBF - file
-      isactiv;
-};
 extern PART_MODEL models[]; // части модели
 extern int nmodels;         // число подмоделей модели
-extern REC_RAZD Cart[];
 extern int actdbf;
 extern double XMINVC, YMINVC, XMAXVC, YMAXVC; // габаритные координаты  контр.окна вид
-extern double XMINM, YMINM, XMAXM, YMAXM;     // габаритные координаты карты в мск
 extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
 extern int xminec, yminec, xmaxec, ymaxec;
 extern double _DXM, _DYM;
-extern char SYSPATH[50];
 extern char *LOC[];
 extern unsigned char SCALES;     // степень увеличения
 extern float SCALEMAX;           // минимаксы масштабов
@@ -66,7 +57,6 @@ struct atrname;
 extern atrname ATRN[];
 extern int ATRsize; // число возможных атрибутов
 extern int RASsize;
-extern FST_MODEL model;
 extern List_base *LBS;
 extern int LBSsize;
 extern char *bram;

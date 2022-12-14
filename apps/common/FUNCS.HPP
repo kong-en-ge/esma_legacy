@@ -9,6 +9,14 @@ void help(const char* help_file);
 
 double YEKRAZD(int x);
 double XEKRAZD(int y);
+int XRAZEKR(float y);
+int YRAZEKR(float x);
+double YDISRAZ(int x);
+double XDISRAZ(int y);
+int XRAZDIS(double y);
+int YRAZDIS(double x);
+int DXEKRDIS(int dx);
+double DXDISEKR(int dx);
 
 void all(void);
 void plmash(void);

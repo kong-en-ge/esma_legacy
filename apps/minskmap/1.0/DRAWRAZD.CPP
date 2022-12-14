@@ -13,11 +13,8 @@
 #include "tpedit.hpp"
 #include "funcs.hpp"
 
-int control(int);
 int next_model(int startpos, int nc = 0);
 int next_dbf(int pos, int m2);
-int XRAZEKR(float y);
-int YRAZEKR(float x);
 int setviewMAP();
 int DXM;
 void draw_one_d(double _x, double _y, int color = -1);

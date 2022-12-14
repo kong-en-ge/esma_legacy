@@ -29,26 +29,6 @@ void act_dbf();
 void pnt_dbf();
 void red_rec();
 
-int XRAZEKR(float y)
-{
-  return float((y - YMINV) * (XMAXMAPE + 1) / (YMAXV - YMINV));
-}
-
-int YRAZEKR(float x)
-{
-  return float((XMAXV - x) * (YMAXMAPE + 1) / (XMAXV - XMINV));
-}
-
-double XDISRAZ(int y)
-{
-  return (y - model.fm.ymin) * (XMAXM - XMINM) / (model.fm.ymax - model.fm.ymin) + XMINM;
-}
-
-double YDISRAZ(int x)
-{
-  return (x - model.fm.xmin) * (YMAXM - YMINM) / (model.fm.xmax - model.fm.xmin) + YMINM;
-}
-
 int _xMK = 240, _yMK = 240;
 
 void cor_dxdy(double *dx, double *dy)

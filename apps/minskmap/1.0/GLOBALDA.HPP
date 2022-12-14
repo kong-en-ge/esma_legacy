@@ -15,15 +15,8 @@ class SET;
 struct SCRIPT;
 struct fonttype;
 struct linesstyle;
-struct FST_MODEL;
-struct REC_RAZD
-{
-  char name[9], // DBF - file
-      isactiv;
-};
 extern PART_MODEL models[]; //части модели
 extern int nmodels;         //число подмоделей модели
-extern REC_RAZD Cart[];
 extern int N_on;
 extern int actdbf;
 extern double XMINVC, YMINVC, XMAXVC, YMAXVC; //габаритные координаты  контр.окна вид
@@ -31,22 +24,12 @@ extern double XMINM, YMINM, XMAXM, YMAXM;     //габаритные координаты карты в мс
 extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
 extern int xminec, yminec, xmaxec, ymaxec;
 extern double _DXM, _DYM;
-extern char SYSPATH[50];
 extern char *LOC[];
 extern unsigned char SCALES;     //степень увеличения
 extern const int colordbf[];
 // extern const unsigned int znakidbf[];
 extern GRwnd wndmain;
 class Menu_but_vrt;
-struct ESIN_menu
-{
-  char *title;
-  Menu_but_vrt *mn;
-  int num_but;
-  pascal ESIN_menu(char *titl, char *but_titl[], int key[]);
-  pascal ~ESIN_menu();
-  int pascal menu_key();
-};
 struct List_base
 {
   char name[20];
@@ -73,7 +56,6 @@ struct atrname;
 extern atrname ATRN[];
 extern int ATRsize; //число возможных атрибутов
 extern int RASsize;
-extern FST_MODEL model;
 extern List_base *LBS;
 extern int LBSsize;
 extern char *bram;

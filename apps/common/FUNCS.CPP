@@ -26,6 +26,48 @@ double YEKRAZD(int x)
   return x * (YMAXV - YMINV) / XMAXMAPE + YMINV;
 }
 
+int XRAZEKR(float y)
+{
+  return float((y - YMINV) * (XMAXMAPE + 1) / (YMAXV - YMINV));
+}
+
+int YRAZEKR(float x)
+{
+  return float((XMAXV - x) * (YMAXMAPE + 1) / (XMAXV - XMINV));
+}
+
+double XDISRAZ(int y)
+{
+  return (y - model.fm.ymin) * (XMAXM - XMINM) / (model.fm.ymax - model.fm.ymin) + XMINM;
+}
+
+double YDISRAZ(int x)
+{
+  return (x - model.fm.xmin) * (YMAXM - YMINM) / (model.fm.xmax - model.fm.xmin) + YMINM;
+}
+
+int XRAZDIS(double y)
+{
+  return double((y - YMINM) * (model.fm.xmax - model.fm.xmin)) / (YMAXM - YMINM) + model.fm.xmin;
+}
+
+int YRAZDIS(double x)
+{
+  return double((x - XMINM) * (model.fm.ymax - model.fm.ymin)) / (XMAXM - XMINM) + model.fm.ymin;
+}
+
+int DXEKRDIS(int dx)
+{
+  double d = dx * (YMAXV - YMINV) * (model.fm.xmax - model.fm.xmin) / (XMAXMAPE + 1) / (YMAXM - YMINM);
+  return d > 32767.0 ? 32767 : d;
+}
+
+double DXDISEKR(int dx)
+{
+  double d = dx * (YMAXM - YMINM) * (XMAXMAPE + 1) / (YMAXV - YMINV) / (model.fm.xmax - model.fm.xmin);
+  return d > 32767.0 ? 32767 : d;
+}
+
 void store_otkat(void)
 {
   if (otkatn && (!memcmp(&XMINV, &otkat[(otkatn - 1) * 4], 4 * sizeof(double))))

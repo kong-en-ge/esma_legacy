@@ -12,7 +12,6 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-int scaleminmax(REC_RAZD *r);
 void draw_one_d(double _x, double _y, int color = -1);
 void draw_one_d(int, int, int, int);
 int dcdpar(char *codp, char *znp, int zn);

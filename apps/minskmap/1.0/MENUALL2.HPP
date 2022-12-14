@@ -25,9 +25,5 @@ void finddbf(void);
 void xycoord(void);
 void polygon(int);
 void pascal clearm(int);
-int XRAZEKR(float y);
-int YRAZEKR(float x);
-double YDISRAZ(int x);
-double XDISRAZ(int y);
 
 #endif

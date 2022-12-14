@@ -24,28 +24,6 @@ struct OBJND
   int color;
 };
 
-int XRAZDIS(double y)
-{
-  return double((y - YMINM) * (model.fm.xmax - model.fm.xmin)) / (YMAXM - YMINM) + model.fm.xmin;
-}
-
-int YRAZDIS(double x)
-{
-  return double((x - XMINM) * (model.fm.ymax - model.fm.ymin)) / (XMAXM - XMINM) + model.fm.ymin;
-}
-
-int DXEKRDIS(int dx)
-{
-  double d = dx * (YMAXV - YMINV) * (model.fm.xmax - model.fm.xmin) / (XMAXMAPE + 1) / (YMAXM - YMINM);
-  return d > 32767.0 ? 32767 : d;
-}
-
-double DXDISEKR(int dx)
-{
-  double d = dx * (YMAXM - YMINM) * (XMAXMAPE + 1) / (YMAXV - YMINV) / (model.fm.xmax - model.fm.xmin);
-  return d > 32767.0 ? 32767 : d;
-}
-
 int poisk(int /*regim*/, int *x, int *y, double *doub)
 {
   int nobj, k;
