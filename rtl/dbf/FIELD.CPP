@@ -11,11 +11,9 @@
 //   F_ref(char) - получение номера поля по его имени
 //----------------------------------------------------------------------
 
-int DBF::F_ref(char *f_name)
+int DBF::F_ref(char const *f_name)
 {
-  char *name = strupr(f_name);
-
-  for (int i = 0; strcmp(fields[i].name, name) && i < num_fields; i++)
+  for (int i = 0; strcmpi(fields[i].name, f_name) && i < num_fields; i++)
     ;
   if (i < num_fields)
     return i + 1;

@@ -53,7 +53,7 @@ int DBF::R_write(void)
 //                 копированием ее в файл
 //---------------------------------------------------------------------
 
-int DBF::R_put(void *buff)
+int DBF::R_put(void const *buff)
 {
 	for (int i = 1; i <= num_fields; i++)
 	{

@@ -14,7 +14,7 @@
 #include "convert.hpp"
 #include "dbf.hpp"
 
-int DBF::Creat(char *name, int num, FIELD *fields, int safety)
+int DBF::Creat(char const *name, int num, FIELD *fields, int safety)
 {
 	char *header;
 	HEAD _head;

@@ -29,9 +29,9 @@ long DBF::R_search(long rec, int (*func)(DBF *ptr))
 //                                   Последним параметром всегда NULL!
 //--------------------------------------------------------------------
 
-long DBF::R_search(long rec, char *name, void *templ, ...)
+long DBF::R_search(long rec, char const *name, void const *templ, ...)
 {
-	char **ptr = &name;
+	char const **ptr = &name;
 	int *num;
 
 	if (!handle)

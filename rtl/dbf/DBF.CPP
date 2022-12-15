@@ -10,7 +10,7 @@
 
 extern int errno;
 
-FIELD::FIELD(char *f_name, char f_type, int f_width, int f_dec)
+FIELD::FIELD(char const *f_name, char f_type, int f_width, int f_dec)
 {
   strcpy(name, f_name);
   type = f_type;
@@ -40,7 +40,7 @@ DBF::~DBF()
   Close();
 }
 
-long DBF::Use(char *dbf_name, unsigned s_buff)
+long DBF::Use(char const *dbf_name, unsigned s_buff)
 {
   char *buff;
   FIELD *f_ptr;

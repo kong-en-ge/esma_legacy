@@ -10,10 +10,10 @@
 //                         1 - ошибка при компиляции
 //                         2 - ошибка при интепретации
 
-extern int parse(DBF *, char *, char **, char *, char *);
+extern int parse(DBF *, char const *, char **, char *, char *);
 extern void *exec(DBF *, char *, char *, char *);
 
-int DBF::Filter_set(char *_filter)
+int DBF::Filter_set(char const *_filter)
 {
 	char *compile, *ptr;
 	char *eval_space, *eval_end;

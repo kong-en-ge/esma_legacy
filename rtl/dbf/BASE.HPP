@@ -26,7 +26,7 @@ struct FIELD
 	char rez[2];
 	unsigned char width,
 		decimals;
-	FIELD(char *, char, int, int = 0);
+	FIELD(char const *, char, int, int = 0);
 };
 
 // BASE - описание базы

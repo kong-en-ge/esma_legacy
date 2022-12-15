@@ -66,7 +66,7 @@ void str_blank_cat(char *a, int a_len, int b_len) /* move blanks to end */
 	  -1 - Error
 */
 
-int near exec_funct(char *r_ptr, int *r_len, char *eval_end)
+int exec_funct(char *r_ptr, int *r_len, char *eval_end)
 {
 	int a_type, a_len, b_type, b_len, c_type, c_len, len, num_parms, i;
 	union

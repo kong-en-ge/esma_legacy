@@ -10,22 +10,23 @@
 #include <string.h>
 #include <stdlib.h>
 
-int near parse_expr();
-int near funct_num(char *, int);
-int near cur_operator(void);
-int near parse_function();
-int near parse_value();
-int near get_operator(char *);
-int near push_oper(char);
-int near push_check(void);
-int near push_double(double);
-int near push_long(long);
-int near push_char(char);
-int near push_str(char *, int);
-char near pop_oper(void);
+int parse_expr();
+int funct_num(char *, int);
+int cur_operator(void);
+int parse_function();
+int parse_value();
+int get_operator(char *);
+int push_oper(char);
+int push_check(void);
+int push_double(double);
+int push_long(long);
+int push_char(char);
+int push_str(char const *, int);
+char pop_oper(void);
 
-char *result_bottom, *oper, *oper_top, *oper_bottom,
-    *source, *err_source;
+char *result_bottom, *oper, *oper_top, *oper_bottom;
+char const *source, *err_source;
+
 extern DBF *__file;
 
 //************************* компиляция *******************************
@@ -42,7 +43,7 @@ int u4error(int, char *, char *)
    return 0;
 }
 
-int near name_char(char ch)
+int name_char(char ch)
 {
    return (ch >= 'a' && ch <= 'z' ||
            ch >= 'A' && ch <= 'Z' ||
@@ -50,7 +51,7 @@ int near name_char(char ch)
            ch == '\\' || ch == '.' || ch == '_');
 }
 
-int near priority(char ch)
+int priority(char ch)
 {
    switch (ch)
    {
@@ -97,7 +98,7 @@ int near priority(char ch)
    }
 }
 
-int near funct_num(char *str, int len)
+int funct_num(char const *str, int len)
 {
    char u_str[10];
 
@@ -149,7 +150,7 @@ int near funct_num(char *str, int len)
    return (Q_NO_FUNCTION);
 }
 
-int near push_oper(char oper_code)
+int push_oper(char oper_code)
 {
    *(--oper) = oper_code;
    if (oper < oper_bottom)
@@ -158,21 +159,21 @@ int near push_oper(char oper_code)
    return 0;
 }
 
-char near pop_oper()
+char pop_oper()
 {
    if (oper >= oper_top)
       return ('\0');
    return (*(oper++));
 }
 
-int near cur_oper()
+int cur_oper()
 {
    if (oper >= oper_top)
       return (Q_NO_FUNCTION);
    return (*oper);
 }
 
-int near push_check()
+int push_check()
 {
    if (result.ch < result_bottom)
       return -1;
@@ -180,26 +181,26 @@ int near push_check()
    return 0;
 }
 
-int near push_double(double doub)
+int push_double(double doub)
 {
    *(--result.doub) = doub;
    push_char((char)I_NUM);
    return push_check();
 }
 
-int near push_long(long l)
+int push_long(long l)
 {
    *(--result.l) = l;
    return push_check();
 }
 
-int near push_char(char ch)
+int push_char(char ch)
 {
    *(--result.ch) = ch;
    return push_check();
 }
 
-int near push_str(char *str, int len)
+int push_str(char const *str, int len)
 {
    if (len > 255 || len < 0)
       return -1;
@@ -216,7 +217,7 @@ int near push_str(char *str, int len)
 }
 
 /* Returns  OK, ERROR */
-int near parse_function()
+int parse_function()
 {
    int i, f_num, num_param;
 
@@ -278,7 +279,7 @@ int near parse_function()
 }
 
 /*  Returns:  OK, ERROR */
-int near parse_value()
+int parse_value()
 {
    while (*source <= ' ' && *source >= '\1')
       source++;
@@ -388,7 +389,7 @@ int near parse_value()
    /* real */
    if (*source >= '0' && *source <= '9' || *source == '-' || *source == '+')
    {
-      if (push_double(strtod(source, &source)) == -1)
+      if (push_double(strtod(source, &(char*)source)) == -1)
          return -1;
       if (strcmp(source - 1, ".AND.") == 0 || strcmp(source - 1, ".OR.") == 0 ||
           strcmp(source - 1, ".NOT.") == 0)
@@ -398,7 +399,8 @@ int near parse_value()
    /* string */
    if (*source == '\'' || *source == '\"')
    {
-      char end_char, *on;
+      char end_char;
+      char const *on;
       int len;
 
       on = source;
@@ -553,7 +555,7 @@ int get_oper(char *op_return)
        0  Normal
       -1  Error
 */
-int near parse_expr()
+int parse_expr()
 {
    int rc;
    char op_value;
@@ -611,7 +613,7 @@ int near parse_expr()
      <0   Error
 */
 
-int parse(DBF *file, char *expr_ptr, char **compile_ptr_ptr,
+int parse(DBF *file, char const *expr_ptr, char **compile_ptr_ptr,
           char *eval_space, char *eval_end)
 {
    __file = file;
