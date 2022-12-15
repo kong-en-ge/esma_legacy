@@ -4,7 +4,7 @@
 #include "button.hpp"
 
 button::button(int left_, int top_, int right_, int bottom_,
-               int key_, char *text_)
+               int key_, char const *text_)
 {
   left = left_;
   right = right_;
@@ -15,7 +15,7 @@ button::button(int left_, int top_, int right_, int bottom_,
   next = NULL;
 }
 
-button::button(int key_, char *text_)
+button::button(int key_, char const *text_)
 {
   text = text_;
   key = key_;

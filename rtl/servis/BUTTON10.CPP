@@ -2,7 +2,7 @@
 #include "button.hpp"
 
 Big_Menu_fadd::Big_Menu_fadd(int xl, int yt, int xr, int sizep_, int Maxn,
-                             int Maxlen, char *titl, char *first_str, int rem, int frst_str, int end_str) : Big_Menu(xl, yt, xr, sizep_, titl, first_str, rem, frst_str, end_str)
+                             int Maxlen, char const *titl, char const *first_str, int rem, int frst_str, int end_str) : Big_Menu(xl, yt, xr, sizep_, titl, first_str, rem, frst_str, end_str)
 {
   items = new char[Maxn * Maxlen];
   maxlen = Maxlen;

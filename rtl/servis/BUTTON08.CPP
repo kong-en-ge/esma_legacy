@@ -9,7 +9,7 @@ void Big_Menu_XY::draw_one(int num)
 }
 
 Big_Menu_XY::Big_Menu_XY(int xl, int yt, int xr, int sizep_, float *X,
-                         float *Y, int Maxn, char *titl, char *first_str, int rem, int frst_str, int end_str) : Big_Menu(xl, yt, xr, sizep_, titl, first_str, rem, frst_str, end_str)
+                         float *Y, int Maxn, char const *titl, char const *first_str, int rem, int frst_str, int end_str) : Big_Menu(xl, yt, xr, sizep_, titl, first_str, rem, frst_str, end_str)
 {
   maxn = Maxn;
   xptr = X;

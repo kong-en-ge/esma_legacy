@@ -14,4 +14,4 @@ int GEO_MODEL::readform(void *buff)
   xmaxm = max(form->xuv, form->xsv);
   ymaxm = max(form->ysz, form->ysv);
   return 0;
-};
+}

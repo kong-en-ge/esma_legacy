@@ -8,7 +8,7 @@ void Big_Menu_St::draw_one(int num)
 }
 
 Big_Menu_St::Big_Menu_St(int xl, int yt, int xr, int sizep_,
-                         void **items_, char *titl, char *first_str, int rem, int frst_str, int end_str) : Big_Menu(xl, yt, xr, sizep_, titl, first_str, rem, frst_str, end_str)
+                         void **items_, char const *titl, char const *first_str, int rem, int frst_str, int end_str) : Big_Menu(xl, yt, xr, sizep_, titl, first_str, rem, frst_str, end_str)
 {
   items = (char **)items_;
   maxlen = maxn = 0;

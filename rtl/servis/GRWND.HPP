@@ -23,9 +23,9 @@ struct REGION
   int left, top, right, bot;
 };
 
-int xyinregion(int x, int y, REGION *reg);
-int regionregion(REGION *reg1, REGION *reg2);
-int xydregion(int x, int y, int delta, REGION *reg);
+int xyinregion(int x, int y, REGION const*reg);
+int regionregion(REGION const *reg1, REGION const *reg2);
+int xydregion(int x, int y, int delta, REGION const *reg);
 
 struct Sreg : public REGION
 {
@@ -49,7 +49,7 @@ struct GRwnd : public Sreg
         int titlec_ = LIGHTBLUE, int rm = 0, int drw = 0);
   void draw(void);
   void text(const char *string, int center = 0);
-  void textxy(int x, int y, char *string, int color = BLACK);
+  void textxy(int x, int y, char const *string, int color = BLACK);
   int readst(char *, int Maxs, char *firststr = NULL, int Maxs2 = 0,
              int atrib = BLACK | (LIGHTGRAY << 4), int x_posit = 0);
   int readfloat(float *fl, float minfl, float maxfl, int MAXL,

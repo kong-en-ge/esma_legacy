@@ -17,7 +17,7 @@ unsigned char MARKER[][8] = {
     {0x06, 0x0c, 0x18, 0x30, 0x98, 0x4c, 0x26, 0x00}  //<=	10
 };
 
-but_mark::but_mark(int left, int top, int right, int bot, int key, char *text) : button(left, top, right, bot, key, text)
+but_mark::but_mark(int left, int top, int right, int bot, int key, char const *text) : button(left, top, right, bot, key, text)
 {
 }
 

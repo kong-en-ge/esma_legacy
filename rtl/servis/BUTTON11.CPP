@@ -18,13 +18,15 @@ void near s()
 }
 
 Big_Menu_path::Big_Menu_path(int xl, int yt, int xr, int _sizep,
-                             char *titl, char *path, int rem) : Big_Menu_fadd(xl, yt, xr, _sizep, 4000, 13, titl, "", rem)
+                             char const *titl, char const *path, int rem) : Big_Menu_fadd(xl, yt, xr, _sizep, 4000, 13, titl, "", rem)
 {
   tt = 0;
   char ext[5];
   char startd[3];
+  char tempPath[MAXPATH];
   int len;
-  fnsplit(strupr(path), startd, startdir, maskfile, ext);
+  strcpy(tempPath, path);
+  fnsplit(strupr(tempPath), startd, startdir, maskfile, ext);
   len = strlen(startdir);
   if (len)
     startdir[len - 1] = 0;

@@ -3,7 +3,7 @@
 #include "button.hpp"
 
 Menu_but_gor::Menu_but_gor(int xl, int yt, int xr,
-                           char *text[], int key[], int num, int rm) : Sreg(xl, yt, xr, yt + 14, rm), Menu_but()
+                           char const *text[], int key[], int num, int rm) : Sreg(xl, yt, xr, yt + 14, rm), Menu_but()
 {
   int len = 0;
   int lft = xl;

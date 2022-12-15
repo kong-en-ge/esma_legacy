@@ -1,7 +1,7 @@
 #pragma inline
 #include "grwnd.hpp"
 
-int xyinregion(int x, int y, REGION *reg)
+int xyinregion(int x, int y, REGION const *reg)
 {
 asm	push	ds
 asm 	lds	bx,reg
@@ -24,7 +24,7 @@ asm	pop	ds
 	return _AX;
 }
 
-int regionregion(REGION *reg1, REGION *reg2)
+int regionregion(REGION const *reg1, REGION const *reg2)
 {
 asm	push	ds
 asm	lds	si,reg1
@@ -50,7 +50,7 @@ asm     pop	ds
 	return 	_AX;
 }
 
-int xydregion(int x, int y, int delta, REGION *reg)
+int xydregion(int x, int y, int delta, REGION const *reg)
 {
 REGION r;
 asm     mov  	ax,x

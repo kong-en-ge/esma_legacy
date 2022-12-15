@@ -1,7 +1,7 @@
 #include <string.h>
 #include "grwnd.hpp"
 
-void GRwnd::textxy(int x, int y, char *string, int color)
+void GRwnd::textxy(int x, int y, char const *string, int color)
 {
   SVS svs;
   savesettings(&svs);

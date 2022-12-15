@@ -87,7 +87,7 @@ extern "C" double pascal square_metr(void const *);
 extern "C" int pascal orient_metr(void const *);
 
 //возврат -1 - нет справки,-2 - нет метрики,-3 - нет характерист
-int isexistmodel(char *path, char *mod);
+int isexistmodel(const char *path, char *mod);
 
 struct FINDHAR
 {

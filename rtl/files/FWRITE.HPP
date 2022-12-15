@@ -12,8 +12,8 @@ public:
   int current;
 
   ~FWRITE();
-  int open(char *path, int h_size, int r_size, int b_size);
-  int w_head(void *ptr);
+  int open(char const *path, int h_size, int r_size, int b_size);
+  int w_head(void const *ptr);
   int add(void *);
   int close(int n = 1);
 };

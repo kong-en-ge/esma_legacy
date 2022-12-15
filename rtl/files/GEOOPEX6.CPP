@@ -20,7 +20,7 @@ s00:
 return -1;
 }
 
-int isexistmodel(char *path, char *mod)
+int isexistmodel(const char *path, char *mod)
 {
   char patht[80];
   struct ffblk ffblk;

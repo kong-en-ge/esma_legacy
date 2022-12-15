@@ -12,7 +12,7 @@ FWRITE::~FWRITE()
     delete buff;
 }
 
-int FWRITE::open(char *path, int h_size, int r_size, int b_size)
+int FWRITE::open(char const *path, int h_size, int r_size, int b_size)
 {
   buff = NULL;
   current = 0;
@@ -27,7 +27,7 @@ int FWRITE::open(char *path, int h_size, int r_size, int b_size)
   return 0;
 }
 
-int FWRITE::w_head(void *ptr)
+int FWRITE::w_head(void const *ptr)
 {
   if (lseek(handle, 0, SEEK_SET) == -1)
     return -1;

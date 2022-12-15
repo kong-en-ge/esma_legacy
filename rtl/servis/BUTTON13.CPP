@@ -17,7 +17,8 @@ int sortbaza(void const *s1, void const *s2)
 }
 
 Big_Menu_baza::Big_Menu_baza(int xl, int yt, int xr, int _sizep,
-                             char *titl, int rem, char *bazap) : Big_Menu_fadd(xl, yt, xr, _sizep, 4000, 12, titl, "", rem)
+                             char const *titl, int rem, char const *  bazap) :
+                             Big_Menu_fadd(xl, yt, xr, _sizep, 4000, 12, titl, "", rem)
 {
   strcpy(bazapath, bazap);
   struct ffblk f;

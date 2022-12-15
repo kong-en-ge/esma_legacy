@@ -2,7 +2,7 @@
 #include "button.hpp"
 
 Menu_but_vrt::Menu_but_vrt(int xl, int yt, int xr,
-                           char *text[], int key[], int num, int rem) : Sreg(xl, yt, xr, yt, rem), Menu_but()
+                           char const *text[], int key[], int num, int rem) : Sreg(xl, yt, xr, yt, rem), Menu_but()
 {
   for (int i = 0; i < num; i++, yt += 15)
   {

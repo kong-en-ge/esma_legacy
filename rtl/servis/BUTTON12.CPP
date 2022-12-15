@@ -9,7 +9,7 @@
 #include "disks.hpp"
 
 Big_Menu_model::Big_Menu_model(int xl, int yt, int xr, int _sizep,
-                               char *titl, int rem) : Big_Menu_path(xl, yt, xr, _sizep, titl, "*.s*", rem)
+                               char const *titl, int rem) : Big_Menu_path(xl, yt, xr, _sizep, titl, "*.s*", rem)
 {
 }
 
