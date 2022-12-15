@@ -7,6 +7,9 @@ int XMINE, YMINE, XMAXE, YMAXE;     // габаритные координаты окна карты на экр
 int XMAXMAPE = 479;
 int YMAXMAPE = 349;
 double _DXM, _DYM;
+int DXM;
+
+SCRIPT scr;
 
 float CURRENTSCALE;
 float SCALEMIN, SCALEMAX;
@@ -20,3 +23,7 @@ int otkatn;
 FST_MODEL model;
 
 int _xMK = 240, _yMK = 240;
+
+const int colordbf[] = {RED, YELLOW, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN};
+List_base *LBS;
+int LBSsize;

@@ -23,12 +23,10 @@
 #include "globalda.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
-#include "drawrazd.hpp"
 
 int next_model(int startpos, int nc = 0, int prp = 0);
 FLIB *findobj(SPR *spr);
 int findobjn(SPR *spr);
-int setviewMAP();
 int poisk(int regim = 0, int *x = NULL, int *y = NULL, double *b = NULL);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
 int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst);
@@ -44,9 +42,7 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd);
 int stmetro();
 int stuzel(int kh);
 int comuzel();
-void draw_one_d(int, int, int, int);
 int obj_enabled(F_SPR *spr);
-void draw_fld();
 void drawcram();
 PERES *ps;
 TWOPERES *pstwo;

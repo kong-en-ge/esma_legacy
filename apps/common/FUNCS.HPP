@@ -20,6 +20,7 @@ int YRAZDIS(double x);
 int DXEKRDIS(int dx);
 double DXDISEKR(int dx);
 
+int setviewMAP(void);
 void fragment(void);
 void all(void);
 void centr(void);
@@ -27,10 +28,16 @@ void rasst(void);
 void plmash(void);
 void minmash(void);
 void cor_V(void);
+int drawmap(void);
+void drawingline(int *metr, int num);
+void draw_one_d(double _x, double _y, int color = -1);
+void draw_one_d(int x, int y, int color, int type);
+void draw_fld();
 
 int M_K_R_status(void (*drawCursor)(void) = NULL, int (*keyhandler)(int) = NULL);
 
 // the following functions are to be implemented within the project
 int drawrazd(void);
+int draw_one_obj(unsigned num, int color, int drawDisabled = 0);
 
 #endif

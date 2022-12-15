@@ -11,7 +11,6 @@
 #include "globalda.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
-#include "drawrazd.hpp"
 
 int next_model(int startpos, int nc = 0);
 int obj_enabled(F_SPR *spr);

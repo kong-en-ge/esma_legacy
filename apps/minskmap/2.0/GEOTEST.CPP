@@ -10,7 +10,6 @@
 #include "button.hpp"
 #include "globalda.hpp"
 #include "menuall2.hpp"
-#include "drawrazd.hpp"
 #include "mouse.hpp"
 #include "flibrt.hpp"
 #include "textfile.hpp"

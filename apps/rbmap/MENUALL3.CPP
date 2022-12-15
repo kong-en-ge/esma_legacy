@@ -22,17 +22,12 @@
 #include "globalda.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
-#include "drawrazd.hpp"
 
 FLIB *findobj(SPR *spr);
 int findobjn(SPR *spr);
-int setviewMAP();
 int poisk(int regim, int *x = NULL, int *y = NULL, double *b = NULL);
-int control(int);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
-void draw_one_d(int, int, int, int);
 int obj_enabled(F_SPR *spr);
-void draw_fld();
 int next_model(int startpos, int nc = 0);
 
 struct KLSt : public Big_Menu

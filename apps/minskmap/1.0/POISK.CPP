@@ -10,7 +10,6 @@
 #include "button.hpp"
 
 int next_model(int startpos, int nc = 0);
-int draw_one_obj(unsigned obj, int color);
 int obj_enabled(F_SPR *spr);
 
 struct OBJND

@@ -4,7 +4,6 @@
 
 #include "mouse.hpp"
 #include "globalda.hpp"
-#include "drawrazd.hpp"
 #include "fwrite.hpp"
 #include "drawpl.hpp"
 #include "button.hpp"
@@ -16,15 +15,8 @@
 #include "tpedit.hpp"
 #include "funcs.hpp"
 
-int control(int);
 int next_model(int startpos, int nc = 0);
 int next_dbf(int pos, int m2);
-int XRAZEKR(float y);
-int YRAZEKR(float x);
-int setviewMAP();
-int DXM;
-void draw_one_d(double _x, double _y, int color = -1);
-void draw_fld();
 
 void STOPTIME();
 void STARTTIME();
@@ -156,117 +148,7 @@ l1:
   STARTTIME();
 #endif
   return pos;
-};
-
-void drawingline(int *metr, int num)
-{
-  setlinesstyle(fliblin + num);
-  polyline(metr);
-  setlinestyle(SOLID_LINE, 0, 1);
 }
-
-int setviewMAP()
-{
-  // int XMINE,YMINE,XMAXE,YMAXE;
-  if ((XMAXM <= XMINM) || (YMINM >= YMAXM))
-    return 0;
-  if ((XMAXV - XMINV) < (XMAXM - XMINM) * 0.00001)
-    return 0;
-  if ((YMAXV - YMINV) < (YMAXM - YMINM) * 0.00001)
-    return 0;
-  int xminm, yminm, xmaxm, ymaxm;
-  if (YMAXM > YMAXV)
-  {
-    xmaxm = float((YMAXV - YMINM) * (model.fm.xmax - model.fm.xmin) /
-                  (YMAXM - YMINM)) +
-            model.fm.xmin;
-    XMAXE = XMAXMAPE;
-  }
-  else
-  {
-    xmaxm = model.fm.xmax;
-    XMAXE = XMAXMAPE * (YMAXM - YMINV) / (YMAXV - YMINV);
-  };
-  if (YMINM < YMINV)
-  {
-    xminm = float((YMINV - YMINM) * (model.fm.xmax - model.fm.xmin) /
-                  (YMAXM - YMINM)) +
-            model.fm.xmin;
-    XMINE = 0;
-  }
-  else
-  {
-    xminm = model.fm.xmin;
-    XMINE = XMAXMAPE * (YMINM - YMINV) / (YMAXV - YMINV);
-  };
-  if (XMAXM > XMAXV)
-  {
-    ymaxm = float((XMAXV - XMINM) * (model.fm.ymax - model.fm.ymin) /
-                  (XMAXM - XMINM)) +
-            model.fm.ymin;
-    YMINE = 0;
-  }
-  else
-  {
-    ymaxm = model.fm.ymax;
-    YMINE = YMAXMAPE * (XMAXV - XMAXM) / (XMAXV - XMINV);
-  };
-  if (XMINM < XMINV)
-  {
-    yminm = float((XMINV - XMINM) * (model.fm.ymax - model.fm.ymin) /
-                  (XMAXM - XMINM)) +
-            model.fm.ymin;
-    YMAXE = YMAXMAPE;
-  }
-  else
-  {
-    yminm = model.fm.ymin;
-    YMAXE = YMAXMAPE * (XMAXV - XMINM) / (XMAXV - XMINV);
-  };
-  if ((XMINE + 1 >= XMAXE) || (YMINE + 1 >= YMAXE))
-    return 0;
-  setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
-  setviewmap(xminm, yminm, xmaxm, ymaxm);
-  setview(0, 0, XMAXE - XMINE, YMAXE - YMINE);
-  scr.assign(0, 0, XMAXE - XMINE, YMAXE - YMINE);
-  scr.assign_map(xminm, yminm, xmaxm, ymaxm);
-  model.xminw = xminm;
-  model.yminw = yminm;
-  model.xmaxw = xmaxm;
-  model.ymaxw = ymaxm;
-  asm mov cx, XMAXE
-  asm sub cx, XMINE
-  asm mov ax, xmaxm
-  asm sub ax, xminm
-  asm mov dx, 3
-  asm mul dx
-  asm add cx, 3
-  asm div cx
-  asm mov DXM,ax
-  return 1;
-}
-
-int drawmap()
-{
-  int exp = 0;
-  F_SPR spr;
-  for (unsigned i = model.pm.start; i <= model.pm.end; i++)
-  {
-    int key;
-#ifndef DEMO
-    if ((mouse_key_status(&key, &key)) == -1)
-    {
-      while (mouse_key_status(&key, &key))
-        ;
-      exp = -1;
-      goto drawex;
-    };
-#endif
-    draw_one_obj(i, -1);
-  };
-drawex:
-  return exp;
-};
 
 void dr_pn_n(F_SPR *spr, int *metr, char *clcod, int color, int en, int cod)
 {
@@ -383,49 +265,4 @@ int draw_one_obj(unsigned obj, int color, int en)
       dr_pn_n(&spr, metr, flib->clcod, color, en, 2);
   }
   return 0;
-}
-
-void draw_one_d(int x, int y, int color, int type)
-{
-  setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
-  setcolor(color);
-  int r = RASsize - 12 + type;
-  putmarker_16_n(x - ras[r].x, y - ras[r].y, 16, ras[r].obr);
-}
-
-void draw_one_d(double _x, double _y, int color, int type)
-{
-  int x = XRAZEKR(_y);
-  int y = YRAZEKR(_x);
-  draw_one_d(x, y, color, type);
-}
-
-void draw_fld()
-{
-  for (int ib = 0; ib < LBSsize; ib++)
-  {
-    List_base *lbs = LBS + ib;
-    if (!lbs->activ)
-      continue;
-    DBF dbf;
-    char dbn[15];
-    sprintf(dbn, "%s.DBF", lbs->file);
-    long crec = dbf.Use(dbn, 100);
-    if (crec <= 0)
-      continue;
-    int type = lbs->mark[0] - 'A';
-    int color = colordbf[lbs->mark[1] - 'A'];
-    for (long ir = 0; ir < crec; ir++)
-    {
-      dbf.Go(ir + 1);
-      if (*(dbf.buffer) == '*')
-        continue;
-      double xd = dbf.F_value(dbf.F_ref("Xcoord"));
-      double yd = dbf.F_value(dbf.F_ref("Ycoord"));
-      if ((xd <= XMINV) || (xd >= XMAXV) || (yd <= YMINV) || (yd >= YMAXV))
-        continue;
-      draw_one_d(xd, yd, color, type);
-    }
-    dbf.Close();
-  }
 }

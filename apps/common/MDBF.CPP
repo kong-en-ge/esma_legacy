@@ -12,12 +12,8 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-void draw_one_d(double _x, double _y, int color = -1);
-void draw_one_d(int, int, int, int);
 int dcdpar(char *codp, char *znp, int zn);
-void draw_one_d(double, double, int, int);
 void redraw(double, double, double, double, int);
-void draw_fld();
 
 struct F_dbf
 {

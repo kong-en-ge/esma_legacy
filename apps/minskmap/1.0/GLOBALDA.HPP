@@ -10,11 +10,6 @@
 #define MENUTOP 43
 #define MENUBOT 188
 
-class GRwnd;
-class SET;
-struct SCRIPT;
-struct fonttype;
-struct linesstyle;
 extern PART_MODEL models[]; //части модели
 extern int nmodels;         //число подмоделей модели
 extern int N_on;
@@ -25,27 +20,12 @@ extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
 extern int xminec, yminec, xmaxec, ymaxec;
 extern char *LOC[];
 extern unsigned char SCALES;     //степень увеличения
-extern const int colordbf[];
 // extern const unsigned int znakidbf[];
 extern GRwnd wndmain;
-class Menu_but_vrt;
-struct List_base
-{
-  char name[20];
-  char file[9];
-  char mark[2];
-  char activ;
-};
-struct SET;
-struct FLIB;
-struct RAS;
-extern SCRIPT scr;
 extern fonttype ft;
 extern FLIB flibrt[];
 extern int flibsort[];
-extern linesstyle fliblin[];
 extern int LINsize;
-extern RAS ras[];
 extern unsigned FLIBsize;
 extern char near *KLSKP[]; //смещение строк класс
 extern char KLSK[];        //строки класс
@@ -54,9 +34,6 @@ extern far unsigned ATCDP[];
 struct atrname;
 extern atrname ATRN[];
 extern int ATRsize; //число возможных атрибутов
-extern int RASsize;
-extern List_base *LBS;
-extern int LBSsize;
 extern char *bram;
 extern int GdEGA;
 
