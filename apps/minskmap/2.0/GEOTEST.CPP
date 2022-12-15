@@ -19,6 +19,7 @@
 #include "set.hpp"
 #include "tpedit.hpp"
 #include "apputils.hpp"
+#include "funcs.hpp"
 
 extern unsigned _stklen = 10240;
 void main_menu(char *parst, int parbl);
@@ -27,7 +28,6 @@ char VERSION[] = "MINSK_MAP 2.0";
 char modelname[] = "minsk";
 char modelmod[] = "00";
 void drawcram();
-void all();
 
 const char *errorMessages[] =
 {

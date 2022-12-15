@@ -22,6 +22,7 @@
 #include "globalda.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
+#include "drawrazd.hpp"
 
 FLIB *findobj(SPR *spr);
 int findobjn(SPR *spr);

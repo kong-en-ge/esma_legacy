@@ -12,7 +12,6 @@ double XMINVC, YMINVC, XMAXVC, YMAXVC; //габаритные координаты контр.окна вид
 int XMINRE, YMINRE, XMAXRE, YMAXRE; //габаритные координаты окна раздела экр
 int XMINEC, YMINEC, XMAXEC, YMAXEC; //габаритные координаты контр.окна карты на экр
 int xminec, yminec, xmaxec, ymaxec;
-double _DXM, _DYM;
 SCRIPT scr;
 fonttype ft;
 unsigned char SCALES; //степень увеличения

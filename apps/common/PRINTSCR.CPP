@@ -2,6 +2,7 @@
 #include <fcntl.h>
 
 #include "button.hpp"
+#include "mouse.hpp"
 #include "menuall2.hpp"
 
 int far pascal error2but()

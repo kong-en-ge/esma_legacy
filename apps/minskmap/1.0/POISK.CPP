@@ -6,15 +6,12 @@
 #include "tpedit.hpp"
 #include "globalda.hpp"
 #include "apputils.hpp"
-
-#define max(arg1, arg2) (((arg1) > (arg2)) ? (arg1) : (arg2))
-#define min(arg1, arg2) (((arg1) < (arg2)) ? (arg1) : (arg2))
+#include "funcs.hpp"
+#include "button.hpp"
 
 int next_model(int startpos, int nc = 0);
 int draw_one_obj(unsigned obj, int color);
 int obj_enabled(F_SPR *spr);
-void draw_kr();
-int M_K_R_status(void (*dr)() = draw_kr, int (*keyhandler)(int) = NULL);
 
 struct OBJND
 {

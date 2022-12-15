@@ -17,6 +17,7 @@
 #include "set.hpp"
 #include "tpedit.hpp"
 #include "apputils.hpp"
+#include "funcs.hpp"
 
 extern unsigned _stklen = 10240;
 void main_menu();
@@ -25,7 +26,6 @@ char VERSION[] = "RB_MAP 1.0";
 char modelname[] = "belarus";
 char modelmod[] = "00";
 void drawcram();
-void all();
 
 const char *errorMessages[] = 
 {

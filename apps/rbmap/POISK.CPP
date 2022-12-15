@@ -1,6 +1,7 @@
 #include <alloc.h>
 #include <string.h>
 
+#include "button.hpp"
 #include "dbf.hpp"
 #include "geomodel.hpp"
 #include "flibrt.hpp"
@@ -9,14 +10,11 @@
 #include "fwrite.hpp"
 #include "globalda.hpp"
 #include "apputils.hpp"
-
-#define max(arg1, arg2) (((arg1) > (arg2)) ? (arg1) : (arg2))
-#define min(arg1, arg2) (((arg1) < (arg2)) ? (arg1) : (arg2))
+#include "funcs.hpp"
+#include "drawrazd.hpp"
 
 int next_model(int startpos, int nc = 0);
 int obj_enabled(F_SPR *spr);
-void draw_kr();
-int M_K_R_status(void (*dr)() = draw_kr, int (*keyhandler)(int) = NULL);
 
 struct OBJND
 {

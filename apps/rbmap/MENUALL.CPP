@@ -3,6 +3,9 @@
 #include <math.h>
 #include <bios.h>
 
+#include "graphics.h"
+#include "mouse.hpp"
+#include "button.hpp"
 #include "dbf.hpp"
 #include "fstmod.hpp"
 #include "flibrt.hpp"
@@ -11,9 +14,7 @@
 #include "fatr.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
-
-#define max(arg1, arg2) (((arg1) > (arg2)) ? (arg1) : (arg2))
-#define min(arg1, arg2) (((arg1) < (arg2)) ? (arg1) : (arg2))
+#include "globals.hpp"
 
 int poisk(int regim, int *x = NULL, int *y = NULL, double *d = NULL);
 long poiskdbf(int *x = NULL, int *y = NULL);
@@ -21,225 +22,12 @@ int setviewMAP();
 int draw_one_obj(int obj, int color, int en = 0);
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 int obj_enabled(F_SPR *spr);
-void draw_kr();
-int M_K_R_status(void (*dr)() = draw_kr, int (*keyhandler)(int) = NULL);
 void whatisit(int mode = 0, int seti = 0);
 void new_dbf();
 void del_dbf();
 void act_dbf();
 void pnt_dbf();
 void red_rec();
-
-int _xMK = 240, _yMK = 240;
-
-void cor_dxdy(double *dx, double *dy)
-{
-  if (*dx > XMAXV)
-    *dx = XMAXV;
-  if (*dy > YMAXV)
-    *dy = YMAXV;
-  if (*dx < XMINV)
-    *dx = XMINV;
-  if (*dy < YMINV)
-    *dy = YMINV;
-}
-
-int x_fr, y_fr;
-
-void draw_fr()
-{
-  int x = XRAZEKR(_DYM);
-  int y = YRAZEKR(_DXM);
-  rectangle(x, y, x_fr, y_fr);
-  char lf[10];
-  int d;
-  setviewport(0, 0, getmaxx(), getmaxy(), 1);
-  d = YEKRAZD(x_fr) - _DYM;
-  sprintf(lf, "%5u", abs(d));
-  outtextxy(570, 277, lf);
-  d = XEKRAZD(y_fr) - _DXM;
-  sprintf(lf, "%5u", abs(d));
-  outtextxy(570, 289, lf);
-  setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
-}
-
-void draw_kr()
-{
-  int x = XRAZEKR(_DYM);
-  int y = YRAZEKR(_DXM);
-  line(0, y, XMAXMAPE, y);
-  line(x, 0, x, YMAXMAPE);
-}
-
-int M_K_R_status(void (*draw_kur)(), int (*keyhandler)(int))
-{
-  mouse_show(OFF);
-  int status = 0, status2, xc, yc, x1, y1, ret = -1, xmn, ymn, xmx, ymx;
-  xmn = X_MIN;
-  ymn = Y_MIN;
-  xmx = X_MAX;
-  ymx = Y_MAX;
-  mouse_screen_size(0, 0, XMAXMAPE, YMAXMAPE);
-  set_position(XMAXMAPE / 2, YMAXMAPE / 2);
-  position_status(&status, &xc, &yc);
-  x1 = xc, y1 = yc;
-  setcolor(DARKGRAY);
-  _DXM = XEKRAZD(_yMK);
-  _DYM = YEKRAZD(_xMK);
-  setwritemode(XOR_PUT);
-  double XK = (XEKRAZD(yc) - XEKRAZD(yc - 1));
-  double YK = (YEKRAZD(xc) - YEKRAZD(xc + 1));
-  cor_dxdy(&_DXM, &_DYM);
-  draw_kur();
-l0:
-  while (1)
-  {
-    if (xc != x1 || yc != y1)
-    {
-      double dx = _DXM + (y1 - yc) * XK, dy = _DYM + (xc - x1) * YK;
-      cor_dxdy(&dx, &dy);
-      if ((dx != _DXM) || (dy != _DYM))
-      {
-        draw_kur();
-        _DXM = dx;
-        _DYM = dy;
-        draw_kur();
-      }
-      set_position(xc, yc);
-    }
-    if (status2 = bioskey(1))
-      break;
-    position_status(&status, &x1, &y1);
-    if (status & 0x3)
-      break;
-  }
-  if (status)
-  {
-    int x2, y2;
-    do
-      position_status(&status2, &x2, &y2);
-    while (status2);
-    if (status & 1)
-      ret = 0;
-    goto ex;
-  }
-  else
-  {
-    status2 = bioskey(0);
-    if (keyhandler)
-    {
-      int key = keyhandler(status2);
-      if (key != 0)
-      {
-        ret = key;
-        goto ex;
-      }
-    }
-    status2 = CallRScommand(&status2);
-    switch (status2)
-    {
-    case RSenter:
-      ret = 0;
-    case RSquit:
-      goto ex;
-    case RSright:
-      x1 += _dec;
-      if (x1 < X_MIN)
-        x1 = X_MIN;
-      break;
-    case RSleft:
-      x1 -= _dec;
-      if (x1 > X_MAX)
-        x1 = X_MAX;
-      break;
-    case RSup:
-      y1 -= _dec;
-      if (y1 < Y_MIN)
-        y1 = Y_MIN;
-      break;
-    case RSdn:
-      y1 += _dec;
-      if (y1 > Y_MAX)
-        y1 = Y_MAX;
-      break;
-    }
-    goto l0;
-  }
-ex:
-  draw_kur();
-  _xMK = XRAZEKR(_DYM);
-  _yMK = YRAZEKR(_DXM);
-  mouse_screen_size(xmn, ymn, xmx, ymx);
-  mouse_show(ON);
-  setwritemode(COPY_PUT);
-  return ret;
-}
-
-void fragment(void)
-{
-  if (CURRENTSCALE < 2.8 * SCALEMIN)
-  {
-    displayWarning(1);
-    return;
-  }
-  double xminm, yminm, dxm, dym;
-  textsettingstype tf;
-  gettextsettings(&tf);
-
-  GRwnd wnf(487, 252, 632, 302, "Размер фрагмента", LIGHTBLUE, 1, 1);
-  wnf.text("(в метрах)");
-  wnf.text("по гор.", 1);
-  wnf.text("по верт.", 1);
-label0:
-  if (M_K_R_status() == -1)
-  {
-    wnf.restore();
-    return;
-  }
-  xminm = _DXM;
-  yminm = _DYM;
-  x_fr = _xMK;
-  y_fr = _yMK;
-  if (M_K_R_status(draw_fr) == -1)
-    goto label0;
-  wnf.restore();
-  settextstyle(tf.font, tf.direction, tf.charsize);
-  settextjustify(tf.horiz, tf.vert);
-  dxm = _DXM - xminm, dym = _DYM - yminm;
-  if (dxm < 0)
-    dxm = -dxm;
-  if (dym < 0)
-    dym = -dym;
-  if (dym >= dxm)
-    dxm = dym;
-  if (dxm < 200)
-    dxm = 200;
-  dxm /= 2;
-  float dxc = (_DXM + xminm) / 2;
-  XMINV = dxc - dxm;
-  XMAXV = dxc + dxm;
-  dxc = (_DYM + yminm) / 2;
-  YMINV = dxc - dxm;
-  YMAXV = dxc + dxm;
-  cor_V();
-  drawrazd();
-}
-
-void centr(void)
-{
-  if (All_Map)
-    return;
-  int x1, y1;
-  if (M_K_R_status() == -1)
-    return;
-  double dxm = (XMAXV - XMINV) / 2, dym = (YMAXV - YMINV) / 2;
-  XMINV = _DXM - dxm;
-  XMAXV = _DXM + dxm;
-  YMINV = _DYM - dym;
-  YMAXV = _DYM + dym;
-  cor_V();
-  drawrazd();
-}
 
 void main_menu()
 {

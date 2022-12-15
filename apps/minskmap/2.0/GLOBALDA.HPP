@@ -23,7 +23,6 @@ extern double XMING, YMING, XMAXG, YMAXG;     //Максимальные координаты
 extern double XMINVC, YMINVC, XMAXVC, YMAXVC; //габаритные координаты  контр.окна вид
 extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
 extern int xminec, yminec, xmaxec, ymaxec;
-extern double _DXM, _DYM;
 extern char *LOC[];
 extern unsigned char SCALES;     //степень увеличения
 extern const int colordbf[];

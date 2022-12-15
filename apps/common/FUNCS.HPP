@@ -1,6 +1,8 @@
 #ifndef __FUNCS_HPP__
 #define __FUNCS_HPP__
 
+#include <stdlib.h>
+
 void store_otkat(void);
 void restore_otkat(void);
 int upcase(int symb);
@@ -18,10 +20,15 @@ int YRAZDIS(double x);
 int DXEKRDIS(int dx);
 double DXDISEKR(int dx);
 
+void fragment(void);
 void all(void);
+void centr(void);
+void rasst(void);
 void plmash(void);
 void minmash(void);
 void cor_V(void);
+
+int M_K_R_status(void (*drawCursor)(void) = NULL, int (*keyhandler)(int) = NULL);
 
 // the following functions are to be implemented within the project
 int drawrazd(void);

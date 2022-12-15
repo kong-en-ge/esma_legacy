@@ -15,12 +15,8 @@
 void draw_one_d(double _x, double _y, int color = -1);
 void draw_one_d(int, int, int, int);
 int dcdpar(char *codp, char *znp, int zn);
-void draw_kr();
-int M_K_R_status(void (*dr)() = draw_kr, int (*keyhandler)(int) = NULL);
 void draw_one_d(double, double, int, int);
 void redraw(double, double, double, double, int);
-int XRAZEKR(float y);
-int YRAZEKR(float x);
 void draw_fld();
 
 struct F_dbf

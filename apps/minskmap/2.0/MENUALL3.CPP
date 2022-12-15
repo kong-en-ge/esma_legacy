@@ -23,6 +23,7 @@
 #include "globalda.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
+#include "drawrazd.hpp"
 
 int next_model(int startpos, int nc = 0, int prp = 0);
 FLIB *findobj(SPR *spr);
