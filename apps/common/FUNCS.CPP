@@ -521,36 +521,6 @@ void draw_one_d(double _x, double _y, int color, int type)
   draw_one_d(x, y, color, type);
 }
 
-void draw_fld()
-{
-  for (int ib = 0; ib < LBSsize; ib++)
-  {
-    List_base *lbs = LBS + ib;
-    if (!lbs->activ)
-      continue;
-    DBF dbf;
-    char dbn[15];
-    sprintf(dbn, "%s.DBF", lbs->file);
-    long crec = dbf.Use(dbn, 100);
-    if (crec <= 0)
-      continue;
-    int type = lbs->mark[0] - 'A';
-    int color = colordbf[lbs->mark[1] - 'A'];
-    for (long ir = 0; ir < crec; ir++)
-    {
-      dbf.Go(ir + 1);
-      if (*(dbf.buffer) == '*')
-        continue;
-      double xd = dbf.F_value(dbf.F_ref("Xcoord"));
-      double yd = dbf.F_value(dbf.F_ref("Ycoord"));
-      if ((xd <= XMINV) || (xd >= XMAXV) || (yd <= YMINV) || (yd >= YMAXV))
-        continue;
-      draw_one_d(xd, yd, color, type);
-    }
-    dbf.Close();
-  }
-}
-
 void draw_kr(void)
 {
   int x = XRAZEKR(_DYM);
@@ -676,4 +646,32 @@ ex:
   mouse_show(ON);
   setwritemode(COPY_PUT);
   return ret;
+}
+
+void redraw(double x1, double y1, double x2, double y2, int d)
+{
+  double xmn = x1 - (XMAXG - XMING) / d;
+  if (xmn < XMING)
+    xmn = XMING;
+  double xmx = x2 + (XMAXG - XMING) / d;
+  if (xmx > XMAXG)
+    xmx = XMAXG;
+  double ymn = y1 - (YMAXG - YMING) / d;
+  if (ymn < YMING)
+    ymn = YMING;
+  double ymx = y2 + (YMAXG - YMING) / d;
+  if (ymx > YMAXG)
+    ymx = YMAXG;
+  double dxm = xmx - xmn;
+  double dym = ymx - ymn;
+  if (dym >= dxm)
+    dxm = dym;
+  dxm /= 2;
+  float dxc = (xmx + xmn) / 2;
+  XMINV = dxc - dxm;
+  XMAXV = dxc + dxm;
+  dxc = (ymx + ymn) / 2;
+  YMINV = dxc - dxm;
+  YMAXV = dxc + dxm;
+  drawrazd();
 }

@@ -10,6 +10,5 @@ unsigned char SCALES; //степень увеличения
 char *LOC[] = {"точ", "лин", "площ", "текст"};
 
 int N_on = 0;
-int actdbf = 0;
 char *bram;
 int GdEGA = 0;

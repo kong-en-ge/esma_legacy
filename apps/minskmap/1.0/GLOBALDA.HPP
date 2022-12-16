@@ -13,14 +13,12 @@
 extern PART_MODEL models[]; //части модели
 extern int nmodels;         //число подмоделей модели
 extern int N_on;
-extern int actdbf;
 extern double XMINVC, YMINVC, XMAXVC, YMAXVC; //габаритные координаты  контр.окна вид
 extern double XMINM, YMINM, XMAXM, YMAXM;     //габаритные координаты карты в мск
 extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
 extern int xminec, yminec, xmaxec, ymaxec;
 extern char *LOC[];
 extern unsigned char SCALES;     //степень увеличения
-// extern const unsigned int znakidbf[];
 extern GRwnd wndmain;
 extern fonttype ft;
 extern FLIB flibrt[];

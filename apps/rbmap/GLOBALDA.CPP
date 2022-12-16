@@ -15,6 +15,5 @@ fonttype ft;
 unsigned char SCALES; // степень увеличения
 char *LOC[] = {"точ", "лин", "площ", "текст"};
 
-int actdbf = 0;
 char *bram;
 int GdEGA = 0;

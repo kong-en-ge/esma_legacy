@@ -15,19 +15,13 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 #include "globals.hpp"
+#include "dbffunc.hpp"
 
 int poisk(int regim, int *x = NULL, int *y = NULL, double *d = NULL);
 long poiskdbf(int *x = NULL, int *y = NULL);
-int setviewMAP();
-int draw_one_obj(int obj, int color, int en = 0);
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 int obj_enabled(F_SPR *spr);
 void whatisit(int mode = 0, int seti = 0);
-void new_dbf();
-void del_dbf();
-void act_dbf();
-void pnt_dbf();
-void red_rec();
 
 void main_menu()
 {

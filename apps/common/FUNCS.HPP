@@ -30,9 +30,9 @@ void minmash(void);
 void cor_V(void);
 int drawmap(void);
 void drawingline(int *metr, int num);
-void draw_one_d(double _x, double _y, int color = -1);
 void draw_one_d(int x, int y, int color, int type);
-void draw_fld();
+void draw_one_d(double x, double y, int color, int type);
+void redraw(double x1, double y1, double x2, double y2, int d);
 
 int M_K_R_status(void (*drawCursor)(void) = NULL, int (*keyhandler)(int) = NULL);
 

@@ -95,7 +95,7 @@ int Init(int carg)
   LBSsize = 0;
   LBS = new List_base[100];
   TEXTFILE txt;
-  if (txt.open("MINSK.LBS", 4000) != -1)
+  if (txt.open(LBSFilename, 4000) != -1)
   {
     char str[41];
     while (LBSsize < 100)
@@ -149,6 +149,7 @@ int org_main(int argc, char *argv[])
 {
   setErrorMessages(errorMessages, sizeof(errorMessages) / sizeof(errorMessages[0]));
   setWarningMessages(warningMessages, sizeof(warningMessages) / sizeof(warningMessages[0]));
+  LBSFilename = "MINSK.LBS";
 
   GRwnd wndmain2(487, 8, 632, 31, "ŽŽŽ '‘Œ€'", LIGHTBLUE, 0, 0);
   int ii;

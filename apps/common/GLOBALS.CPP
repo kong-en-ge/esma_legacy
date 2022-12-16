@@ -27,3 +27,6 @@ int _xMK = 240, _yMK = 240;
 const int colordbf[] = {RED, YELLOW, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN};
 List_base *LBS;
 int LBSsize;
+int actdbf = 0;
+
+char const * LBSFilename;

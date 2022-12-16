@@ -43,6 +43,8 @@ extern int _xMK, _yMK;
 extern const int colordbf[];
 extern List_base *LBS;
 extern int LBSsize;
+extern char const * LBSFilename;
+extern int actdbf;
 
 // external classifier data
 extern linesstyle fliblin[];

@@ -16,6 +16,7 @@
 #include "fatr.hpp"
 #include "tpedit.hpp"
 #include "funcs.hpp"
+#include "dbffunc.hpp"
 
 int next_model(int startpos, int nc = 0, int prp = 0);
 int next_dbf(int pos, int m2);
