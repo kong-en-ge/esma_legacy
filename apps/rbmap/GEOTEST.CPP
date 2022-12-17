@@ -24,7 +24,6 @@ void DBF_FIL();
 char VERSION[] = "RB_MAP 1.0";
 char modelname[] = "belarus";
 char modelmod[] = "00";
-void drawcram();
 
 const char *errorMessages[] = 
 {

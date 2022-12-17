@@ -6,6 +6,11 @@
 #include "font.hpp"
 #include "flibrt.hpp"
 
+#define WHITE 0
+#define BLACK 15
+#define MENUTOP 43
+#define MENUBOT 188
+
 #define MAX_STORED_VIEWS 10
 
 struct List_base
@@ -47,8 +52,18 @@ extern char const * LBSFilename;
 extern int actdbf;
 
 // external classifier data
+extern FLIB flibrt[];
+extern int flibsort[];
 extern linesstyle fliblin[];
+extern int LINsize;
 extern RAS ras[];
 extern int RASsize;
+extern unsigned FLIBsize;
+extern atrname ATRN[];
+extern char near *KLSKP[]; // смещение строк класс
+extern char KLSK[];        // строки класс
+extern far char ATCD[];
+extern far unsigned ATCDP[];
+extern int ATRsize; // число возможных атрибутов
 
 #endif

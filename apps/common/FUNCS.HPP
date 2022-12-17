@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 
+#include "txtpacks.hpp"
+
 void store_otkat(void);
 void restore_otkat(void);
 int upcase(int symb);
@@ -19,6 +21,10 @@ int XRAZDIS(double y);
 int YRAZDIS(double x);
 int DXEKRDIS(int dx);
 double DXDISEKR(int dx);
+
+void whatisit(int m, int s);
+void displayObjectInfo(int objIndex);
+int ATR(TEXT_PACK_MENUS *tp, int obj);
 
 int setviewMAP(void);
 void fragment(void);
@@ -39,5 +45,7 @@ int M_K_R_status(void (*drawCursor)(void) = NULL, int (*keyhandler)(int) = NULL)
 // the following functions are to be implemented within the project
 int drawrazd(void);
 int draw_one_obj(unsigned num, int color, int drawDisabled = 0);
+void drawcram(void);
+int poisk(int regim, int *x = NULL, int *y = NULL, double *b = NULL);
 
 #endif

@@ -6,8 +6,7 @@
 #include "fatr.hpp"
 #include "globalda.hpp"
 #include "apputils.hpp"
-
-int poisk(int regim = 0, int *x = NULL, int *y = NULL, double *b = NULL);
+#include "funcs.hpp"
 
 int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn)
 {

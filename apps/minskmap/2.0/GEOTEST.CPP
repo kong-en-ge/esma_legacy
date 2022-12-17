@@ -26,7 +26,6 @@ void DBF_FIL();
 char VERSION[] = "MINSK_MAP 2.0";
 char modelname[] = "minsk";
 char modelmod[] = "00";
-void drawcram();
 
 const char *errorMessages[] =
 {

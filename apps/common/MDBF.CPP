@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <dos.h>
 
+#include "dbf.hpp"
 #include "button.hpp"
 #include "globalda.hpp"
 #include "files.hpp"

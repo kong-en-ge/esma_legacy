@@ -10,7 +10,6 @@
 #include "fstmod.hpp"
 #include "flibrt.hpp"
 #include "menuall2.hpp"
-#include "tpedit.hpp"
 #include "fatr.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
@@ -18,11 +17,8 @@
 #include "globalda.hpp"
 #include "dbffunc.hpp"
 
-int poisk(int regim, int *x = NULL, int *y = NULL, double *d = NULL);
 long poiskdbf(int *x = NULL, int *y = NULL);
-int setviewMAP();
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
-int obj_enabled(F_SPR *spr);
 void whatisit(int mode = 0, int seti = 0);
 
 char *ston = "‚ª«. N";

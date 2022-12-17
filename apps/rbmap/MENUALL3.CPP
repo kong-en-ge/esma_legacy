@@ -25,8 +25,6 @@
 
 FLIB *findobj(SPR *spr);
 int findobjn(SPR *spr);
-int poisk(int regim, int *x = NULL, int *y = NULL, double *b = NULL);
-int ATR(TEXT_PACK_MENUS *tp, int obj);
 int obj_enabled(F_SPR *spr);
 int next_model(int startpos, int nc = 0);
 
@@ -261,74 +259,4 @@ void find_rg(void)
   if (count == 0)
     displayWarning(2);
   return;
-}
-
-int ATR(TEXT_PACK_MENUS *tp, int obj)
-{
-  int at = 0, r;
-  mk_atrf ma;
-  char str[80];
-  F_SPR spr;
-  int ret2 = model.readspr(&spr, obj);
-  if (ret2 != 1)
-    tp->add("Ошибка чтения справки объекта");
-  else
-  {
-    sprintf(str, " %s", (char far *)KLSKP[spr.numincl]);
-    tp->add(str);
-    if (spr.lnh == 0)
-      tp->add(" ");
-    else if (model.readhars((int **)&ma.har, &spr) == -1)
-      tp->add("Ошибка чтения атрибутов");
-    else
-    {
-      at = 1;
-      ma.har += 4;
-      do
-      {
-        r = make_atr(&ma);
-        //			 if (!(strncmp(flibrt[spr.numincl].clcod,"45",2))&&
-        //				!(strncmp(ATRN[ma.natr].atr,"ST",2))) strcpy(str,"Название:");
-        //			 else
-        sprintf(str, "%s%c", ATRN[ma.natr].name, ':');
-        tp->add(str);
-        if (ATRN[ma.natr].type == 'K')
-          sprintf(str, " %s", ATCD + ATCDP[ATRN[ma.natr].start + ma.znk]);
-        else if (ATRN[ma.natr].type == 'T')
-          sprintf(str, " %s", ma.zns);
-        else
-          sprintf(str, " %-10.3g", ma.znn);
-        tp->add(str);
-      } while (r == 0);
-    }
-  }
-  return at;
-}
-
-void whatisit(int m, int s)
-{
-  char str[80];
-  int key, at;
-  int x, y;
-  int ret = poisk(s, &x, &y);
-  if (ret == -1)
-    return;
-  {
-    TEXT_PACK_MENUS tp(450, 185, 632, 7, "Что это?", "", 1, 4000, 200, 1, 1);
-    if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
-    {
-      displayError(0);
-      goto ex;
-    }
-    at = ATR(&tp, ret);
-    tp.draw();
-    tp.textxy(1, 9, "Esc,Enter - выход");
-    key = tp.menu_key2();
-    tp.restore();
-    tp.del();
-  }
-ex:
-  nottwink();
-  draw_one_obj(ret, -1);
-  setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
 }

@@ -7,7 +7,6 @@ int XMINEC, YMINEC, XMAXEC, YMAXEC; //габаритные координаты контр.окна карты на 
 int xminec, yminec, xmaxec, ymaxec;
 fonttype ft;
 unsigned char SCALES; //степень увеличения
-char *LOC[] = {"точ", "лин", "площ", "текст"};
 
 int N_on = 0;
 char *bram;
