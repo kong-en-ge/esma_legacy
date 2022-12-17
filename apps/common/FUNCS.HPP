@@ -26,6 +26,8 @@ void whatisit(int m, int s);
 void displayObjectInfo(int objIndex);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
 
+void loadLibDefs(void);
+void setupPalette(int modeEGA);
 int setviewMAP(void);
 void fragment(void);
 void all(void);

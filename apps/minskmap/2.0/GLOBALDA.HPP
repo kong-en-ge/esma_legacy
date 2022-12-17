@@ -12,7 +12,7 @@ extern double XMINVC, YMINVC, XMAXVC, YMAXVC; //габаритные координаты  контр.окн
 extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
 extern int xminec, yminec, xmaxec, ymaxec;
 extern unsigned char SCALES;     //степень увеличения
-extern GRwnd wndmain;
+//extern GRwnd wndmain;
 struct OBSTOP
 {
   int nobj;
@@ -74,7 +74,6 @@ struct UZLY
 extern UZLY *uzly;
 extern int pr, xo, yo, retot, kolmet, koluz, comuz, xco, yco, xck, yck, prmt, uzl;
 extern char stt[40], nmot1[90], ost[40];
-extern fonttype ft;
 extern char *bram;
 extern int GdEGA;
 

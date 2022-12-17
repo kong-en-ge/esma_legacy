@@ -1,6 +1,5 @@
 #ifndef GLOBDATA
 #define GLOBDATA
-#include "font.hpp"
 #include "fstmod.hpp"
 #include "globals.hpp"
 
@@ -13,7 +12,6 @@ extern unsigned char SCALES;     // степень увеличения
 extern float SCALEMAX;           // минимаксы масштабов
 extern GRwnd wndmain;
 
-extern fonttype ft;
 extern char *bram;
 extern int GdEGA;
 

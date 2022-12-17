@@ -31,6 +31,7 @@ extern double _DXM, _DYM;
 extern int DXM;
 
 extern SCRIPT scr;
+extern fonttype ft;
 
 extern float CURRENTSCALE;
 extern float SCALEMIN, SCALEMAX; // min/max scale

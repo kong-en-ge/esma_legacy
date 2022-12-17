@@ -1,6 +1,5 @@
 #ifndef GLOBDATA
 #define GLOBDATA
-#include "font.hpp"
 #include "fstmod.hpp"
 #include "globals.hpp"
 
@@ -13,7 +12,6 @@ extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
 extern int xminec, yminec, xmaxec, ymaxec;
 extern unsigned char SCALES;     //степень увеличения
 extern GRwnd wndmain;
-extern fonttype ft;
 extern char *bram;
 extern int GdEGA;
 

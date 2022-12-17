@@ -10,6 +10,7 @@ double _DXM, _DYM;
 int DXM;
 
 SCRIPT scr;
+fonttype ft;
 
 float CURRENTSCALE;
 float SCALEMIN, SCALEMAX;
