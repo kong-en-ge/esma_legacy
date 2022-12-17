@@ -6,7 +6,7 @@
 
 #include "dbf.hpp"
 #include "button.hpp"
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "files.hpp"
 #include "txtpacks.hpp"
 #include "menuall2.hpp"

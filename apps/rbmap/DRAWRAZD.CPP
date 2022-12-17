@@ -1,18 +1,13 @@
 #include <math.h>
 #include <string.h>
-#include <stdio.h>
 
 #include "mouse.hpp"
-#include "globalda.hpp"
-#include "fwrite.hpp"
+#include "globals.hpp"
 #include "drawpl.hpp"
-#include "button.hpp"
 #include "flibrt.hpp"
 #include "fstmod.hpp"
-#include "set.hpp"
 #include "atribut.hpp"
 #include "fatr.hpp"
-#include "tpedit.hpp"
 #include "funcs.hpp"
 #include "dbffunc.hpp"
 
@@ -42,10 +37,14 @@ l1:
   return pos;
 }
 
-void drawcram()
+void drawcram(void)
 {
+  if (!indexMapImage.hasData())
+    return;
+
+  indexMapImage.paintImage(XMINEC, YMINEC);
+
   int xminec, yminec, xmaxec, ymaxec;
-  putimage(XMINEC, YMINEC, bram, COPY_PUT);
   xminec = XMINEC + (YMINV - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);
   yminec = YMAXEC - (XMAXV - XMINVC) / (XMAXVC - XMINVC) * (YMAXEC - YMINEC);
   xmaxec = XMINEC + (YMAXV - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);

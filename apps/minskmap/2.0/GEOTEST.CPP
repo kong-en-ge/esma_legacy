@@ -76,16 +76,9 @@ int Init(int carg)
   loadLibDefs();
   if (!GdEGA)
   {
-    int hnd;
-    if ((hnd = open("MINSK.CWN", O_BINARY)) == -1)
-      return -1;
-    if ((bram = new char[filelength(hnd)]) == NULL)
-    {
-      displayError(0);
-      return -1;
-    }
-    read(hnd, bram, filelength(hnd));
-    close(hnd);
+    if (!indexMapImage.load("MINSK.CWN"))
+      return 0;
+
     XMINEC = 481;
     YMINEC = getmaxy() - 158;
     XMAXEC = 638;
@@ -137,8 +130,7 @@ int org_main(int argc, char *argv[])
   wndmain2.draw();
   wndmain2.text(VERSION);
   mouse_show(OFF);
-  if (!GdEGA)
-    putimage(XMINEC, YMINEC, bram, COPY_PUT);
+  indexMapImage.paintImage(XMINEC, YMINEC);
   mouse_show(ON);
   //     all();
   if (argc == 3)
@@ -159,8 +151,6 @@ label0:
   }
   while (!confirmExit());
 
-  if (!GdEGA)
-    delete (bram);
 //      delete metro;delete uzly;
 exit:
   closegraph();

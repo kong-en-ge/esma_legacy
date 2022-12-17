@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 
 #include "apputils.hpp"
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "grwnd.hpp"
 
 struct PCXheader

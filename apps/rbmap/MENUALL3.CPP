@@ -11,7 +11,7 @@
 #include "bigpath.hpp"
 #include "tpedit.hpp"
 #include "button.hpp"
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "flibrt.hpp"
 #include "textfile.hpp"
 #include "txtpacks.hpp"
@@ -19,7 +19,6 @@
 #include "drawpl.hpp"
 #include "fatr.hpp"
 #include "menuall2.hpp"
-#include "globalda.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
 

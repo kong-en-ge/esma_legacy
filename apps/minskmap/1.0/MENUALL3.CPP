@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <dir.h>
 
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "flibrt.hpp"
 #include "txtpacks.hpp"
 #include "drawpl.hpp"

@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "graphics.h"
-#include "globalda.hpp"
 #include "textfile.hpp"
 #include "textpack.hpp"
 #include "tpedit.hpp"

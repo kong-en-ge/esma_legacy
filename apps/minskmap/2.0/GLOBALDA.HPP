@@ -1,16 +1,9 @@
 #ifndef GLOBDATA
 #define GLOBDATA
-#include "font.hpp"
 #include "globals.hpp"
-#include "set.hpp"
 
-extern PART_MODEL models[]; //части модели
-extern int nmodels;         //число подмоделей модели
 extern int N_on;
-extern double XMINVC, YMINVC, XMAXVC, YMAXVC; //габаритные координаты  контр.окна вид
-extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
-extern unsigned char SCALES;     //степень увеличения
-//extern GRwnd wndmain;
+
 struct OBSTOP
 {
   int nobj;
@@ -25,8 +18,8 @@ struct PERES
   char vt;
   float d;
 };
-//	      int nperes;
-//	      int not_kd;     };
+//            int nperes;
+//            int not_kd;     };
 struct PERESU
 {
   char stperes[40];
@@ -36,7 +29,7 @@ struct PERESU
   char nmkd[90];
   float d;
 };
-/*	       char vtot,vtkd;
+/*             char vtot,vtkd;
          float d;
          int nperes,pcol;
          int xot,yot;
@@ -72,7 +65,5 @@ struct UZLY
 extern UZLY *uzly;
 extern int pr, xo, yo, retot, kolmet, koluz, comuz, xco, yco, xck, yck, prmt, uzl;
 extern char stt[40], nmot1[90], ost[40];
-extern char *bram;
-extern int GdEGA;
 
 #endif

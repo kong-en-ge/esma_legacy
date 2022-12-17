@@ -8,7 +8,7 @@
 #include "menuall2.hpp"
 #include "tpedit.hpp"
 #include "fwrite.hpp"
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
 

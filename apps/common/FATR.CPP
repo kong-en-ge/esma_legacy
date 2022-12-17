@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include "fatr.hpp"
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "flibrt.hpp"
 
 unsigned findobj(FAST_MODEL &mod, FINDatrf &fa)

@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "mouse.hpp"
+#include "globals.hpp"
 #include "globalda.hpp"
 #include "drawpl.hpp"
 #include "flibrt.hpp"
@@ -42,8 +43,12 @@ l1:
 
 void drawcram()
 {
+  if (!indexMapImage.hasData())
+    return;
+
+  indexMapImage.paintImage(XMINEC, YMINEC);
+
   int xminec, yminec, xmaxec, ymaxec;
-  putimage(XMINEC, YMINEC, bram, COPY_PUT);
   xminec = XMINEC + (YMINV - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);
   yminec = YMAXEC - (XMAXV - XMINVC) / (XMAXVC - XMINVC) * (YMAXEC - YMINEC);
   xmaxec = XMINEC + (YMAXV - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);
