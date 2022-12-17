@@ -738,10 +738,10 @@ void displayObjectInfo(int objIndex)
     displayError(0);
 }
 
-void whatisit(int m, int s)
+void whatisit()
 {
   int x, y;
-  int objIndex = poisk(s, &x, &y);
+  int objIndex = poisk(0 /*mode*/, &x, &y);
   if (objIndex >= 0)
   {
     displayObjectInfo(objIndex);

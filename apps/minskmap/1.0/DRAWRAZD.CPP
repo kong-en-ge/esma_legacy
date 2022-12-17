@@ -42,6 +42,7 @@ l1:
 
 void drawcram()
 {
+  int xminec, yminec, xmaxec, ymaxec;
   putimage(XMINEC, YMINEC, bram, COPY_PUT);
   xminec = XMINEC + (YMINV - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);
   yminec = YMAXEC - (XMAXV - XMINVC) / (XMAXVC - XMINVC) * (YMAXEC - YMINEC);

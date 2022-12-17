@@ -8,7 +8,6 @@
 
 long poiskdbf(int *x = NULL, int *y = NULL);
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
-void whatisit(int mode = 0, int seti = 0);
 
 void main_menu()
 {

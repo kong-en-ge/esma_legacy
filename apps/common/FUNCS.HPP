@@ -22,7 +22,7 @@ int YRAZDIS(double x);
 int DXEKRDIS(int dx);
 double DXDISEKR(int dx);
 
-void whatisit(int m, int s);
+void whatisit(void);
 void displayObjectInfo(int objIndex);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
 
