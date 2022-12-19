@@ -46,27 +46,6 @@ struct f_attr : public atribut
              //  int  orp;    //выражение (и - или)
   int tpr;   //текущий признак
 };
-/*
-//структура для поиска по одному атрибуту
-struct FINDatr : public f_attr {
-  char clcod[10];
-  int  startobj;
-  int findobj(GEO_MODEL *model);
-};
-
-//структура для поиска по атрибутам
-struct FINDobj {
-  char clcod[10][9];
-  int  ncod;
-  f_attr atr[5];
-  int  natr;
-  int  startobj;
-  FINDobj();
-  void add_clcod(char *clc);
-  void add_f_attr(char *atr,char *zna,int prp,int orp);
-  int findobj(GEO_MODEL *model);
-};
-*/
 
 //структура для поиска по нескольким атрибутам без кода
 struct FINDatrs

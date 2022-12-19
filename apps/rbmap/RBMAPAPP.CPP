@@ -1,0 +1,113 @@
+#include <alloc.h>
+#include <math.h>
+
+#include "rbmapapp.hpp"
+#include "apputils.hpp"
+#include "globals.hpp"
+#include "mouse.hpp"
+#include "funcs.hpp"
+
+const char *errorMessages[] =
+{
+  "Нет памяти для работы программы",                         // 0
+  "Ошибка чтения карты",                                     // 1
+  "Фатальные ошибки инициализации.  Продолжение невозможно", // 2
+  "Ошибка записи слайда"                                     // 3
+};
+
+const char * warningMessages[] =
+{
+  "Не найден объект в указанной точке",         // 0
+  "Достигнут максимальный масштаб отображения", // 1
+  "Не найден заданный объект"                   // 2
+};
+
+void main_menu();
+
+int state2error(int state)
+{
+  switch(state)
+  {
+    case STATE_FAILED:
+      return 2;
+
+    case STATE_LOW_MEMORY:
+      return 0;
+
+    case STATE_NO_MAP:
+      return 1;
+  }
+
+  return -1;
+}
+
+/*********************
+ * CRbMapApplication *
+ *********************/
+
+CRbMapApplication::CRbMapApplication(int argc, char *argv[]) :
+  CInfoMapApplication(argc, argv)
+{
+  SCALEMIN = 50000;
+  SCALEMAX = 10000000;
+}
+
+void CRbMapApplication::executeApp(void)
+{
+  all();
+
+  do
+  {
+    main_menu();
+  }
+  while (!confirmExit());
+}
+
+char const *CRbMapApplication::getIndexMapFilename(void) const
+{
+  return "BELARUS.CWN";
+}
+
+char const *CRbMapApplication::getMainMapFilename(void) const
+{
+  return "belarus";
+}
+
+char const *CRbMapApplication::getVersion(void) const
+{
+  return "RB_MAP 1.0";
+}
+
+
+int CRbMapApplication::runUI(void)
+{
+  setErrorMessages(errorMessages, sizeof(errorMessages) / sizeof(errorMessages[0]));
+  setWarningMessages(warningMessages, sizeof(warningMessages) / sizeof(warningMessages[0]));
+  LBSFilename = "BELARUS.LBS";
+
+  setfillstyle(1, BLACK);
+  bar(0, 0, getmaxx(), getmaxy());
+
+  int initState = initializeApplication();
+  if (initState != STATE_SUCCESS)
+  {
+    displayError(state2error(initState));
+    return 0;
+  }
+
+  if (!displaySplashBox(getVersion()))
+    return 0;
+
+  mouse_show(OFF);
+  cleardevice();
+
+  GRwnd* wndTitle = createTitleWindow();
+
+  indexMapImage.paintImage(XMINEC, YMINEC);
+  mouse_show(ON);
+
+  executeApp();
+
+  delete wndTitle;
+  return 1;
+}

@@ -79,6 +79,21 @@ int Init(int carg)
   mouse_show(ON);
   if (model.open(modelname, modelmod) == -1)
     return 1;
+
+  double dxv, dyv;
+  memmove(&XMING, &model.fm.xminm, 4 * sizeof(XMING));
+  memmove(&XMINV, &XMING, 4 * sizeof(XMING));
+  dyv = XMAXV - XMINV;
+  dxv = YMAXV - YMINV;
+  if (dxv > dyv)
+    dyv = dxv;
+  else
+    dxv = dyv;
+  XMINVC = (XMAXV + XMINV - dxv) / 2;
+  XMAXVC = XMINVC + dxv;
+  YMINVC = (YMAXV + YMINV - dyv) / 2;
+  YMAXVC = YMINVC + dyv;
+
   if (carg == 3)
     return 0;
 
@@ -93,7 +108,6 @@ int org_main(int argc, char *argv[])
 
   GRwnd wndmain2(487, 8, 632, 31, "ŽŽŽ '‘Œ€'", LIGHTBLUE, 0, 0);
   int ii;
-  double dxv, dyv;
   char *stpar = NULL;
   int blpar = 0;
   if ((ii = Init(argc)) != 0)
@@ -102,18 +116,6 @@ int org_main(int argc, char *argv[])
       displayError(2);
     goto exit;
   }
-  memmove(&XMING, &model.fm.xminm, 4 * sizeof(XMING));
-  memmove(&XMINV, &XMING, 4 * sizeof(XMING));
-  dyv = XMAXV - XMINV;
-  dxv = YMAXV - YMINV;
-  if (dxv > dyv)
-    dyv = dxv;
-  else
-    dxv = dyv;
-  XMINVC = (XMAXV + XMINV - dxv) / 2;
-  XMAXVC = XMINVC + dxv;
-  YMINVC = (YMAXV + YMINV - dyv) / 2;
-  YMAXVC = YMINVC + dyv;
   mouse_show(OFF);
   cleardevice();
   mouse_show(ON);
