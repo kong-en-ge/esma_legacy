@@ -26,7 +26,6 @@
 
 int next_model(int startpos, int nc = 0, int prp = 0);
 FLIB *findobj(SPR *spr);
-int findobjn(SPR *spr);
 int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst);
 int ATRFR(TEXT_PACK_MENUS *tp, int j1);
 void ATRMT(TEXT_PACK_MENUS *tp, int ob);

@@ -779,36 +779,3 @@ void loadLibDefs(void)
     }
   }
 }
-
-void setupPalette(int modeEGA)
-{
-  if (!modeEGA)
-  {
-    static unsigned char arr[][4] = {
-        {EGA_BLACK, 0, 0, 0},
-        {EGA_BLUE, 0, 0, 0x2D},
-        {EGA_GREEN, 0x2, 0x2A, 0x2},
-        {EGA_RED, 0x2A, 2, 2},
-        {EGA_BROWN, 0x2A, 0x15, 0},
-        {EGA_LIGHTGRAY, 0x1D, 0x1D, 0x1D},
-        {EGA_DARKGRAY, 0x4, 0x4, 0x4},
-        {EGA_LIGHTBLUE, 0x15, 0x15, 0x3F},
-        {EGA_LIGHTGREEN, 0x4, 0x3A, 0x4},
-        {EGA_LIGHTCYAN, 0x20, 0x3F, 0x3F},
-        {EGA_LIGHTRED, 0x3F, 0x15, 0},
-        {EGA_LIGHTMAGENTA, 0x3F, 0x23, 0x16},
-        {EGA_YELLOW, 0x3A, 0x3A, 0x13},
-        {EGA_WHITE, 0x2A, 0x2A, 0x2A}};
-    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
-      setrgbpalette(arr[i][0], arr[i][1], arr[i][2], arr[i][3]);
-  }
-  else
-  {
-    setpalette(0, 55);
-    setpalette(1, 25);
-    setpalette(2, 34);
-    setpalette(3, 35);
-    setpalette(4, 36);
-    setpalette(6, 38);
-  }
-}

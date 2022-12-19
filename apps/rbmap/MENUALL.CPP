@@ -6,7 +6,6 @@
 #include "globals.hpp"
 #include "dbffunc.hpp"
 
-long poiskdbf(int *x = NULL, int *y = NULL);
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 
 void main_menu()

@@ -23,7 +23,6 @@
 #include "funcs.hpp"
 
 FLIB *findobj(SPR *spr);
-int findobjn(SPR *spr);
 int obj_enabled(F_SPR *spr);
 int next_model(int startpos, int nc = 0);
 

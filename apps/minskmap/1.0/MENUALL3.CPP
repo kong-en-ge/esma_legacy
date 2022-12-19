@@ -15,7 +15,6 @@
 #include "funcs.hpp"
 
 FLIB *findobj(SPR *spr);
-int findobjn(SPR *spr);
 int obj_enabled(F_SPR *spr);
 
 struct KLSt : public Big_Menu
