@@ -750,32 +750,3 @@ void whatisit()
   }
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
 }
-
-void loadLibDefs(void)
-{
-  LBSsize = 0;
-  LBS = new List_base[100];
-  TEXTFILE txt;
-  if (txt.open(LBSFilename, 4000) != -1)
-  {
-    char str[41];
-    while (LBSsize < 100)
-    {
-      if (txt.readstr(str, 40) < 0)
-        break;
-      char *c = strchr(str, '/');
-      if (!c)
-        continue;
-      *c++ = 0;
-      strcpy((LBS + LBSsize)->name, str);
-      char *c1 = strchr(c, '/');
-      if (!c1)
-        continue;
-      *c1++ = 0;
-      strcpy((LBS + LBSsize)->file, c);
-      memmove((LBS + LBSsize)->mark, c1, 2);
-      (LBS + LBSsize)->activ = 0;
-      LBSsize++;
-    }
-  }
-}

@@ -8,6 +8,14 @@ CGraphicApplication::CGraphicApplication(int argc, char *argv[]) :
 {
 }
 
+GRwnd* CGraphicApplication::createTitleWindow(void)
+{
+  GRwnd* wnd = new GRwnd(487, 8, 632, 31, "ŽŽŽ '‘Œ€'", LIGHTBLUE, 0, 1 /* draw */);
+  wnd->text(getVersion());
+
+  return wnd;
+}
+
 int CGraphicApplication::enterGraphicMode(void)
 {
   setgraphbufsize(8000);

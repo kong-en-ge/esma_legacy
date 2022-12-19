@@ -1,16 +1,15 @@
 #ifndef __RBMAPAPP_HPP__
 #define __RBMAPAPP_HPP__
 
-#include "graphapp.hpp"
+#include "inmapapp.hpp"
 
-class CRbMapApplication : public CGraphicApplication
+class CRbMapApplication : public CInfoMapApplication
 {
-private:
-  int initializeApplication(void);
-  int loadIndexMap(void);
-  int openMapData(void);
 protected:
   virtual void executeApp(void);
+  virtual char const * getIndexMapFilename(void) const;
+  virtual char const * getMainMapFilename(void) const;
+  virtual char const * getVersion(void) const;
   virtual int runUI(void);
 public:
   CRbMapApplication(int argc, char *argv[]);

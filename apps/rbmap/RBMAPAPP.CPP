@@ -7,12 +7,6 @@
 #include "mouse.hpp"
 #include "funcs.hpp"
 
-#define STATE_SUCCESS 0
-#define STATE_LOW_MEMORY 1
-#define STATE_NO_MAP 2
-#define STATE_FAILED 3
-#define STATE_CANCELLED 4
-
 const char *errorMessages[] =
 {
   "Нет памяти для работы программы",                         // 0
@@ -29,10 +23,6 @@ const char * warningMessages[] =
 };
 
 void main_menu();
-void DBF_FIL();
-char VERSION[] = "RB_MAP 1.0";
-char modelname[] = "belarus";
-char modelmod[] = "00";
 
 int state2error(int state)
 {
@@ -56,7 +46,7 @@ int state2error(int state)
  *********************/
 
 CRbMapApplication::CRbMapApplication(int argc, char *argv[]) :
-  CGraphicApplication(argc, argv)
+  CInfoMapApplication(argc, argv)
 {
   SCALEMIN = 50000;
   SCALEMAX = 10000000;
@@ -73,75 +63,21 @@ void CRbMapApplication::executeApp(void)
   while (!confirmExit());
 }
 
-int CRbMapApplication::initializeApplication(void)
+char const *CRbMapApplication::getIndexMapFilename(void) const
 {
-  if (farcoreleft() <= 0x18000l)
-    return STATE_LOW_MEMORY;
-
-  YMAXMAPE = getmaxy();
-
-  if (!loadIndexMap())
-    return STATE_FAILED;
-
-  init_mouse();
-  mouse_screen_size(XMAXMAPE, 0, getmaxx(), getmaxy());
-  mouse_show(ON);
-
-
-  DBF_FIL();
-  loadLibDefs();
-  SCALEO = (log(SCALEMAX / SCALEMIN) / 256);
-
-  if (!openMapData())
-    return STATE_NO_MAP;
-
-
-  if (displaySplashBox(VERSION))
-    return STATE_SUCCESS;
-  else
-    return STATE_CANCELLED;
+  return "BELARUS.CWN";
 }
 
-int CRbMapApplication::loadIndexMap(void)
+char const *CRbMapApplication::getMainMapFilename(void) const
 {
-  if (!isModeEGA())
-  {
-    if (!indexMapImage.load("BELARUS.CWN"))
-      return 0;
-
-    XMINEC = 481;
-    YMINEC = getmaxy() - 158;
-    XMAXEC = 638;
-    YMAXEC = getmaxy() - 1;
-  }
-
-  return 1;
+  return "belarus";
 }
 
-int CRbMapApplication::openMapData(void)
+char const *CRbMapApplication::getVersion(void) const
 {
-  if (model.open(modelname, modelmod) == 0)
-  {
-    double dxv, dyv;
-
-    memmove(&XMING, &model.fm.xminm, 4 * sizeof(XMING));
-    memmove(&XMINV, &XMING, 4 * sizeof(XMING));
-    dyv = XMAXV - XMINV;
-    dxv = YMAXV - YMINV;
-    if (dxv > dyv)
-      dyv = dxv;
-    else
-      dxv = dyv;
-    XMINVC = (XMAXV + XMINV - dxv) / 2;
-    XMAXVC = XMINVC + dxv;
-    YMINVC = (YMAXV + YMINV - dyv) / 2;
-    YMAXVC = YMINVC + dyv;
-
-    return 1;
-  }
-  else
-    return 0;
+  return "RB_MAP 1.0";
 }
+
 
 int CRbMapApplication::runUI(void)
 {
@@ -155,24 +91,23 @@ int CRbMapApplication::runUI(void)
   int initState = initializeApplication();
   if (initState != STATE_SUCCESS)
   {
-    if (initState != STATE_CANCELLED)
-      displayError(state2error(initState));
-
+    displayError(state2error(initState));
     return 0;
   }
+
+  if (!displaySplashBox(getVersion()))
+    return 0;
 
   mouse_show(OFF);
   cleardevice();
 
-  GRwnd wndmain2(487, 8, 632, 31, "ООО 'ЭСМА'", LIGHTBLUE, 0, 0);
-  wndmain2.draw();
-  wndmain2.text(VERSION);
+  GRwnd* wndTitle = createTitleWindow();
 
   indexMapImage.paintImage(XMINEC, YMINEC);
   mouse_show(ON);
 
   executeApp();
 
+  delete wndTitle;
   return 1;
 }
-
