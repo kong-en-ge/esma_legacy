@@ -9,7 +9,7 @@
 char *ston = "Вкл. N";
 char *stoff = "Выкл. N";
 
-void main_menu(char *parst, int parbl)
+void main_menu(char const *parst, int parbl)
 {
   int keym = 0;
   prmt = 0;

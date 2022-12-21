@@ -3,6 +3,6 @@
 
 void find_rg(void);
 void find_st(void);
-int find_bl(char *parst = NULL, int parbl = 0);
+int find_bl(char const *parst = NULL, int parbl = 0);
 
 #endif
