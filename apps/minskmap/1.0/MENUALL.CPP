@@ -20,7 +20,7 @@
 char *ston = "Вкл. N";
 char *stoff = "Выкл. N";
 
-void main_menu(char *parst, int parbl)
+void main_menu(char const *parst, int parbl)
 {
   setcolor(BLACK);
   mouse_show(OFF);

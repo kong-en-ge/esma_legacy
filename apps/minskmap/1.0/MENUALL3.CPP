@@ -223,7 +223,7 @@ void find_st(void)
   return;
 }
 
-int find_bl(char *st, int bl)
+int find_bl(char const *st, int bl)
 {
   textsettingstype t;
   gettextsettings(&t);
