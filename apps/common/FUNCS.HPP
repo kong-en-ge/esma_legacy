@@ -40,6 +40,9 @@ void draw_one_d(int x, int y, int color, int type);
 void draw_one_d(double x, double y, int color, int type);
 void redraw(double x1, double y1, double x2, double y2, int d);
 
+int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
+void slide(void);
+
 int M_K_R_status(void (*drawCursor)(void) = NULL, int (*keyhandler)(int) = NULL);
 
 // the following functions are to be implemented within the project
