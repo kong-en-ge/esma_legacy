@@ -17,8 +17,6 @@
 #include "globalda.hpp"
 #include "dbffunc.hpp"
 
-int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
-
 char *ston = "Вкл. N";
 char *stoff = "Выкл. N";
 

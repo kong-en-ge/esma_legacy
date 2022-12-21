@@ -6,8 +6,6 @@
 #include "globals.hpp"
 #include "dbffunc.hpp"
 
-int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
-
 void main_menu()
 {
   setcolor(BLACK);
