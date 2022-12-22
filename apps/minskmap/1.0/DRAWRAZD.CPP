@@ -17,9 +17,6 @@
 int next_dbf(int pos, int m2);
 int lin_wnd(int *, int *, int *, int *, int, int, int, int);
 
-void STOPTIME();
-void STARTTIME();
-
 void drawcram()
 {
   if (!indexMapImage.hasData())
@@ -41,19 +38,6 @@ void drawcram()
   setlinestyle(0, 0, 3);
   rectangle(xminec - d, yminec - d, xmaxec + d, ymaxec + d);
   setlinestyle(0, 0, 1);
-}
-
-int obj_enabled(F_SPR *spr)
-{
-  if (!regionregion((REGION *)&model.xminw, (REGION *)&spr->xmin))
-    return 0;
-  if (flibrt[spr->numincl].minw > SCALES || flibrt[spr->numincl].maxw < SCALES)
-    return 0;
-  if (flibrt[spr->numincl].loc != 3)
-    return 1;
-  if ((spr->xmax - spr->xmin <= DXM) && (spr->ymax - spr->ymin <= DXM))
-    return 0;
-  return 1;
 }
 
 void dr_bl_n(int *metr, F_SPR *spr, char *clcod)

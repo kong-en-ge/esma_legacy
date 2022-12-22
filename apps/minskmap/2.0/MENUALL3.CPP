@@ -39,7 +39,6 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd);
 int stmetro();
 int stuzel(int kh);
 int comuzel();
-int obj_enabled(F_SPR *spr);
 PERES *ps;
 TWOPERES *pstwo;
 

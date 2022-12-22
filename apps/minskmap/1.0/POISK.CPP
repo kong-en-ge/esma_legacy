@@ -9,8 +9,6 @@
 #include "funcs.hpp"
 #include "button.hpp"
 
-int obj_enabled(F_SPR *spr);
-
 struct OBJND
 {
   int nobj;

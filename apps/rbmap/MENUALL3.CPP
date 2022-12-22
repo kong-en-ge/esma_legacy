@@ -24,7 +24,6 @@
 #include "codesel.hpp"
 
 FLIB *findobj(SPR *spr);
-int obj_enabled(F_SPR *spr);
 
 struct Bpunct
 {

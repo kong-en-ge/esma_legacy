@@ -850,3 +850,17 @@ l1:
 #endif
   return pos;
 }
+
+int obj_enabled(F_SPR const *spr)
+{
+  if (!regionregion((REGION *)&model.xminw, (REGION *)&spr->xmin))
+    return 0;
+  if (flibrt[spr->numincl].minw > SCALES || flibrt[spr->numincl].maxw < SCALES)
+    return 0;
+  if (flibrt[spr->numincl].loc != 3)
+    return 1;
+  if ((spr->xmax - spr->xmin <= DXM) && (spr->ymax - spr->ymin <= DXM))
+    return 0;
+  return 1;
+}
+
