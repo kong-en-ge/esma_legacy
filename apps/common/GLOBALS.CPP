@@ -12,6 +12,7 @@ int XMAXMAPE = 479;
 int YMAXMAPE = 349;
 double _DXM, _DYM;
 int DXM;
+int FULL_MAP;
 
 SCRIPT scr;
 fonttype ft;

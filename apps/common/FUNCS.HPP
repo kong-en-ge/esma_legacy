@@ -41,6 +41,7 @@ void drawingline(int *metr, int num);
 void draw_one_d(int x, int y, int color, int type);
 void draw_one_d(double x, double y, int color, int type);
 void redraw(double x1, double y1, double x2, double y2, int d);
+int drawrazd(void);
 
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 void slide(void);
@@ -48,7 +49,6 @@ void slide(void);
 int M_K_R_status(void (*drawCursor)(void) = NULL, int (*keyhandler)(int) = NULL);
 
 // the following functions are to be implemented within the project
-int drawrazd(void);
 int draw_one_obj(unsigned num, int color, int drawDisabled = 0);
 void drawcram(void);
 int poisk(int regim, int *x = NULL, int *y = NULL, double *b = NULL);
