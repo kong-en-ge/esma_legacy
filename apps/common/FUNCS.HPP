@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "txtpacks.hpp"
+#include "fastmod.hpp"
 
 void store_otkat(void);
 void restore_otkat(void);
@@ -42,6 +43,7 @@ void draw_one_d(int x, int y, int color, int type);
 void draw_one_d(double x, double y, int color, int type);
 void redraw(double x1, double y1, double x2, double y2, int d);
 int drawrazd(void);
+int obj_enabled(F_SPR const *spr);
 
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 void slide(void);

@@ -9,8 +9,6 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-int obj_enabled(F_SPR *spr);
-
 struct OBJND
 {
   int nobj;
