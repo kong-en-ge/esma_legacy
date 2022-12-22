@@ -24,23 +24,6 @@ const char * warningMessages[] =
 
 void main_menu();
 
-int state2error(int state)
-{
-  switch(state)
-  {
-    case STATE_FAILED:
-      return 2;
-
-    case STATE_LOW_MEMORY:
-      return 0;
-
-    case STATE_NO_MAP:
-      return 1;
-  }
-
-  return -1;
-}
-
 /*********************
  * CRbMapApplication *
  *********************/

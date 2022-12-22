@@ -5,13 +5,10 @@
 #include "dbf.hpp"
 #include "geomodel.hpp"
 #include "menuall2.hpp"
-//#include "tpedit.hpp"
-#include "fwrite.hpp"
 #include "globals.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-int next_model(int startpos, int nc = 0);
 int obj_enabled(F_SPR *spr);
 
 struct OBJND

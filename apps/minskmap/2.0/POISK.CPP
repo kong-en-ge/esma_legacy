@@ -12,7 +12,6 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-int next_model(int startpos, int nc = 0, int prp = 0);
 int obj_enabled(F_SPR *spr);
 
 struct OBJND
@@ -53,7 +52,7 @@ int poisk(int regim, int *x, int *y, double *doub)
     else
       Dp = DXDISEKR(500);
   }
-  while ((ret = next_model(ret, 0, regim)) > 0)
+  while ((ret = next_model(ret, regim)) > 0)
   {
     int spp;
     int nkl = models[ret - 1].numkl;

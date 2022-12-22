@@ -9,7 +9,6 @@
 #include "funcs.hpp"
 #include "button.hpp"
 
-int next_model(int startpos, int nc = 0);
 int obj_enabled(F_SPR *spr);
 
 struct OBJND
