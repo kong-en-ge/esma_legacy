@@ -51,6 +51,7 @@ extern PART_MODEL models[]; // части модели
 extern int nmodels;         // число подмоделей модели
 
 extern int _xMK, _yMK;
+extern int FULL_MAP;
 
 extern const int colordbf[];
 extern List_base *LBS;

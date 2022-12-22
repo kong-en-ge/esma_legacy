@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <bios.h>
 #include <string.h>
+#include <math.h>
 
 //#include "funcs.hpp"
 #include "globals.hpp"
@@ -18,6 +19,7 @@
 #include "txtpacks.hpp"
 #include "fatr.hpp"
 #include "textfile.hpp"
+#include "dbffunc.hpp"
 
 const unsigned mscur[] = {
     0xffff, 0xffff, 0xffff, 0xfc1f, 0xf3e7, 0xf777, 0xee3b, 0xec9b,
@@ -769,4 +771,82 @@ void whatisit()
     draw_one_obj(objIndex, -1);
   }
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
+}
+
+int drawrazd(void)
+{
+#ifdef DEMO
+  STOPTIME();
+#endif
+  FULL_MAP = 1;
+  int pos = 0, ret2 = 0;
+  mouse_show(OFF);
+  setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
+  clearviewport();
+  //  int dxe=XMAXMAPE,dye=YMAXMAPE;
+  double dyv = XMAXV - XMINV, dxv = YMAXV - YMINV;
+  if ((dxv <= 0) || (dyv <= 0))
+    goto l1;
+  if (dxv > dyv)
+  {
+    dyv = dxv;
+  }
+  else
+  {
+    dxv = dyv;
+  }
+  All_Map = !memcmp(&XMINV, &XMING, 4 * sizeof(double));
+  XMINV = (XMAXV + XMINV - dxv) / 2;
+  XMAXV = XMINV + dxv;
+  YMINV = (YMAXV + YMINV - dyv) / 2;
+  YMAXV = YMINV + dyv;
+  CURRENTSCALE = dyv / 0.18;
+  if ((CURRENTSCALE >= SCALEMAX) || (CURRENTSCALE <= SCALEMIN))
+  {
+    float sc = CURRENTSCALE >= SCALEMAX ? SCALEMAX : SCALEMIN;
+    int ss;
+    if (CURRENTSCALE >= SCALEMAX)
+    {
+      sc = SCALEMAX;
+      ss = 255;
+    }
+    else
+    {
+      sc = SCALEMIN;
+      ss = 0;
+    }
+    SCALES = ss;
+    dxv = dxv * sc / CURRENTSCALE;
+    XMINV = (XMAXV + XMINV - dxv) / 2.0;
+    XMAXV = XMINV + dxv;
+    dyv = dyv * sc / CURRENTSCALE;
+    YMINV = (YMAXV + YMINV - dxv) / 2.0;
+    YMAXV = YMINV + dyv;
+    CURRENTSCALE = sc;
+  }
+  else
+    SCALES = log(CURRENTSCALE / SCALEMIN) / SCALEO;
+  memmove(&XMINM, &XMING, 4 * sizeof(double));
+  setviewMAP();
+  pos = 0;
+  store_otkat();
+  while (((pos = next_model(pos)) > 0) && (!ret2))
+  {
+    ret2 = drawmap();
+  }
+  setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
+  if (ret2)
+    goto l1;
+  if (LBSsize)
+    draw_fld();
+l1:
+  mouse_show(ON);
+  setviewport(0, 0, getmaxx(), getmaxy(), 1);
+  if (!GdEGA)
+    drawcram();
+  FULL_MAP = 0;
+#ifdef DEMO
+  STARTTIME();
+#endif
+  return pos;
 }
