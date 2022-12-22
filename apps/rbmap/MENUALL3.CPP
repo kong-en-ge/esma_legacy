@@ -21,73 +21,10 @@
 #include "menuall2.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
+#include "codesel.hpp"
 
 FLIB *findobj(SPR *spr);
 int obj_enabled(F_SPR *spr);
-
-struct KLSt : public Big_Menu
-{
-  int nchar, numat;
-  char cod[21];
-  void draw_one(int num);
-  int key_handler(int key);
-  int numinkl(char *cod, int sim);
-  KLSt(int ia);
-};
-
-KLSt::KLSt(int ia) : Big_Menu(150, 100, 470, 10, "Выбор района",
-                              "", 1)
-{
-  maxn = ATRN[ia].ncod;
-  textwidth -= 2;
-  nchar = 0;
-  numat = ia;
-}
-
-void KLSt::draw_one(int num)
-{
-  draw_one_str(ATCD + ATCDP[ATRN[numat].start + activ + num], num);
-}
-
-int KLSt::numinkl(char *cod, int sim)
-{
-  for (int i = 0; i < maxn; i++)
-    if (!strncmpi(cod, ATCD + ATCDP[ATRN[numat].start + i], sim))
-      return i;
-  return -1;
-}
-
-int KLSt::key_handler(int key)
-{
-  int p, k2 = key, num = -1;
-  if ((p = CallRScommand(&k2)) != RSchar && p != RSback)
-    return key;
-  if (p == RSchar)
-  {
-    if (nchar < 20)
-    {
-      cod[nchar] = upcase(key);
-      if ((num = numinkl(cod, nchar + 1)) >= 0)
-        nchar++;
-    }
-  }
-  else
-  {
-    if (nchar > 0)
-      nchar--;
-    goto l1;
-  }
-  if (num == -1)
-    return key;
-  go(num);
-l1:
-  char str[21];
-  str[20] = 0;
-  memset(str, ' ', 20);
-  strncpy(str, cod, nchar);
-  textxy(2, 1, str);
-  return key;
-}
 
 struct Bpunct
 {
@@ -206,7 +143,7 @@ void find_rg(void)
     return;
   fa.atr[0].natr = ia;
   {
-    KLSt mn(ia);
+    KLSt mn(ia, "Выбор района");
     mn.draw();
     int key = mn.menu_key2();
     if (key == -1)

@@ -23,6 +23,7 @@
 #include "globalda.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
+#include "codesel.hpp"
 
 FLIB *findobj(SPR *spr);
 int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst);
@@ -55,70 +56,6 @@ struct OTK_KUD
 
 PERESU *psu;
 OTK_KUD otk_kud[21], o_k[21];
-
-struct KLSt : public Big_Menu
-{
-  int nchar, numat;
-  char cod[21];
-  void draw_one(int num);
-  int key_handler(int key);
-  int numinkl(char *cod, int sim);
-  KLSt(int ia);
-};
-
-KLSt::KLSt(int ia) : Big_Menu(150, 100, 470, 10, "Выбор улицы",
-                              "", 1)
-{
-  maxn = ATRN[ia].ncod;
-  textwidth -= 2;
-  nchar = 0;
-  numat = ia;
-}
-
-void KLSt::draw_one(int num)
-{
-  draw_one_str(ATCD + ATCDP[ATRN[numat].start + activ + num], num);
-}
-
-int KLSt::numinkl(char *cod, int sim)
-{
-  for (int i = 0; i < maxn; i++)
-    if (!strncmpi(cod, ATCD + ATCDP[ATRN[numat].start + i], sim))
-      return i;
-  return -1;
-}
-
-int KLSt::key_handler(int key)
-{
-  int p, k2 = key, num = -1;
-  if ((p = CallRScommand(&k2)) != RSchar && p != RSback)
-    return key;
-  if (p == RSchar)
-  {
-    if (nchar < 20)
-    {
-      cod[nchar] = upcase(key);
-      if ((num = numinkl(cod, nchar + 1)) >= 0)
-        nchar++;
-    }
-  }
-  else
-  {
-    if (nchar > 0)
-      nchar--;
-    goto l1;
-  }
-  if (num == -1)
-    return key;
-  go(num);
-l1:
-  char str[21];
-  str[20] = 0;
-  memset(str, ' ', 20);
-  strncpy(str, cod, nchar);
-  textxy(2, 1, str);
-  return key;
-}
 
 void find_rg(void)
 {
@@ -203,7 +140,7 @@ void find_st(void)
     return;
   fa.atr[0].natr = ia;
   {
-    KLSt mn(ia);
+    KLSt mn(ia, "Выбор улицы");
     mn.draw();
     int key = mn.menu_key2();
     if (key == -1)
@@ -276,7 +213,7 @@ int find_bl(char const *st, int bl)
   fa.atr[0].natr = ia;
   if (!st)
   {
-    KLSt mn(ia);
+    KLSt mn(ia, "Выбор улицы");
     mn.draw();
     int key = mn.menu_key2();
     if (key == -1)
