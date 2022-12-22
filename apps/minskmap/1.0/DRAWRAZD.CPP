@@ -14,32 +14,11 @@
 #include "funcs.hpp"
 #include "dbffunc.hpp"
 
-int next_model(int startpos, int nc = 0);
 int next_dbf(int pos, int m2);
 int lin_wnd(int *, int *, int *, int *, int, int, int, int);
 
 void STOPTIME();
 void STARTTIME();
-
-int next_model(int pos, int nc)
-{
-  int ret;
-l1:
-  if (pos >= nmodels)
-    return 0;
-  if (nc == 0)
-  {
-    int nkl = models[pos].numkl;
-    if (flibrt[nkl].minw > SCALES || flibrt[nkl].maxw < SCALES)
-    {
-      pos++;
-      goto l1;
-    }
-  }
-  model.pm = models[pos];
-  pos++;
-  return pos;
-}
 
 void drawcram()
 {

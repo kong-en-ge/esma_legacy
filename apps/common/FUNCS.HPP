@@ -11,6 +11,8 @@ int upcase(int symb);
 void rasst(void);
 void help(const char* help_file);
 
+int next_model(int index, int ignoreScaleFilter = 0);
+
 double YEKRAZD(int x);
 double XEKRAZD(int y);
 int XRAZEKR(float y);

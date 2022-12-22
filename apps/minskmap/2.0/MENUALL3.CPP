@@ -24,7 +24,6 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-int next_model(int startpos, int nc = 0, int prp = 0);
 FLIB *findobj(SPR *spr);
 int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst);
 int ATRFR(TEXT_PACK_MENUS *tp, int j1);
@@ -1109,7 +1108,7 @@ int comuzel()
   F_SPR spr;
   int ret = 0;
   int klm = 0;
-  while ((ret = next_model(ret, 0, 1)) > 0)
+  while ((ret = next_model(ret, 1)) > 0)
   { // who
     int nkl = models[ret - 1].numkl;
     if (strncmp(flibrt[nkl].clcod, "655", 3) != 0)

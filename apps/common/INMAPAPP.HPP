@@ -22,4 +22,6 @@ public:
   CInfoMapApplication(int argc, char *argv[]);
 };
 
+int state2error(int state);
+
 #endif

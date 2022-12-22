@@ -77,6 +77,26 @@ double DXDISEKR(int dx)
   return d > 32767.0 ? 32767 : d;
 }
 
+int next_model(int index, int ignoreScaleFilter)
+{
+  while (index < nmodels)
+  {
+    if (!ignoreScaleFilter)
+    {
+      int classIndex = models[index].numkl;
+      if (flibrt[classIndex].minw > SCALES || flibrt[classIndex].maxw < SCALES)
+      {
+        index++;
+        continue;
+      }
+    }
+    model.pm = models[index];
+    return ++index;
+  }
+  return 0;
+}
+
+
 void store_otkat(void)
 {
   if (otkatn && (!memcmp(&XMINV, &otkat[(otkatn - 1) * 4], 4 * sizeof(double))))

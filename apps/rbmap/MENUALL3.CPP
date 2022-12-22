@@ -24,7 +24,6 @@
 
 FLIB *findobj(SPR *spr);
 int obj_enabled(F_SPR *spr);
-int next_model(int startpos, int nc = 0);
 
 struct KLSt : public Big_Menu
 {
