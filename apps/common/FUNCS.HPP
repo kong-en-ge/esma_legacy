@@ -25,6 +25,15 @@ int YRAZDIS(double x);
 int DXEKRDIS(int dx);
 double DXDISEKR(int dx);
 
+struct OBJND
+{
+  int nobj;
+  float d;
+  float dl;
+  int color;
+};
+
+int selectObjectPoint(double *x, double *y);
 void whatisit(void);
 void displayObjectInfo(int objIndex);
 int ATR(TEXT_PACK_MENUS *tp, int obj);

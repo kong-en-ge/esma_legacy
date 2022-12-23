@@ -286,16 +286,12 @@ long poiskdbf_in_one(int nf, float x, float y, float dx, float dy)
 long poiskdbf()
 {
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
-  GRwnd wns(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
-  wns.text("Укажите точку объекта");
+  double x2, y2;
+  if (!selectObjectPoint(&x2, &y2))
+    return 0;
+
   int x1, y1;
   int ret;
-  ret = M_K_R_status();
-  wns.restore();
-  if (ret == -1)
-    return 0;
-  float x2 = _DXM;
-  float y2 = _DYM;
   x1 = XRAZEKR(y2);
   y1 = YRAZEKR(x2);
   float dx = (XEKRAZD(y1 - 1) - x2) * 10;

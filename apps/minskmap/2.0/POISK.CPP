@@ -12,14 +12,6 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-struct OBJND
-{
-  int nobj;
-  float d;
-  float dl;
-  int color;
-};
-
 int poisk(int regim, int *x, int *y, double *doub)
 {
   int nobj, k;
@@ -27,18 +19,12 @@ int poisk(int regim, int *x, int *y, double *doub)
   F_SPR spr;
   double Dp;
   int x1, y1, xc, yc;
-  float x2, y2;
+  double x2, y2;
   int ret;
   if (regim != 2)
   {
-    GRwnd wns(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
-    wns.text("Укажите точку объекта");
-    ret = M_K_R_status();
-    wns.restore();
-    if (ret == -1)
+    if (!selectObjectPoint(&x2, &y2))
       goto ex1;
-    x2 = _DXM;
-    y2 = _DYM;
   }
   ret = 0;
   nobj = 0;
