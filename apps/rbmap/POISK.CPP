@@ -9,31 +9,17 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-struct OBJND
-{
-  int nobj;
-  float d;
-  float dl;
-  int color;
-};
-
 int poisk(int regim, int *x, int *y, double *doub)
 {
   int nobj, k;
   OBJND obj[6];
   F_SPR spr;
-  double Dp;
-  GRwnd wns(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
-  wns.text("Укажите точку объекта");
-  int x1, y1;
-  float x2, y2;
-  int ret;
-  ret = M_K_R_status();
-  wns.restore();
-  if (ret == -1)
+  int x1, y1, ret;
+  double Dp, x2, y2;
+
+  if (!selectObjectPoint(&x2, &y2))
     goto ex1;
-  x2 = _DXM;
-  y2 = _DYM;
+
   ret = 0;
   nobj = 0;
   Dp = CURRENTSCALE > 2000 ? 20 : 40;

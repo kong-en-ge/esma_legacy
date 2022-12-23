@@ -122,6 +122,24 @@ void restore_otkat(void)
   drawrazd();
 }
 
+int selectObjectPoint(double *x, double *y)
+{
+  int retValue;  
+  GRwnd infoWindow(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
+  infoWindow.text("Укажите точку объекта");
+  if (M_K_R_status() != -1)
+  {
+    *x = _DXM;
+    *y = _DYM;
+    retValue = 1;
+  }
+  else
+    retValue = 0;
+
+  infoWindow.restore();
+  return retValue;
+}
+
 void rasst(void)
 {
   mouse_show(OFF);
