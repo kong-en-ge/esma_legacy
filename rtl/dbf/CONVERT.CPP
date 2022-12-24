@@ -135,7 +135,7 @@ char *dtoa(double doub_val, char *buffer, int len, int dec)
    return (buffer);
 }
 
-double atod(char *char_string, int string_len)
+double atod(char const *char_string, int string_len)
 {
    char buffer[50];
    int len;
@@ -147,7 +147,7 @@ double atod(char *char_string, int string_len)
    return (strtod(buffer, (char **)0));
 }
 
-void name_full(char *result_name, char *in_name, char *default_extension)
+void name_full(char *result_name, char const *in_name, char const *default_extension)
 {
    int len, i;
    char *ptr;
