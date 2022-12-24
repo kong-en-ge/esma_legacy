@@ -838,8 +838,8 @@ void howstop()
   OBSTOP *obs;
   obs = new OBSTOP[4];
   char str[80];
-  int x, y, ob = 0, num, nm1 = 0;
-  int ret = poisk(1, &x, &y);
+  int ob = 0, num, nm1 = 0;
+  int ret = poisk(1);
   if (!ret)
   {
     delete[] obstop;
