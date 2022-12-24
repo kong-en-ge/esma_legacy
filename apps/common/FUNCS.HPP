@@ -34,6 +34,7 @@ struct OBJND
 };
 
 int selectObjectPoint(double *x, double *y);
+int chooseObject(const OBJND *obj, int nobj);
 void whatisit(void);
 void displayObjectInfo(int objIndex);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
@@ -57,11 +58,14 @@ int obj_enabled(F_SPR const *spr);
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 void slide(void);
 
-int M_K_R_status(void (*drawCursor)(void) = NULL, int (*keyhandler)(int) = NULL);
+typedef void (*DrawCursorFunc)(const void *drawContext);
+
+int M_K_R_status(DrawCursorFunc drawCursor = NULL, int (*keyhandler)(int) = NULL,
+  const void *drawContext = NULL);
 
 // the following functions are to be implemented within the project
 int draw_one_obj(unsigned num, int color, int drawDisabled = 0);
 void drawcram(void);
-int poisk(int regim, int *x = NULL, int *y = NULL, double *b = NULL);
+int poisk(int mode, int *x = NULL, int *y = NULL);
 
 #endif

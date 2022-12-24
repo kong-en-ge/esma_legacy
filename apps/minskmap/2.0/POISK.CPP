@@ -12,7 +12,7 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-int poisk(int regim, int *x, int *y, double *doub)
+int poisk(int mode, int *x, int *y)
 {
   int nobj, k;
   OBJND obj[6];
@@ -21,26 +21,26 @@ int poisk(int regim, int *x, int *y, double *doub)
   int x1, y1, xc, yc;
   double x2, y2;
   int ret;
-  if (regim != 2)
+  if (mode != 2)
   {
     if (!selectObjectPoint(&x2, &y2))
-      goto ex1;
+      return -1;
   }
   ret = 0;
   nobj = 0;
   Dp = CURRENTSCALE > 2000 ? 20 : 40;
-  if (regim > 0)
+  if (mode > 0)
   {
-    if (regim == 1)
+    if (mode == 1)
       Dp = DXDISEKR(1000);
     else
       Dp = DXDISEKR(500);
   }
-  while ((ret = next_model(ret, regim)) > 0)
+  while ((ret = next_model(ret, mode)) > 0)
   {
     int spp;
     int nkl = models[ret - 1].numkl;
-    if (regim > 0)
+    if (mode > 0)
     {
       if (((spp = strncmp(flibrt[nkl].clcod, "651", 3)) != 0) &&
           ((spp = strncmp(flibrt[nkl].clcod, "652", 3)) != 0) &&
@@ -58,7 +58,7 @@ int poisk(int regim, int *x, int *y, double *doub)
     {
       if (flibrt[nkl].loc > 3)
         continue;
-      if (regim != 2)
+      if (mode != 2)
       {
         yc = YRAZDIS(x2);
         xc = XRAZDIS(y2);
@@ -78,7 +78,7 @@ int poisk(int regim, int *x, int *y, double *doub)
           continue;
         if (!xydregion(xc, yc, flibrt[spr.numincl].loc == 1 ? d2 : d, (REGION *)&spr.xmin))
           continue;
-        if (regim == 0)
+        if (mode == 0)
         {
           if (!obj_enabled(&spr))
             continue;
@@ -173,7 +173,7 @@ int poisk(int regim, int *x, int *y, double *doub)
             continue;
         }
         double dp = DXDISEKR(l);
-        if (regim == 0)
+        if (mode == 0)
         {
           for (int j = 0; j < nobj; j++)
           {
@@ -231,37 +231,19 @@ int poisk(int regim, int *x, int *y, double *doub)
   } // while
   if (nobj != 0)
   {
-    if (regim == 0)
+    if (mode == 0)
     {
-      setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
-      for (int i = 0; i < nobj; i++)
+      int retValue = chooseObject(obj, nobj);
+      if (retValue >= 0)
       {
-        draw_one_obj(obj[i].nobj, 12, 0);
-        settwink(12, obj[i].color);
-        GRwnd wns(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
-        wns.text("Этот объект ?");
-        button b1(510, 282, 550, 297, 1, "Да"), b2(570, 280, 610, 295, -1, "Heт");
-        Menu_but b;
-        b + &b1 + &b2;
-        int k;
-        k = b.menu_key();
-        wns.restore();
-        if (k == -1)
-        {
-          nottwink();
-          draw_one_obj(obj[i].nobj, -1, 0);
-          continue;
-        }
         if (x != NULL)
           *x = x1;
         if (y != NULL)
           *y = y1;
-        if (doub != NULL)
-          *doub = obj[i].dl;
-        return obj[i].nobj;
-      } // for
-    }   // regim==0
-    else if (regim > 0)
+      }
+      return retValue;
+    }   // mode==0
+    else if (mode > 0)
     {
       if (x != NULL)
         *x = xc;
@@ -272,12 +254,11 @@ int poisk(int regim, int *x, int *y, double *doub)
   }
   else
   {
-    if (regim != 2)
+    if (mode != 2)
       displayWarning(0);
   }
-  setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
-ex1:
-  if (regim == 0)
+
+  if (mode == 0)
     return -1;
   else
     return 0;

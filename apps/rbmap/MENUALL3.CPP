@@ -25,6 +25,8 @@
 
 FLIB *findobj(SPR *spr);
 
+#define MAX_CITY_SEARCH 200
+
 struct Bpunct
 {
   int nob, x, y;
@@ -42,9 +44,9 @@ void find_punct(void)
   if (!fist[0])
     return;
   strupr(fist);
-  Bpunct punct[200];
+  Bpunct punct[MAX_CITY_SEARCH];
   int cpunct = 0, ret = 0, ncl;
-  while (((ret = next_model(ret, 1)) > 0) && (cpunct < 200))
+  while (((ret = next_model(ret, 1)) > 0) && (cpunct < MAX_CITY_SEARCH))
   {
     ncl = models[ret - 1].numkl;
     if (flibrt[ncl].clcod[0] != '4')
@@ -91,15 +93,17 @@ void find_punct(void)
         punct[cpunct].y = spr.ymin / 2 + spr.ymax / 2;
         cpunct++;
       }
-      if (cpunct == 200)
+      if (cpunct == MAX_CITY_SEARCH)
         break;
     }
   }
+
   if (!cpunct)
   {
     displayWarning(2);
     return;
   }
+
   for (ret = 0; ret < cpunct; ret++)
   {
     double xd = XDISRAZ(punct[ret].y);
@@ -131,8 +135,8 @@ void find_punct(void)
 
 void find_rg(void)
 {
-  textsettingstype t;
-  gettextsettings(&t);
+//  textsettingstype t;
+//  gettextsettings(&t);
   FINDatrf fa;
   fa.natr = 1;
   for (int ia = 0; ia < ATRsize; ia++)
@@ -189,7 +193,9 @@ void find_rg(void)
       ret = at;
     }
   } while (ret < 0xff00);
+
   if (count == 0)
     displayWarning(2);
+
   return;
 }

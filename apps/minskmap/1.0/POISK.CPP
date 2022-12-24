@@ -9,7 +9,7 @@
 #include "funcs.hpp"
 #include "button.hpp"
 
-int poisk(int /*regim*/, int *x, int *y, double *doub)
+int poisk(int /*mode*/, int *x, int *y)
 {
   int nobj, k;
   OBJND obj[6];
@@ -17,7 +17,7 @@ int poisk(int /*regim*/, int *x, int *y, double *doub)
   int x1, y1, ret;
   double Dp, x2, y2;
   if (!selectObjectPoint(&x2, &y2))
-    goto ex1;
+    return -1;
 
   ret = 0;
   nobj = 0;
@@ -156,40 +156,14 @@ int poisk(int /*regim*/, int *x, int *y, double *doub)
       }
     } // for
   }   // while
-  if (nobj != 0)
-  {
-    setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
-    for (int i = 0; i < nobj; i++)
-    {
-      draw_one_obj(obj[i].nobj, 12);
-      settwink(12, obj[i].color);
-      GRwnd wns(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
-      wns.text("Этот объект ?");
-      button b1(510, 282, 550, 297, 1, "Да"), b2(570, 280, 610, 295, -1, "Heт");
-      Menu_but b;
-      b + &b1 + &b2;
-      int k;
-      k = b.menu_key();
-      wns.restore();
-      if (k == -1)
-      {
-        nottwink();
-        draw_one_obj(obj[i].nobj, -1);
-        continue;
-      }
-      if (x != NULL)
-        *x = x1;
-      if (y != NULL)
-        *y = y1;
-      if (doub != NULL)
-        *doub = obj[i].dl;
-      return obj[i].nobj;
-    }
-  }
-  else
-    displayWarning(0);
 
-  setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
-ex1:
-  return -1;
+  int retValue = chooseObject(obj, nobj);
+  if (retValue >= 0)
+  {
+    if (x != NULL)
+      *x = x1;
+    if (y != NULL)
+      *y = y1;
+  }
+  return retValue;
 }

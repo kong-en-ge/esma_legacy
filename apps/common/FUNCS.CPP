@@ -5,7 +5,6 @@
 #include <string.h>
 #include <math.h>
 
-//#include "funcs.hpp"
 #include "globals.hpp"
 #include "graphics.h"
 #include "files.hpp"
@@ -124,7 +123,7 @@ void restore_otkat(void)
 
 int selectObjectPoint(double *x, double *y)
 {
-  int retValue;  
+  int retValue;
   GRwnd infoWindow(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
   infoWindow.text("Укажите точку объекта");
   if (M_K_R_status() != -1)
@@ -437,19 +436,24 @@ void minmash(void)
   drawrazd();
 }
 
-int x_fr, y_fr;
-void draw_fr()
+struct DrawFrameContext {
+  int x;
+  int y;
+};
+
+void draw_fr(void const *drawContext)
 {
   int x = XRAZEKR(_DYM);
   int y = YRAZEKR(_DXM);
-  rectangle(x, y, x_fr, y_fr);
+  DrawFrameContext const* frameContext = (DrawFrameContext const*)drawContext;
+  rectangle(x, y, frameContext->x, frameContext->y);
   char lf[10];
   int d;
   setviewport(0, 0, getmaxx(), getmaxy(), 1);
-  d = YEKRAZD(x_fr) - _DYM;
+  d = YEKRAZD(frameContext->x) - _DYM;
   sprintf(lf, "%5u", abs(d));
   outtextxy(570, 277, lf);
-  d = XEKRAZD(y_fr) - _DXM;
+  d = XEKRAZD(frameContext->y) - _DXM;
   sprintf(lf, "%5u", abs(d));
   outtextxy(570, 289, lf);
   setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
@@ -470,18 +474,22 @@ void fragment(void)
   wnf.text("(в метрах)");
   wnf.text("по гор.", 1);
   wnf.text("по верт.", 1);
-label0:
-  if (M_K_R_status() == -1)
+
+  DrawFrameContext frameContext;
+  do
   {
-    wnf.restore();
-    return;
+    if (M_K_R_status() == -1)
+    {
+      wnf.restore();
+      return;
+    }
+    xminm = _DXM;
+    yminm = _DYM;
+    frameContext.x = _xMK;
+    frameContext.y = _yMK;
   }
-  xminm = _DXM;
-  yminm = _DYM;
-  x_fr = _xMK;
-  y_fr = _yMK;
-  if (M_K_R_status(draw_fr) == -1)
-    goto label0;
+  while (M_K_R_status(draw_fr, NULL, &frameContext) == -1);
+
   wnf.restore();
   settextstyle(tf.font, tf.direction, tf.charsize);
   settextjustify(tf.horiz, tf.vert);
@@ -503,7 +511,7 @@ label0:
   YMAXV = dxc + dxm;
   cor_V();
   drawrazd();
-};
+}
 
 void centr(void)
 {
@@ -521,7 +529,7 @@ void centr(void)
   drawrazd();
 }
 
-int drawmap()
+int drawmap(void)
 {
   int exp = 0;
   F_SPR spr;
@@ -534,11 +542,11 @@ int drawmap()
       while (mouse_key_status(&key, &key))
         ;
       exp = -1;
-      goto drawex;
-    };
+      break;
+    }
 #endif
     draw_one_obj(i, -1, 0 /* drawDisabled */);
-  };
+  }
 drawex:
   return exp;
 }
@@ -565,7 +573,7 @@ void draw_one_d(double _x, double _y, int color, int type)
   draw_one_d(x, y, color, type);
 }
 
-void draw_kr(void)
+void draw_kr(const void *)
 {
   int x = XRAZEKR(_DYM);
   int y = YRAZEKR(_DXM);
@@ -585,8 +593,9 @@ void cor_dxdy(double *dx, double *dy)
     *dy = YMINV;
 }
 
-int M_K_R_status(void (*drawCursor)(void), int (*keyhandler)(int))
-{                                                                                                 
+int M_K_R_status(DrawCursorFunc drawCursor, int (*keyhandler)(int),
+  const void *drawContext)
+{
   if (!drawCursor)
     drawCursor = draw_kr;
 
@@ -607,7 +616,7 @@ int M_K_R_status(void (*drawCursor)(void), int (*keyhandler)(int))
   double XK = (XEKRAZD(yc) - XEKRAZD(yc - 1));
   double YK = (YEKRAZD(xc) - YEKRAZD(xc + 1));
   cor_dxdy(&_DXM, &_DYM);
-  drawCursor();
+  drawCursor(drawContext);
 l0:
   while (1)
   {
@@ -617,10 +626,10 @@ l0:
       cor_dxdy(&dx, &dy);
       if ((dx != _DXM) || (dy != _DYM))
       {
-        drawCursor();
+        drawCursor(drawContext);
         _DXM = dx;
         _DYM = dy;
-        drawCursor();
+        drawCursor(drawContext);
       }
       set_position(xc, yc);
     }
@@ -683,7 +692,7 @@ l0:
     goto l0;
   }
 ex:
-  drawCursor();
+  drawCursor(drawContext);
   _xMK = XRAZEKR(_DYM);
   _yMK = YRAZEKR(_DXM);
   mouse_screen_size(xmn, ymn, xmx, ymx);
@@ -781,7 +790,7 @@ void displayObjectInfo(int objIndex)
 void whatisit()
 {
   int x, y;
-  int objIndex = poisk(0 /*mode*/, &x, &y);
+  int objIndex = poisk(0 /*mode*/);
   if (objIndex >= 0)
   {
     displayObjectInfo(objIndex);
@@ -880,5 +889,41 @@ int obj_enabled(F_SPR const *spr)
   if ((spr->xmax - spr->xmin <= DXM) && (spr->ymax - spr->ymin <= DXM))
     return 0;
   return 1;
+}
+
+int chooseObject(const OBJND *obj, int nobj)
+{
+  int retValue = -1;
+
+  if (nobj > 0)
+  {
+    setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+    for (int i = 0; i < nobj; i++)
+    {
+      draw_one_obj(obj[i].nobj, 12);
+      settwink(12, obj[i].color);
+      GRwnd wndHelper(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
+      wndHelper.text("Этот объект ?");
+      button b1(510, 282, 550, 297, 1, "Да"), b2(570, 280, 610, 295, -1, "Heт");
+      Menu_but b;
+      b + &b1 + &b2;
+      int k;
+      k = b.menu_key();
+      wndHelper.restore();
+      if (k == -1)
+      {
+        nottwink();
+        draw_one_obj(obj[i].nobj, -1);
+        continue;
+      }
+      retValue = obj[i].nobj;
+      break;
+    }
+    setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
+  }
+  else
+    displayWarning(0);
+
+  return retValue;
 }
 
