@@ -8,6 +8,7 @@
 #include "menuall2.hpp"
 #include "globalda.hpp"
 #include "apputils.hpp"
+#include "funcs.hpp"
 
 int peresad(PERESU *ps, OBSTOP *kuda, int retkd)
 {
@@ -156,13 +157,11 @@ int peresad(PERESU *ps, OBSTOP *kuda, int retkd)
                   {
                     r = make_atr(&maot);
                     if (k != 1)
-                      if (!(strncmp(ATRN[maot.natr].atr, "NM", 2)) &&
-                          (ATRN[maot.natr].type == 'T'))
+                      if (checkAttributeDef(maot.natr, "NM", 'T'))
                         sprintf(mrot, "%s", maot.zns);
-                    if (!(strncmp(ATRN[maot.natr].atr, "09", 2)) &&
-                        (ATRN[maot.natr].type == 'T'))
+                    if (checkAttributeDef(maot.natr, "09", 'T'))
                       sprintf(nstot1, "%s", maot.zns);
-                  } while (r == 0);
+                  } while (!r);
                 } // atribute  ot
               }   // rd ot
               if ((strlen(mrot) != 0) && (strlen(nstot1) != 0) && (k != 1))
@@ -219,8 +218,8 @@ int peresad(PERESU *ps, OBSTOP *kuda, int retkd)
                       }
                       else
                       {
-                        xot = xot / 2 + sprot.xmin / 2;
-                        yot = yot / 2 + sprot.ymin / 2;
+                        xot = (xot + sprot.xmin) / 2;
+                        yot = (yot + sprot.ymin) / 2;
                       }
                     }
                   }
@@ -284,16 +283,15 @@ int peresad(PERESU *ps, OBSTOP *kuda, int retkd)
                     {
                       r = make_atr(&makd);
                       if (k != 1)
-                        if (!(strncmp(ATRN[makd.natr].atr, "NM", 2)) &&
-                            (ATRN[makd.natr].type == 'T'))
+                        if (checkAttributeDef(makd.natr, "NM", 'T'))
                           sprintf(mrkd, "%s", makd.zns);
-                      if (!(strncmp(ATRN[makd.natr].atr, "09", 2)) &&
-                          (ATRN[makd.natr].type == 'T'))
+                      if (checkAttributeDef(makd.natr, "09", 'T'))
                         sprintf(nstkd1, "%s", makd.zns);
-                    } while (r == 0);
+                    } while (!r);
                   } // atribute  kd
                 }   // rd kd
               }     // on tr
+
               if ((strlen(mrkd) != 0) && (strlen(nstkd1) != 0))
               { // compare
                 int ik = 0, ik1, iv2, iv1, fl = 0;
@@ -361,7 +359,8 @@ int peresad(PERESU *ps, OBSTOP *kuda, int retkd)
         } // for3
         if ((strlen(sss) != 0) && (strlen(ss) != 0))
         { // данные в структуру
-          float dw = sqrt(pow((uzel[iv].x - xot), 2) + pow((uzel[iv].y - yot), 2)) + sqrt(pow((uzel[iv].x - xkd), 2) + pow((uzel[iv].y - ykd), 2));
+          float dw = sqrt(pow((uzel[iv].x - xot), 2) + pow((uzel[iv].y - yot), 2)) + 
+            sqrt(pow((uzel[iv].x - xkd), 2) + pow((uzel[iv].y - ykd), 2));
           int js = 0;
           for (js = 0; js < j2; js++)
           {

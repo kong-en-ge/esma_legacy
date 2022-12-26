@@ -37,7 +37,7 @@ int poisk(int /*mode*/, int *x, int *y)
     double D;
     int d = DXEKRDIS(Dp);
     int d2 = d, l;
-    double len = 0, l2 = 0, l3 = 0;
+    double len = 0, l2 = 0;
     for (unsigned i = model.pm.start; i <= model.pm.end; i++)
     {
       if (model.readspr(&spr, i) != 1)
@@ -118,7 +118,6 @@ int poisk(int /*mode*/, int *x, int *y)
             {
               b = 1;
               l = D;
-              l3 = len + (t7 - 1) * l2;
             }
           }
           else if (t7 >= 1)
@@ -127,7 +126,6 @@ int poisk(int /*mode*/, int *x, int *y)
             {
               b = 1;
               l = D;
-              l3 = len;
             }
           }
         } // просмотр метрики
@@ -145,7 +143,6 @@ int poisk(int /*mode*/, int *x, int *y)
       memmove(obj + j + 1, obj + j, (nobj - j) * sizeof(OBJND));
       obj[j].d = dp;
       obj[j].nobj = i;
-      obj[j].dl = l3 / (len + 1e-4);
       obj[j].color = flibrt[spr.numincl].color;
       if (nobj < 5)
         nobj++;
