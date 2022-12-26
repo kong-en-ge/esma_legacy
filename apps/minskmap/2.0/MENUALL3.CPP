@@ -389,7 +389,7 @@ int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst)
     } // wh
     k++;
     if (k == 2)
-      strcpy(vidtr, "  Автобусы");
+      strcpy(vidtr, "  Автобусы:");
     if (k == 3)
       strcpy(vidtr, "  Троллейбусы:");
     if (k == 4)
@@ -990,23 +990,19 @@ int stuzel(int kh)
     do
     {
       r = make_atr(&maot);
-      if (!(strncmp(ATRN[maot.natr].atr, "09", 2)) &&
-          (ATRN[maot.natr].type == 'T'))
+      if (checkAttributeDef(maot.natr, "09", 'T'))
         sprintf(nstot, "%s", maot.zns);
-      if (!(strncmp(ATRN[maot.natr].atr, "M1", 2)) &&
-          (ATRN[maot.natr].type == 'T'))
+      if (checkAttributeDef(maot.natr, "M1", 'T'))
         sprintf(nmu1, "%s", maot.zns);
-      if (!(strncmp(ATRN[maot.natr].atr, "M0", 2)) &&
-          (ATRN[maot.natr].type == 'T'))
+      if (checkAttributeDef(maot.natr, "M0", 'T'))
         sprintf(nmu0, "%s", maot.zns);
-      if (!(strncmp(ATRN[maot.natr].atr, "M2", 2)) &&
-          (ATRN[maot.natr].type == 'T'))
+      if (checkAttributeDef(maot.natr, "M2", 'T'))
         sprintf(nmu2, "%s", maot.zns);
-      if (!(strncmp(ATRN[maot.natr].atr, "M3", 2)) &&
-          (ATRN[maot.natr].type == 'T'))
+      if (checkAttributeDef(maot.natr, "M3", 'T'))
         sprintf(nmu3, "%s", maot.zns);
-    } while (r == 0);
-    if ((strlen(nstot) != 0) || (strlen(nmu0) != 0))
+    } while (!r);
+
+    if (strlen(nstot) || strlen(nmu0))
     { //
       float dou = sqrt(pow((uzly[i].x - xco), 2) + pow((uzly[i].y - yco), 2));
       float dku = sqrt(pow((uzly[i].x - xck), 2) + pow((uzly[i].y - yck), 2));

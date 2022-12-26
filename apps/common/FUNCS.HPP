@@ -29,7 +29,6 @@ struct OBJND
 {
   int nobj;
   float d;
-  float dl;
   int color;
 };
 
@@ -38,6 +37,8 @@ int chooseObject(const OBJND *obj, int nobj);
 void whatisit(void);
 void displayObjectInfo(int objIndex);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
+
+int checkAttributeDef(int index, char const* name, char type);
 
 int setviewMAP(void);
 void fragment(void);

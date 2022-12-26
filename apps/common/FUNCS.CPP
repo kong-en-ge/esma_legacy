@@ -927,3 +927,9 @@ int chooseObject(const OBJND *obj, int nobj)
   return retValue;
 }
 
+int checkAttributeDef(int index, char const* name, char type)
+{
+  atrname const* atrn = ATRN + index;
+  return (atrn->type == type) && !strncmp(atrn->atr, name, 2);
+}
+

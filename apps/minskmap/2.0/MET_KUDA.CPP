@@ -69,6 +69,7 @@ int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn)
       nm1++;
     }
   } // for
+
   int iv = 0;
   if (kolmet != 0)
   { // on metro
@@ -139,11 +140,9 @@ int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn)
                   {
                     r = make_atr(&maot);
                     if (k != 1)
-                      if (!(strncmp(ATRN[maot.natr].atr, "NM", 2)) &&
-                          (ATRN[maot.natr].type == 'T'))
+                      if (checkAttributeDef(maot.natr, "NM", 'T'))
                         sprintf(mrot, "%s", maot.zns);
-                    if (!(strncmp(ATRN[maot.natr].atr, "09", 2)) &&
-                        (ATRN[maot.natr].type == 'T'))
+                    if (checkAttributeDef(maot.natr, "09", 'T'))
                       sprintf(nstot, "%s", maot.zns);
                   } while (r == 0);
                   if ((strlen(nstot) != 0) && (((strlen(mrot) != 0) && (k != 1)) ||
@@ -184,11 +183,9 @@ int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn)
                             {
                               r = make_atr(&makd);
                               if (k != 1)
-                                if (!(strncmp(ATRN[makd.natr].atr, "NM", 2)) &&
-                                    (ATRN[makd.natr].type == 'T'))
+                                if (checkAttributeDef(makd.natr, "NM", 'T'))
                                   sprintf(mrkd, "%s", makd.zns);
-                              if (!(strncmp(ATRN[makd.natr].atr, "09", 2)) &&
-                                  (ATRN[makd.natr].type == 'T'))
+                              if (checkAttributeDef(makd.natr, "09", 'T'))
                                 sprintf(nstkd, "%s", makd.zns);
                             } while (r == 0);
                           } // atribute  kd
@@ -283,7 +280,8 @@ int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn)
       iv++;
     } //
   }   // on metro
-  delete peres;
-  delete kudan;
+  delete[] peres;
+  delete[] kudan;
+
   return j2;
 }
