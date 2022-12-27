@@ -933,3 +933,85 @@ int checkAttributeDef(int index, char const* name, char type)
   return (atrn->type == type) && !strncmp(atrn->atr, name, 2);
 }
 
+int findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
+{
+  int x1, y1;
+  double D, len = 0, l2 = 0;
+  int b = 0;
+
+  metr += 2;
+
+  int x2 = *metr++;
+  int y2 = *metr++;
+  l = d;
+  if ((D = length(x2 - xc, y2 - yc)) < l)
+  {
+    b = 1;
+    l = D;
+  }
+
+  while (1)
+  {
+    x1 = x2;
+    y1 = y2;
+    x2 = *metr++;
+    if (x2 == 0xc018)
+      break;
+    y2 = *metr++;
+    if ((l2 = length(x2 - x1, y2 - y1)) == 0)
+      continue;
+    len = len + l2;
+    if (x2 < x1)
+    {
+      if (x2 - d > xc)
+        continue;
+      if (x1 < xc - d)
+        continue;
+    }
+    else
+    {
+      if (x1 - d > xc)
+        continue;
+      if (x2 < xc - d)
+        continue;
+    }
+    if (y2 < y1)
+    {
+      if (y2 - d > yc)
+        continue;
+      if (y1 < yc - d)
+        continue;
+    }
+    else
+    {
+      if (y1 - d > yc)
+        continue;
+      if (y2 < yc - d)
+        continue;
+    }
+    float a7 = x2 - x1;
+    float b7 = y2 - y1;
+    float t7 = (a7 * (xc - x1) + b7 * (yc - y1)) / l2 / l2;
+    if ((t7 > 0) && (t7 < 1))
+    {
+      if ((D = length(x1 + t7 * a7 - xc, y1 + t7 * b7 - yc)) < l)
+      {
+        b = 1;
+        l = D;
+      }
+    }
+    else if (t7 >= 1)
+    {
+      if ((D = length(x2 - xc, y2 - yc)) < l)
+      {
+        b = 1;
+        l = D;
+      }
+    }
+  } // просмотр метрики
+
+  if (b == 0)
+    return 0;
+
+  return 1;
+}

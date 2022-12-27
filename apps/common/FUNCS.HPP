@@ -39,6 +39,7 @@ void displayObjectInfo(int objIndex);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
 
 int checkAttributeDef(int index, char const* name, char type);
+int findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l);
 
 int setviewMAP(void);
 void fragment(void);
