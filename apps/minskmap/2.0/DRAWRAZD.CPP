@@ -8,17 +8,13 @@
 #include "fwrite.hpp"
 #include "drawpl.hpp"
 #include "button.hpp"
-#include "flibrt.hpp"
 #include "fstmod.hpp"
 //#include "test.hpp"
 #include "set.hpp"
-#include "atribut.hpp"
 #include "fatr.hpp"
 #include "tpedit.hpp"
 #include "funcs.hpp"
-#include "dbffunc.hpp"
 
-int next_dbf(int pos, int m2);
 int lin_wnd(int *, int *, int *, int *, int, int, int, int);
 
 void drawcram()
@@ -73,9 +69,9 @@ void dr_bl_n(int *metr, F_SPR *spr, char *clcod)
   do
   {
     r = make_atr(&ma);
-    if (!strncmp(ATRN[ma.natr].atr, "BN", 2))
+    if (checkAttributeName(ma.natr, "BN"))
       nbn = ma.znn;
-    if (!strncmp(ATRN[ma.natr].atr, "CN", 2))
+    if (checkAttributeName(ma.natr, "CN"))
       ncn = ma.zns[0];
   } while (r == 0);
   if (!nbn)
@@ -135,12 +131,10 @@ void dr_st_n(F_SPR *spr, int *metr)
   do
   {
     r = make_atr(&ma);
-    if (!strncmp(ATRN[ma.natr].atr, "ST", 2))
-    {
-      strncpyz(namst, ATCD + ATCDP[ATRN[ma.natr].start + ma.znk], 40);
-    }
+    if (checkAttributeName(ma.natr, "ST"))
+      strncpyz(namst, getLookupAttributeValue(ma.natr, ma.znk), 40);
   } while (r == 0);
-  if (!strlen(namst))
+  if (!namst[0])
     return;
   int mst[200], *mi = metr + 2, *mo = mst + 4;
   int bp = 1, x1, y1, x2, y2;
@@ -233,7 +227,6 @@ int draw_one_obj(unsigned obj, int color, int drawDisabled)
     }
     else
     {
-      char har[61];
       struct MFT
       {
         unsigned font : 3;

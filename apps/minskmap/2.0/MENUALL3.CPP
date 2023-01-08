@@ -60,10 +60,8 @@ void find_rg(void)
 {
   FINDatrf fa;
   fa.natr = 1;
-  for (int ia = 0; ia < ATRsize; ia++)
-    if (!strncmp(ATRN[ia].atr, "09", 2))
-      break;
-  if (ia == ATRsize)
+  int ia = getAttributeIndex("09");
+  if (ia < 0)
     return;
   fa.atr[0].natr = ia;
   {
@@ -132,10 +130,8 @@ void find_st(void)
   gettextsettings(&t);
   FINDatrf fa;
   fa.natr = 1;
-  for (int ia = 0; ia < ATRsize; ia++)
-    if (!strncmp(ATRN[ia].atr, "ST", 2))
-      break;
-  if (ia == ATRsize)
+  int ia = getAttributeIndex("ST");
+  if (ia < 0)
     return;
   fa.atr[0].natr = ia;
   {
@@ -204,10 +200,8 @@ int find_bl(char const *st, int bl)
   gettextsettings(&t);
   FINDatrf fa;
   fa.natr = 2;
-  for (int ia = 0; ia < ATRsize; ia++)
-    if (!strncmp(ATRN[ia].atr, "ST", 2))
-      break;
-  if (ia == ATRsize)
+  int ia = getAttributeIndex("ST");
+  if (ia < 0)
     return -1;
   fa.atr[0].natr = ia;
   if (!st)
@@ -241,10 +235,8 @@ int find_bl(char const *st, int bl)
     }
     fa.atr[0].znk = ii;
   }
-  for (ia = 0; ia < ATRsize; ia++)
-    if (!strncmp(ATRN[ia].atr, "BN", 2))
-      break;
-  if (ia == ATRsize)
+  ia = getAttributeIndex("BN");
+  if (ia < 0)
     return -1;
   fa.atr[1].natr = ia;
   if (!bl)
@@ -361,12 +353,10 @@ int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst)
               r = make_atr(&ma);
               if (k != 1)
               {
-                if (!(strncmp(ATRN[ma.natr].atr, "NM", 2)) &&
-                    (ATRN[ma.natr].type == 'T'))
+                if (checkAttributeDef(ma.natr, "NM", 'T'))
                   sprintf(mr, " %s", ma.zns);
               }
-              if (!(strncmp(ATRN[ma.natr].atr, "09", 2)) &&
-                  (ATRN[ma.natr].type == 'T'))
+              if (checkAttributeDef(ma.natr, "09", 'T'))
                 if (k != 1)
                   sprintf(nst, "αβ. %s", ma.zns);
                 else
@@ -930,8 +920,7 @@ int stmetro()
       do
       {
         r = make_atr(&maot);
-        if (!(strncmp(ATRN[maot.natr].atr, "09", 2)) &&
-            (ATRN[maot.natr].type == 'T'))
+        if (checkAttributeDef(maot.natr, "09", 'T'))
         {
           sprintf(nstot, "%s", maot.zns);
           r = 1;
@@ -1227,11 +1216,9 @@ void where()
                 {
                   r = make_atr(&maot);
                   if (k != 1)
-                    if (!(strncmp(ATRN[maot.natr].atr, "NM", 2)) &&
-                        (ATRN[maot.natr].type == 'T'))
+                    if (checkAttributeDef(maot.natr, "NM", 'T'))
                       sprintf(mrot, "%s", maot.zns);
-                  if (!(strncmp(ATRN[maot.natr].atr, "09", 2)) &&
-                      (ATRN[maot.natr].type == 'T'))
+                  if (checkAttributeDef(maot.natr, "09", 'T'))
                     sprintf(nstot, "%s", maot.zns);
                 } while (r == 0);
                 if ((strlen(nstot) != 0) && (((strlen(mrot) != 0) && (k != 1)) ||
@@ -1272,11 +1259,9 @@ void where()
                           {
                             r = make_atr(&makd);
                             if (k != 1)
-                              if (!(strncmp(ATRN[makd.natr].atr, "NM", 2)) &&
-                                  (ATRN[makd.natr].type == 'T'))
+                              if (checkAttributeDef(makd.natr, "NM", 'T'))
                                 sprintf(mrkd, "%s", makd.zns);
-                            if (!(strncmp(ATRN[makd.natr].atr, "09", 2)) &&
-                                (ATRN[makd.natr].type == 'T'))
+                            if (checkAttributeDef(makd.natr, "09", 'T'))
                               sprintf(nstkd, "%s", makd.zns);
                           } while (r == 0);
                         } // atribute  kd
@@ -1422,8 +1407,7 @@ void where()
             do
             {
               r = make_atr(&makd);
-              if (!(strncmp(ATRN[makd.natr].atr, "09", 2)) &&
-                  (ATRN[makd.natr].type == 'T'))
+              if (checkAttributeDef(makd.natr, "09", 'T'))
                 sprintf(stt, "%s", makd.zns);
             } while (r == 0);
           } // atribute

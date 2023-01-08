@@ -48,9 +48,7 @@ int poisk(int /*mode*/, int *x, int *y)
       if (flibrt[spr.numincl].loc == 1)
       {
         if ((D = length(xc - spr.xmin, yc - spr.ymin)) < d2)
-        {
           l = D / 4;
-        }
         else
           continue;
       }
