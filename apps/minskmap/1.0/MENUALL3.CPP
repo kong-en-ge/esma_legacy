@@ -21,10 +21,8 @@ void find_rg(void)
 {
   FINDatrf fa;
   fa.natr = 1;
-  for (int ia = 0; ia < ATRsize; ia++)
-    if (!strncmp(ATRN[ia].atr, "09", 2))
-      break;
-  if (ia == ATRsize)
+  int ia = getAttributeIndex("09");
+  if (ia < 0)
     return;
   fa.atr[0].natr = ia;
   {
@@ -93,10 +91,8 @@ void find_st(void)
   gettextsettings(&t);
   FINDatrf fa;
   fa.natr = 1;
-  for (int ia = 0; ia < ATRsize; ia++)
-    if (!strncmp(ATRN[ia].atr, "ST", 2))
-      break;
-  if (ia == ATRsize)
+  int ia = getAttributeIndex("ST");
+  if (ia < 0)
     return;
   fa.atr[0].natr = ia;
   {
@@ -165,10 +161,8 @@ int find_bl(char const *st, int bl)
   gettextsettings(&t);
   FINDatrf fa;
   fa.natr = 2;
-  for (int ia = 0; ia < ATRsize; ia++)
-    if (!strncmp(ATRN[ia].atr, "ST", 2))
-      break;
-  if (ia == ATRsize)
+  int ia = getAttributeIndex("ST");
+  if (ia < 0)
     return -1;
   fa.atr[0].natr = ia;
   if (!st)
@@ -202,10 +196,8 @@ int find_bl(char const *st, int bl)
     }
     fa.atr[0].znk = ii;
   }
-  for (ia = 0; ia < ATRsize; ia++)
-    if (!strncmp(ATRN[ia].atr, "BN", 2))
-      break;
-  if (ia == ATRsize)
+  ia = getAttributeIndex("BN");
+  if (ia < 0)
     return -1;
   fa.atr[1].natr = ia;
   if (!bl)

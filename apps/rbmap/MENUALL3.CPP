@@ -32,18 +32,21 @@ struct Bpunct
   int nob, x, y;
 };
 
+#define MAX_CITYNAME_SIZE 50
+
 void find_punct(void)
 {
-  char fist[50];
-  fist[0] = 0;
+  char szName[MAX_CITYNAME_SIZE];
+  szName[0] = 0;
   GRwnd wnnd(140, 180, 420, 240, "Нас. пункт", LIGHTBLUE, 1, 1);
   wnnd.text("");
   wnnd.text("Введите название");
-  wnnd.readst(fist, 49);
+  wnnd.readst(szName, MAX_CITYNAME_SIZE - 1);
   wnnd.restore();
-  if (!fist[0])
+  if (!szName[0])
     return;
-  strupr(fist);
+
+  strupr(szName);
   Bpunct punct[MAX_CITY_SEARCH];
   int cpunct = 0, ret = 0, ncl;
   while (((ret = next_model(ret, 1)) > 0) && (cpunct < MAX_CITY_SEARCH))
@@ -66,23 +69,24 @@ void find_punct(void)
       do
       {
         r = make_atr(&ma);
-        if (!strncmp(ATRN[ma.natr].atr, "09", 2))
+        if (checkAttributeName(ma.natr, "09"))
           strcpy(namst, ma.zns);
-      } while (r == 0);
+      } while (!r);
       if (!strlen(namst))
         continue;
       strupr(namst);
       int ok = 0;
-      if (fist[strlen(fist) - 1] == '.')
+      char* pNameEnd = szName + strlen(szName) - 1;
+      if (*pNameEnd  == '.')
       {
-        fist[strlen(fist) - 1] = 0;
-        if (!strcmp(namst, fist))
+        *pNameEnd = 0;
+        if (!strcmp(namst, szName))
           ok++;
-        fist[strlen(fist)] = '.';
+        *pNameEnd = '.';
       }
       else
       {
-        char *sbstr = strstr(namst, fist);
+        char *sbstr = strstr(namst, szName);
         if ((sbstr) && ((sbstr == namst) || (*(sbstr - 1) == ' ') || (*(sbstr - 1) == '.')))
           ok++;
       }
@@ -139,10 +143,8 @@ void find_rg(void)
 //  gettextsettings(&t);
   FINDatrf fa;
   fa.natr = 1;
-  for (int ia = 0; ia < ATRsize; ia++)
-    if (!strncmp(ATRN[ia].atr, "RN", 2))
-      break;
-  if (ia == ATRsize)
+  int ia = getAttributeIndex("RN");
+  if (ia < 0)
     return;
   fa.atr[0].natr = ia;
   {

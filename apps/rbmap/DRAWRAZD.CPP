@@ -4,14 +4,9 @@
 #include "mouse.hpp"
 #include "globals.hpp"
 #include "drawpl.hpp"
-#include "flibrt.hpp"
-#include "fstmod.hpp"
-#include "atribut.hpp"
 #include "fatr.hpp"
 #include "funcs.hpp"
 #include "dbffunc.hpp"
-
-int next_dbf(int pos, int m2);
 
 void drawcram(void)
 {
@@ -35,7 +30,7 @@ void drawcram(void)
   setlinestyle(0, 0, 1);
 }
 
-void dr_pn_n(F_SPR *spr, int *metr, char *clcod, int color, int en, int cod)
+void dr_pn_n(F_SPR *spr, char *clcod, int color, int en, int cod)
 {
   if (!en)
   {
@@ -56,10 +51,10 @@ void dr_pn_n(F_SPR *spr, int *metr, char *clcod, int color, int en, int cod)
   do
   {
     r = make_atr(&ma);
-    if (!strncmp(ATRN[ma.natr].atr, "09", 2))
+    if (checkAttributeName(ma.natr, "09"))
       strcpy(namst, ma.zns);
   } while (r == 0);
-  if (!strlen(namst))
+  if (!namst[0])
     return;
   if (!cod)
   {
@@ -128,7 +123,6 @@ int draw_one_obj(unsigned obj, int color, int en)
     }
     else
     {
-      char har[61];
       struct MFT
       {
         unsigned font : 3;
@@ -143,11 +137,11 @@ int draw_one_obj(unsigned obj, int color, int en)
       scr.outstring((char *)(metr + size_methar(metr) + 1), metr - 2, &ft);
     }
     if ((flib->clcod[0] == '4') && (loc == 3))
-      dr_pn_n(&spr, metr, flib->clcod, color, en, 0);
+      dr_pn_n(&spr, flib->clcod, color, en, 0);
     if (!strncmp(flib->clcod, "31120000", 8))
-      dr_pn_n(&spr, metr, flib->clcod, color, en, 1);
+      dr_pn_n(&spr, flib->clcod, color, en, 1);
     if (!strncmp(flib->clcod, "31131000", 8))
-      dr_pn_n(&spr, metr, flib->clcod, color, en, 2);
+      dr_pn_n(&spr, flib->clcod, color, en, 2);
   }
   return 0;
 }

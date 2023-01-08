@@ -927,10 +927,30 @@ int chooseObject(const OBJND *obj, int nobj)
   return retValue;
 }
 
+int checkAttributeName(int index, char const* name)
+{
+  atrname const* atrn = ATRN + index;
+  return !strncmp(atrn->atr, name, 2);
+}
+
 int checkAttributeDef(int index, char const* name, char type)
 {
   atrname const* atrn = ATRN + index;
-  return (atrn->type == type) && !strncmp(atrn->atr, name, 2);
+  return (atrn->type == type) && checkAttributeName(index, name);
+}
+
+int getAttributeIndex(char const* name)
+{
+  for (int i = 0; i < ATRsize; i++)
+    if (checkAttributeName(i, name))
+      return i;
+
+  return -1;
+}
+
+char const * getLookupAttributeValue(int attrIndex, int valueIndex)
+{
+  return ATCD + ATCDP[ATRN[attrIndex].start + valueIndex];
 }
 
 int findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
