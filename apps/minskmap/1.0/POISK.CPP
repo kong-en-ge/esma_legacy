@@ -11,8 +11,7 @@
 
 int poisk(int /*mode*/, int *x, int *y)
 {
-  int nobj, k;
-  OBJND obj[6];
+  CSearchResultCollector resultCollector(5);
   F_SPR spr;
   int x1, y1, ret;
   double Dp, x2, y2;
@@ -21,7 +20,6 @@ int poisk(int /*mode*/, int *x, int *y)
     return -1;
 
   ret = 0;
-  nobj = 0;
   Dp = CURRENTSCALE > 2000 ? 20 : 40;
   while ((ret = next_model(ret)) > 0)
   {
@@ -63,29 +61,16 @@ int poisk(int /*mode*/, int *x, int *y)
           continue;
       }
       double dp = DXDISEKR(l);
-      for (int j = 0; j < nobj; j++)
+      if (resultCollector.addObject(i, dp, flibrt[spr.numincl].color) && resultCollector.isFull())
       {
-        if (dp < obj[j].d)
-          break;
-      }
-      if (j >= 5)
-        continue;
-      memmove(obj + j + 1, obj + j, (nobj - j) * sizeof(OBJND));
-      obj[j].d = dp;
-      obj[j].nobj = i;
-      obj[j].color = flibrt[spr.numincl].color;
-      if (nobj < 5)
-        nobj++;
-      if (nobj == 5)
-      {
-        Dp = obj[4].d;
+        Dp = resultCollector.maxDistance();
         d = DXEKRDIS(Dp);
         d2 = Dp < 2.5 ? 4 * d : DXEKRDIS(10);
       }
     } // for
   }   // while
 
-  int retValue = chooseObject(obj, nobj);
+  int retValue = chooseObject(resultCollector.getObj(), resultCollector.getCount());
   if (retValue >= 0)
   {
     if (x != NULL)

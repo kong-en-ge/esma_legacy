@@ -1035,3 +1035,57 @@ int findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
 
   return 1;
 }
+
+/**************************
+ * CSearchResultCollector *
+ **************************/
+
+CSearchResultCollector::CSearchResultCollector(int maxCount)
+{
+  _maxCount = maxCount;
+  _count = 0;
+  obj = new OBJND[maxCount];
+}
+
+CSearchResultCollector::~CSearchResultCollector(void)
+{
+  delete[] obj;
+}
+
+bool CSearchResultCollector::addObject(int index, double distance, int color)
+{
+  for (int i = 0; i < _count; i++)
+  {
+    if (distance < obj[i].d)
+      break;
+  }
+
+  if (i >= _maxCount)
+    return false;
+
+  if (_count > i)
+    memmove(obj + i + 1, obj + i, (_count - i) * sizeof(OBJND));
+
+  obj[i].d = distance;
+  obj[i].nobj = index;
+  obj[i].color = color;
+
+  if (_count < _maxCount)
+    _count++;
+
+  return true;
+}
+
+bool CSearchResultCollector::isFull(void) const
+{
+  return _count == _maxCount;
+}
+
+double CSearchResultCollector::maxDistance(void) const
+{
+  if (_count > 0)
+    return obj[_count - 1].d;
+  else
+    return 0;
+}
+
