@@ -211,7 +211,6 @@ int draw_one_obj(unsigned obj, int color, int drawDisabled)
     }
     else
     {
-      char har[61];
       struct MFT
       {
         unsigned font : 3;

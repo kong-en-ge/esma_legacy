@@ -32,6 +32,33 @@ struct OBJND
   int color;
 };
 
+typedef int bool;
+#define false 0
+#define true  1
+
+class CSearchResultCollector
+{
+private:
+  int _maxCount;
+  int _count;
+  OBJND* obj;
+public:
+  CSearchResultCollector(int maxCount);
+  ~CSearchResultCollector(void);
+
+  bool addObject(int index, double distance, int color);
+  int getCount(void) const
+  {
+    return _count;
+  }
+  OBJND const* getObj(void) const
+  {
+    return obj;
+  }
+  bool isFull(void) const;
+  double maxDistance(void) const;
+};
+
 int selectObjectPoint(double *x, double *y);
 int chooseObject(const OBJND *obj, int nobj);
 void whatisit(void);

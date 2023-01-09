@@ -14,8 +14,8 @@
 
 int poisk(int mode, int *x, int *y)
 {
+  CSearchResultCollector resultCollector(5);
   int nobj, k;
-  OBJND obj[6];
   F_SPR spr;
   double Dp;
   int x1, y1, xc, yc;
@@ -102,25 +102,13 @@ int poisk(int mode, int *x, int *y)
       double dp = DXDISEKR(l);
       if (mode == 0)
       {
-        for (int j = 0; j < nobj; j++)
+        if (resultCollector.addObject(i, dp, flibrt[spr.numincl].color) && resultCollector.isFull())
         {
-          if (dp < obj[j].d)
-            break;
-        }
-        if (j >= 5)
-          continue;
-        memmove(obj + j + 1, obj + j, (nobj - j) * sizeof(OBJND));
-        obj[j].d = dp;
-        obj[j].nobj = i;
-        obj[j].color = flibrt[spr.numincl].color;
-        if (nobj < 5)
-          nobj++;
-        if (nobj == 5)
-        {
-          Dp = obj[4].d;
+          Dp = resultCollector.maxDistance();
           d = DXEKRDIS(Dp);
           d2 = Dp < 2.5 ? 4 * d : DXEKRDIS(10);
         }
+        nobj = resultCollector.getCount();
       }
       else
       {
@@ -158,7 +146,7 @@ int poisk(int mode, int *x, int *y)
   {
     if (mode == 0)
     {
-      int retValue = chooseObject(obj, nobj);
+      int retValue = chooseObject(resultCollector.getObj(), resultCollector.getCount());
       if (retValue >= 0)
       {
         if (x != NULL)
