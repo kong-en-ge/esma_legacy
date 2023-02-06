@@ -2,7 +2,7 @@
 #include <math.h>
 
 #include "button.hpp"
-#include "mmmapapp.hpp"
+#include "mmapp20.hpp"
 #include "apputils.hpp"
 #include "globals.hpp"
 #include "mouse.hpp"
@@ -23,70 +23,34 @@ const char * warningMessages[] =
 {
   "Не найден объект в указанной точке",         // 0
   "Достигнут максимальный масштаб отображения", // 1
-  "Не найден заданный объект"                   // 2
+  "Не найден заданный объект",                  // 2
+  "Прямого транспорта нет",                     // 3
+  "Маршрут не найден"                           // 4
 };
+
 
 char const *ston = "Вкл. N";
 char const *stoff = "Выкл. N";
 
-/************************
- * CMinskMapApplication *
- ************************/
+/**************************
+ * CMinskMap20Application *
+ **************************/
 
-CMinskMapApplication::CMinskMapApplication(int argc, char *argv[]) :
-  CInfoMapApplication(argc, argv)
+CMinskMap20Application::CMinskMap20Application(int argc, char *argv[]) :
+  CMinskMapApplication(argc, argv)
 {
-  SCALEMIN = 400;
-  SCALEMAX = 200000;
-  this->argc = argc;
-  this->argv = argv;
 }
 
-void CMinskMapApplication::executeApp(void)
+char const *CMinskMap20Application::getVersion(void) const
 {
-  parst = NULL;
-  parbl = 0;
-
-  if (argc == 3)
-  {
-    parst = argv[1];
-    parbl = atoi(argv[2]);
-    memmove(&XMINM, &XMING, 4 * sizeof(double));
-  }
-  else
-    all();
-
-  do
-  {
-    runMainMenu();
-    parst = NULL;
-    parbl = 0;
-  }
-  while (!confirmExit());
+  return "MINSK_MAP 2.0";
 }
 
-char const *CMinskMapApplication::getIndexMapFilename(void) const
+void CMinskMap20Application::runMainMenu(void)
 {
-  return "MINSK.CWN";
-}
-
-char const *CMinskMapApplication::getHelpFilename(void) const
-{
-  return "M_M.hlp";
-}
-
-char const *CMinskMapApplication::getMainMapFilename(void) const
-{
-  return "minsk";
-}
-
-char const *CMinskMapApplication::getVersion(void) const
-{
-  return "MINSK_MAP 1.3";
-}
-
-void CMinskMapApplication::runMainMenu(void)
-{
+  int keym = 0;
+  prmt = 0;
+  uzl = 0;
   setcolor(BLACK);
   mouse_show(OFF);
   line(480, 39, 480, 196);
@@ -103,34 +67,38 @@ void CMinskMapApplication::runMainMenu(void)
       b7(560, 123, 639, 138, 7, "Дом"),
       b8(480, 139, 559, 154, 8, "Улица"),
       b9(560, 139, 639, 154, 9, "Район"),
-      b91(480, 155, 559, 170, 17, "Печать"),
-      b92(560, 155, 639, 170, 18, "Слайд"),
-      b10(480, 181, 559, 196, 10, "Вкл/Выкл"),
-      b11(560, 181, 639, 196, 11, "Знак"),
-      b12(480, 197, 559, 212, 12, "Что здесь"),
-      b13(560, 197, 639, 212, 13, "Поиск"),
-      b14(480, 213, 559, 228, 19, "Новая"),
-      b15(560, 213, 639, 228, 20, "Удал.базу"),
-      b16(480, 229, 559, 244, 21, "Назначить"),
-      b17(560, 229, 639, 244, 22, "Ввод"),
-      b18(480, 245, 559, 260, 23, "Изменение"),
-      b19(560, 245, 639, 260, 24, "Уд.объект"),
-      b20(480, 263, 559, 278, 25, "Справка"),
-      b21(560, 263, 639, 278, -1, "Выход");
+      b81(480, 155, 533, 170, 26, "Трансп"),
+      b82(534, 155, 587, 170, 27, "Откуда"),
+      b83(588, 155, 639, 170, 28, "Куда"),
+      b91(480, 171, 559, 186, 17, "Печать"),
+      b92(560, 171, 639, 186, 18, "Слайд"),
+      b10(480, 197, 559, 212, 10, "Вкл/Выкл"),
+      b11(560, 197, 639, 212, 11, "Знак"),
+      b12(480, 213, 559, 228, 12, "Что здесь"),
+      b13(560, 213, 639, 228, 13, "Поиск"),
+      b14(480, 229, 559, 244, 19, "Новая"),
+      b15(560, 229, 639, 244, 20, "Удал.базу"),
+      b16(480, 245, 559, 260, 21, "Назначить"),
+      b17(560, 245, 639, 260, 22, "Ввод"),
+      b18(480, 261, 559, 276, 23, "Изменение"),
+      b19(560, 261, 639, 276, 24, "Уд.объект"),
+      b20(480, 279, 559, 294, 25, "Справка"),
+      b21(560, 279, 639, 294, -1, "Выход");
   Menu_but menm;
-  menm + &b1 + &b2 + &b3 + &b4 + &b31 + &b41 + &b5 + &b51 + &b6 + &b7 + &b8 + &b9 + &b91 + &b92 +
+  menm + &b1 + &b2 + &b3 + &b4 + &b31 + &b41 + &b5 + &b51 + &b6 + &b7 + &b8 + &b9 + &b81 + &b82 + &b83 + &b91 + &b92 +
       &b10 + &b11 + &b12 + &b13 + &b14 + &b15 + &b16 + &b17 + &b18 + &b19 + &b20 + &b21;
   menm.draw();
   outtextxy(560, 44, "О б з о р");
   outtextxy(560, 118, "К а р т а");
-  outtextxy(562, 176, "Б а з ы");
+  outtextxy(562, 191, "Б а з ы");
   mouse_show(ON);
   if (parst)
     if (find_bl(parst, parbl))
       all();
-  int keym;
-  do
+  // int keym;
+  while (keym != -1)
   {
+    // do {
     keym = menm.menu_key2();
     switch (keym)
     {
@@ -223,15 +191,28 @@ void CMinskMapApplication::runMainMenu(void)
     case 25:
       displayHelp();
       break;
+    case 26:
+      howstop();
+      break;
+    case 27:
+      where_from();
+      break;
+    case 28:
+      if (pr)
+        where();
+      break;
     }
-  } while (keym != -1);
+  } // while (keym!=-1);
+  if (prmt == 1)
+    delete metro;
+  if (uzl == 1)
+    delete uzly;
 }
 
-int CMinskMapApplication::runUI(void)
+int CMinskMap20Application::runUI(void)
 {
   setErrorMessages(errorMessages, sizeof(errorMessages) / sizeof(errorMessages[0]));
   setWarningMessages(warningMessages, sizeof(warningMessages) / sizeof(warningMessages[0]));
-  LBSFilename = "MINSK.LBS";
 
   setfillstyle(1, BLACK);
   bar(0, 0, getmaxx(), getmaxy());
