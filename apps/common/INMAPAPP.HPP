@@ -15,9 +15,12 @@ private:
   void loadLibDefs(void);
   int openMapData(void);
 protected:
+  void displayHelp(void) const;
   virtual char const * getIndexMapFilename(void) const = 0;
+  virtual char const * getHelpFilename(void) const = 0;
   virtual char const * getMainMapFilename(void) const = 0;
   virtual int initializeApplication(void);
+  virtual void runMainMenu(void) = 0;
 public:
   CInfoMapApplication(int argc, char *argv[]);
 };

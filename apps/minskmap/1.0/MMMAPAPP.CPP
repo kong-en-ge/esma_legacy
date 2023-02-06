@@ -1,11 +1,15 @@
 #include <alloc.h>
 #include <math.h>
 
+#include "button.hpp"
 #include "mmmapapp.hpp"
 #include "apputils.hpp"
 #include "globals.hpp"
 #include "mouse.hpp"
 #include "funcs.hpp"
+#include "menuall2.hpp"
+#include "dbffunc.hpp"
+#include "globalda.hpp"
 
 const char *errorMessages[] =
 {
@@ -22,7 +26,8 @@ const char * warningMessages[] =
   "Не найден заданный объект"                   // 2
 };
 
-void main_menu(char const* parst, int parbl);
+char const *ston = "Вкл. N";
+char const *stoff = "Выкл. N";
 
 /************************
  * CMinskMapApplication *
@@ -39,13 +44,13 @@ CMinskMapApplication::CMinskMapApplication(int argc, char *argv[]) :
 
 void CMinskMapApplication::executeApp(void)
 {
-  char *stpar = NULL;
-  int blpar = 0;
+  parst = NULL;
+  parbl = 0;
 
   if (argc == 3)
   {
-    stpar = argv[1];
-    blpar = atoi(argv[2]);
+    parst = argv[1];
+    parbl = atoi(argv[2]);
     memmove(&XMINM, &XMING, 4 * sizeof(double));
   }
   else
@@ -53,9 +58,9 @@ void CMinskMapApplication::executeApp(void)
 
   do
   {
-    main_menu(stpar, blpar);
-    stpar = NULL;
-    blpar = 0;
+    runMainMenu();
+    parst = NULL;
+    parbl = 0;
   }
   while (!confirmExit());
 }
@@ -63,6 +68,11 @@ void CMinskMapApplication::executeApp(void)
 char const *CMinskMapApplication::getIndexMapFilename(void) const
 {
   return "MINSK.CWN";
+}
+
+char const *CMinskMapApplication::getHelpFilename(void) const
+{
+  return "M_M.hlp";
 }
 
 char const *CMinskMapApplication::getMainMapFilename(void) const
@@ -75,6 +85,147 @@ char const *CMinskMapApplication::getVersion(void) const
   return "MINSK_MAP 1.3";
 }
 
+void CMinskMapApplication::runMainMenu(void)
+{
+  setcolor(BLACK);
+  mouse_show(OFF);
+  line(480, 39, 480, 196);
+  line(639, 39, 639, 196);
+  button b1(480, 49, 559, 64, 1, "Все"),
+      b2(560, 49, 639, 64, 2, "Фрагмент"),
+      b3(480, 65, 559, 80, 3, "Центр"),
+      b4(560, 65, 639, 80, 4, "Возврат"),
+      b31(480, 81, 559, 96, 14, "Крупнее"),
+      b41(560, 81, 639, 96, 15, "Мельче"),
+      b5(480, 97, 559, 112, 5, "Расст-ние"),
+      b51(560, 97, 639, 112, 16, ston),
+      b6(480, 123, 559, 138, 6, "Что это"),
+      b7(560, 123, 639, 138, 7, "Дом"),
+      b8(480, 139, 559, 154, 8, "Улица"),
+      b9(560, 139, 639, 154, 9, "Район"),
+      b91(480, 155, 559, 170, 17, "Печать"),
+      b92(560, 155, 639, 170, 18, "Слайд"),
+      b10(480, 181, 559, 196, 10, "Вкл/Выкл"),
+      b11(560, 181, 639, 196, 11, "Знак"),
+      b12(480, 197, 559, 212, 12, "Что здесь"),
+      b13(560, 197, 639, 212, 13, "Поиск"),
+      b14(480, 213, 559, 228, 19, "Новая"),
+      b15(560, 213, 639, 228, 20, "Удал.базу"),
+      b16(480, 229, 559, 244, 21, "Назначить"),
+      b17(560, 229, 639, 244, 22, "Ввод"),
+      b18(480, 245, 559, 260, 23, "Изменение"),
+      b19(560, 245, 639, 260, 24, "Уд.объект"),
+      b20(480, 263, 559, 278, 25, "Справка"),
+      b21(560, 263, 639, 278, -1, "Выход");
+  Menu_but menm;
+  menm + &b1 + &b2 + &b3 + &b4 + &b31 + &b41 + &b5 + &b51 + &b6 + &b7 + &b8 + &b9 + &b91 + &b92 +
+      &b10 + &b11 + &b12 + &b13 + &b14 + &b15 + &b16 + &b17 + &b18 + &b19 + &b20 + &b21;
+  menm.draw();
+  outtextxy(560, 44, "О б з о р");
+  outtextxy(560, 118, "К а р т а");
+  outtextxy(562, 176, "Б а з ы");
+  mouse_show(ON);
+  if (parst)
+    if (find_bl(parst, parbl))
+      all();
+  int keym;
+  do
+  {
+    keym = menm.menu_key2();
+    switch (keym)
+    {
+    case 1:
+      all();
+      break;
+    case 2:
+      fragment();
+      break;
+    case 3:
+      centr();
+      break;
+    case 4:
+      restore_otkat();
+      break;
+    case 14:
+      plmash();
+      break;
+    case 15:
+      minmash();
+      break;
+    case 5:
+      rasst();
+      break;
+    case 16:
+    {
+      if (N_on)
+      {
+        N_on = 0;
+        b51.text = ston;
+      }
+      else
+      {
+        N_on = 1;
+        b51.text = stoff;
+      }
+      menm.draw();
+      if (CURRENTSCALE < 12.0 * SCALEMIN)
+        drawrazd();
+      break;
+    }
+    case 6:
+      whatisit();
+      break;
+    case 7:
+      find_bl();
+      break;
+    case 8:
+      find_st();
+      break;
+    case 9:
+      find_rg();
+      break;
+    case 17:
+      printwnd(0, 0, XMAXMAPE, getmaxy(), 0xaf28, 0x4096);
+      break;
+    case 18:
+      slide();
+      break;
+    case 10:
+      onoff();
+      break;
+    case 11:
+      chmark();
+      break;
+    case 12:
+      whatisitd(0);
+      break;
+    case 13:
+      finddbf();
+      break;
+    case 19:
+      new_dbf();
+      break;
+    case 20:
+      del_dbf();
+      break;
+    case 21:
+      act_dbf();
+      break;
+    case 22:
+      pnt_dbf();
+      break;
+    case 23:
+      red_rec();
+      break;
+    case 24:
+      whatisitd(1);
+      break;
+    case 25:
+      displayHelp();
+      break;
+    }
+  } while (keym != -1);
+}
 
 int CMinskMapApplication::runUI(void)
 {
