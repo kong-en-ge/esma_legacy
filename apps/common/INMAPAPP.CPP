@@ -36,6 +36,11 @@ CInfoMapApplication::CInfoMapApplication(int argc, char *argv[]) :
 {
 }
 
+void CInfoMapApplication::displayHelp(void) const
+{
+  help(getHelpFilename());
+}
+
 int CInfoMapApplication::initializeApplication(void)
 {
   if (farcoreleft() <= 0x18000l)
