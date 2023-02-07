@@ -4,6 +4,8 @@
 
 #include "app.hpp"
 
+extern unsigned _stklen = 10240;
+
 static const char cWorkPathSwitch[] = "/workpath:";
 
 void updateWorkingDirectory(int argc, char *argv[])
