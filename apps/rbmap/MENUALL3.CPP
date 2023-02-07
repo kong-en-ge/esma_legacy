@@ -1,38 +1,19 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-#include <io.h>
-#include <fcntl.h>
-#include <dir.h>
 
-#include "dbf.hpp"
-#include "geomodel.hpp"
-#include "bigpath.hpp"
-#include "tpedit.hpp"
-#include "button.hpp"
 #include "globals.hpp"
-#include "flibrt.hpp"
-#include "textfile.hpp"
-#include "txtpacks.hpp"
-#include "mouse.hpp"
-#include "drawpl.hpp"
 #include "fatr.hpp"
-#include "menuall2.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
 #include "codesel.hpp"
 
-FLIB *findobj(SPR *spr);
-
 #define MAX_CITY_SEARCH 200
+#define MAX_CITYNAME_SIZE 50
 
 struct Bpunct
 {
   int nob, x, y;
 };
 
-#define MAX_CITYNAME_SIZE 50
 
 void find_punct(void)
 {

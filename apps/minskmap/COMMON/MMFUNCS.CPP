@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <dir.h>
 
+#include "mmfuncs.hpp"
 #include "globals.hpp"
 #include "flibrt.hpp"
 #include "txtpacks.hpp"
@@ -56,7 +57,7 @@ void find_rg(void)
     if (!All_Map)
       all();
     setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
-    draw_one_obj(ret, 12);
+    draw_one_obj(ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -74,7 +75,7 @@ void find_rg(void)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(ret, -1);
+      draw_one_obj(ret, -1, 0);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;
@@ -127,7 +128,7 @@ void find_st(void)
              YDISRAZ(spr.xmax), 24);
     }
     setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
-    draw_one_obj(ret, 12);
+    draw_one_obj(ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -144,7 +145,7 @@ void find_st(void)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(ret, -1);
+      draw_one_obj(ret, -1, 0);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;
@@ -237,7 +238,7 @@ int find_bl(char const *st, int bl)
              YDISRAZ(spr.xmax), 64);
       setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
     }
-    draw_one_obj(ret, 12);
+    draw_one_obj(ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -254,7 +255,7 @@ int find_bl(char const *st, int bl)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(ret, -1);
+      draw_one_obj(ret, -1, 0);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;
