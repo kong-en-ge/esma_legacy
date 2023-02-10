@@ -223,8 +223,8 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
                       }
                       else
                       {
-                        xot = (xot + sprot.xmin) / 2;
-                        yot = (yot + sprot.ymin) / 2;
+                        xot = xot / 2 + sprot.xmin / 2;
+                        yot = yot / 2 + sprot.ymin / 2;
                       }
                     }
                   }
@@ -356,8 +356,8 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
                         }
                         else
                         {
-                          xkd = (xkd + sprkd.xmin) / 2;
-                          ykd = (ykd + sprkd.ymin) / 2;
+                          xkd = xkd / 2 + sprkd.xmin / 2;
+                          ykd = ykd / 2 + sprkd.ymin / 2;
                         }
                       }
                     }
