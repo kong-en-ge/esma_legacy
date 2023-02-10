@@ -3,12 +3,16 @@
 
 #include "geomodel.hpp"
 
-GEO_MODEL::~GEO_MODEL()
+GEO_MODEL::GEO_MODEL(void)
+{
+}
+
+GEO_MODEL::~GEO_MODEL(void)
 {
   close();
 }
 
-int GEO_MODEL::close()
+int GEO_MODEL::close(void)
 {
   return hsp.close() & hmt.close() & hhr.close();
 }

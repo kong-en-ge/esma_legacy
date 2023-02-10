@@ -112,11 +112,11 @@ public:
   char path[80], mod[3];
   int maxn;
 
-  GEO_MODEL();
-  ~GEO_MODEL();
+  GEO_MODEL(void);
+  ~GEO_MODEL(void);
   int openexist(const char *name, const char *model, int spbsize = 320,
                 int mtsize = 80, int hrsize = 20, int readonly = 0);
-  int close();
+  int close(void);
   int readform(void *buff);
   int writeform(const void *buff);
   int readsprb(void **sprp, unsigned no); //Читает из буфера файла
