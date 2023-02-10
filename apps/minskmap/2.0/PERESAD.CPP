@@ -218,8 +218,8 @@ int peresad(PERESU *ps, OBSTOP *kuda, int retkd)
                       }
                       else
                       {
-                        xot = (xot + sprot.xmin) / 2;
-                        yot = (yot + sprot.ymin) / 2;
+                        xot = xot / 2 + sprot.xmin / 2;
+                        yot = yot / 2 + sprot.ymin / 2;
                       }
                     }
                   }
