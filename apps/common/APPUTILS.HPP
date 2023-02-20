@@ -4,8 +4,8 @@
 void setWarningMessages(char const *texts[], int count);
 void setErrorMessages(char const *texts[], int count);
 
-void displayError(int code);
-void displayWarning(int code);
+void displayError(int code, char const *text = NULL);
+void displayWarning(int code, char const *text = NULL);
 
 int displaySplashBox(const char * version);
 int confirmExit(void);

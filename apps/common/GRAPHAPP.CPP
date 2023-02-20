@@ -1,11 +1,20 @@
 #include <iostream.h>
+#include <stdlib.h>
 
 #include "graphapp.hpp"
-#include "globals.hpp"
+
+// static member definition
+CGraphicApplication* CGraphicApplication::_instance = NULL;
 
 CGraphicApplication::CGraphicApplication(int argc, char *argv[]) :
   CApplication(argc, argv)
 {
+  _instance = this;
+}
+
+CGraphicApplication::~CGraphicApplication(void)
+{
+  _instance = NULL;
 }
 
 GRwnd* CGraphicApplication::createTitleWindow(void)
@@ -24,7 +33,6 @@ int CGraphicApplication::enterGraphicMode(void)
   if ((gd != EGA) && (gd != VGA))
     gd = VGA;
   _graphicMode = gd;
-  GdEGA = gd == EGA;
 
   initgraph(&gd, &gm, NULL);
   if (graphresult() == grOk)

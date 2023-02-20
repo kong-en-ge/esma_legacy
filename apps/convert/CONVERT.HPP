@@ -23,6 +23,4 @@
 #include "fastmod.hpp"
 #include "atribut.hpp"
 
-void errorproc(int, char const *s = NULL);
-
 #endif

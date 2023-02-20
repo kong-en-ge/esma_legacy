@@ -60,7 +60,6 @@ extern char const * LBSFilename;
 extern int actdbf;
 
 extern CIndexMapImage indexMapImage;
-extern int GdEGA;
 
 // external classifier data
 extern FLIB flibrt[];

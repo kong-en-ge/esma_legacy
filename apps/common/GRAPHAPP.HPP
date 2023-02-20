@@ -8,6 +8,7 @@
 class CGraphicApplication : public CApplication
 {
 private:
+  static CGraphicApplication* _instance;
   int _graphicMode;
 
   int enterGraphicMode(void);
@@ -19,15 +20,23 @@ protected:
   virtual int runUI(void) = 0;
 public:
   CGraphicApplication(int argc, char *argv[]);
+  virtual ~CGraphicApplication(void);
+
   virtual int run(void);
 
   int isModeEGA(void) const;
+
+  static CGraphicApplication* getInstance(void);
 };
+
+inline static CGraphicApplication* CGraphicApplication::getInstance(void)
+{
+  return _instance;
+}
 
 inline int CGraphicApplication::isModeEGA(void) const
 {
   return _graphicMode == EGA;
 }
-
 
 #endif

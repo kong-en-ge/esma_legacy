@@ -24,6 +24,7 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 #include "codesel.hpp"
+#include "graphapp.hpp"
 
 FLIB *findobj(SPR *spr);
 int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst);
@@ -852,7 +853,7 @@ void where_from()
   retot = kl;
   pr = 1;
   setviewport(0, 0, getmaxx(), getmaxy(), 1);
-  if (!GdEGA)
+  if (!CGraphicApplication::getInstance()->isModeEGA())
     drawcram();
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
 
@@ -1352,7 +1353,7 @@ void where()
 ex:
   pr = 0;
   setviewport(0, 0, getmaxx(), getmaxy(), 1);
-  if (!GdEGA)
+  if (!CGraphicApplication::getInstance()->isModeEGA())
     drawcram();
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
   delete[] kuda;

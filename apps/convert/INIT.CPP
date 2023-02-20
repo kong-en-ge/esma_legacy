@@ -1,6 +1,8 @@
 #include <io.h>
 #include <fcntl.h>
+
 #include "convert.hpp"
+#include "apputils.hpp"
 
 FLIB *flibrt;
 unsigned int *flibsort;
@@ -14,7 +16,6 @@ atrname *ATRN;
 unsigned int ATRsize; // число возможных атрибутов
 unsigned int RASsize;
 char *ATCD; // Расшифровка кодовых атрибутов
-char SYSPATH[MAXPATH];
 
 void decode_marker(unsigned int mar[16])
 {
@@ -86,7 +87,7 @@ int read_tbls(char *name, int type)
   }
   if ((handle = open(name, O_BINARY | O_RDONLY)) == -1)
   {
-    errorproc(9, name);
+    displayError(9, name);
     return -1;
   }
   flen = filelength(handle) / size;
@@ -107,7 +108,7 @@ int read_tbls(char *name, int type)
     FLIBsize = --len;
     if (memcmp(flibrt, "ESMA2.00                         ", sizeof(FLIB)))
     {
-      errorproc(9, name);
+      displayError(9, name);
       break;
     }
     memmove(flibrt, flibrt + 1, len * sizeof(FLIB));
@@ -149,7 +150,7 @@ int read_klas(char const *name)
   KLSKP = NULL;
   if (txt.open(name, 10230) == -1)
   {
-    errorproc(9, name);
+    displayError(9, name);
     return -1;
   }
   TEXT_PACK txp(FLIBsize * 35 + 1, FLIBsize + 4);
@@ -158,7 +159,7 @@ int read_klas(char const *name)
     char str[40];
     if (txt.readstr(str, 34) == -1)
     {
-      errorproc(5);
+      displayError(5);
       return -1;
     }
     if (txt.status() == T_EOF)
@@ -173,49 +174,12 @@ int read_klas(char const *name)
 
 int Init()
 {
+  char SYSPATH[MAXPATH];
   //   strcpy(SYSPATH,_argv[0]);
   //   *(strrchr(SYSPATH,'\\')+1)=0;
   SYSPATH[0] = '\\';
   getcurdir(0, SYSPATH + 1);
   strcat(SYSPATH, "\\");
-  int gd, gm;
-  detectgraph(&gd, &gm); // gm=1;
-  if ((gd != EGA) && (gd != VGA))
-    gd = VGA;
-  initgraph(&gd, &gm, NULL);
-  gm = graphresult();
-  if (gm != grOk)
-    return -1;
-  if (gd == VGA)
-  {
-    static unsigned char arr[][4] = {
-        {EGA_BLACK, 0x2A, 0x2A, 0x2A},
-        {EGA_BLUE, 0, 0, 0x2D},
-        {EGA_GREEN, 0x2, 0x2A, 0x2},
-        {EGA_RED, 0x2A, 2, 2},
-        {EGA_BROWN, 0x2A, 0x15, 0},
-        {EGA_LIGHTGRAY, 0x1D, 0x1D, 0x1D},
-        {EGA_DARKGRAY, 0x4, 0x4, 0x4},
-        {EGA_LIGHTBLUE, 0x15, 0x15, 0x3F},
-        {EGA_LIGHTGREEN, 0x2, 0x2A, 0x2},
-        {EGA_LIGHTCYAN, 0x20, 0x3F, 0x3F},
-        {EGA_LIGHTRED, 0x3F, 0x15, 0},
-        {EGA_LIGHTMAGENTA, 0x3F, 0x23, 0x16},
-        {EGA_YELLOW, 0x3A, 0x3A, 0x13},
-        {EGA_WHITE, 0, 0, 0}};
-    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
-      setrgbpalette(arr[i][0], arr[i][1], arr[i][2], arr[i][3]);
-  }
-  else
-  {
-    setpalette(15, 0);
-    setpalette(0, 55);
-    setpalette(1, 25);
-    setpalette(2, 34);
-    setpalette(3, 35);
-    setpalette(4, 36);
-    setpalette(6, 38);
-  }
   setfillstyle(1, BLACK);
   bar(0, 0, getmaxx(), getmaxy());
   setcolor(BLACK);
@@ -227,7 +191,7 @@ int Init()
   mouse_show(ON);
   if (farcoreleft() <= 0x20000l)
   {
-    errorproc(7);
+    displayError(7);
     return -1;
   }
   char path[MAXPATH];
