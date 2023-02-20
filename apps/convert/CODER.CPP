@@ -1,5 +1,7 @@
 #include <io.h>
+
 #include "convert.hpp"
+#include "apputils.hpp"
 
 struct esort
 {
@@ -50,30 +52,6 @@ int FLIBcmp(const void *i1, const void *i2)
   return strncmp(c1, c2, 9);
 }
 
-void errorproc(int num, char const *txt)
-{
-  char *err[] = {"Ошибка открытия исходной геобазы",     // 0
-                 "Ошибка чтения исходной геобазы",       // 1
-                 "Ошибка записи выходной геобазы",       // 2
-                 "Ошибка закрытия выходной геобазы",     // 3
-                 "Нет памяти для работы программы",      // 4
-                 "Перегонка модели завершилась успешно", // 5
-                 "Объект вне классификатора",
-                 "Атрибут вне классификатора",          // 7
-                 "Кодовый атрибут вне классификатора",  // 8
-                 "Ошибка чтения файлов классификатора", // 9
-                 "Числовой атрибут не число"};
-  char s[100];
-  GRwnd wnd(170, 130, 470, 210, "Внимание!", RED, 1, 1);
-  button but1(275, 185, 345, 201, -1, "Выход");
-  wnd.text(err[num]);
-  if (txt != NULL)
-    wnd.text(txt);
-  Menu_but menu;
-  menu + &but1;
-  menu.menu_key();
-}
-
 int findobjn(SPR *spr)
 {
   _spr = spr;
@@ -103,7 +81,7 @@ int write_metharfast(int *metr, METHARFAST *m)
   {
     if (write(m->hmt, m->mtbuf, (m->nmtr & 0xff00) * 2) == -1)
     {
-      errorproc(1);
+      displayError(1);
       return -1;
     }
 
@@ -151,7 +129,7 @@ void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf)
           case 'N':
             z = strtod(mk.zna, &ch);
             if (*ch != 0)
-              errorproc(10, str);
+              displayError(10, str);
             len = 4;
             memmove(buff + s + 2, &z, 4);
             break;
@@ -171,7 +149,7 @@ void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf)
               ch += strlen(ch) + 1;
             }
             if (len == 0)
-              errorproc(8, str);
+              displayError(8, str);
             break;
           }
           buff[s] = i;
@@ -180,7 +158,7 @@ void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf)
           break;
         }
       if (i == ATRsize)
-        errorproc(7, str);
+        displayError(7, str);
     }
   } while (ret == 0);
   if (s > 8)
@@ -192,7 +170,7 @@ void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf)
     buff[ls + 1] |= 0x80;
     if (write_metharfast((int *)buff, &mhf) != 0)
     {
-      errorproc(2);
+      displayError(2);
       return;
     }
 
@@ -219,7 +197,7 @@ int coder(char const *path, char const *mod)
   char patht[80];
   if (model.openexist(path, mod) != 0)
   {
-    errorproc(0);
+    displayError(0);
     return -1;
   }
   sprintf(pth, "%s.ASM", path);
@@ -229,7 +207,7 @@ int coder(char const *path, char const *mod)
      << "_models\tlabel byte\n";
   if (model.readform(&orgForm) != 0)
   {
-    errorproc(1);
+    displayError(1);
     return -1;
   }
   unsigned maxn = model.maxn, n = 0;
@@ -240,7 +218,7 @@ int coder(char const *path, char const *mod)
   esbase = (esort *)farmalloc((unsigned long)maxn * sizeof(esort));
   if (esbase == NULL)
   {
-    errorproc(4);
+    displayError(4);
     return -1;
   }
   es = esbase;
@@ -265,7 +243,7 @@ int coder(char const *path, char const *mod)
   fsbase = new F_SPR[400];
   if (fsbase == NULL)
   {
-    errorproc(4);
+    displayError(4);
     return -1;
   }
 
@@ -273,27 +251,27 @@ int coder(char const *path, char const *mod)
   sprintf(patht, "%s.c%s", path, mod);
   if ((hsp = _creat(patht, FA_ARCH)) == -1)
   {
-    errorproc(2);
+    displayError(2);
     return -1;
   }
 
   if (write(hsp, fsbase, sizeof(F_FORM)) == -1)
   {
-    errorproc(2);
+    displayError(2);
     return -1;
   }
 
   mhf.mtbuf = new int[100 * 256];
   if (mhf.mtbuf == NULL)
   {
-    errorproc(4);
+    displayError(4);
     return -1;
   }
 
   sprintf(patht, "%s.d%s", path, mod);
   if ((mhf.hmt = _creat(patht, FA_ARCH)) == -1)
   {
-    errorproc(2);
+    displayError(2);
     return -1;
   }
 
@@ -306,7 +284,7 @@ int coder(char const *path, char const *mod)
   {
     if (model.readspr(&spr, es->Num) != 0)
     {
-      errorproc(1);
+      displayError(1);
       return -1;
     }
 
@@ -329,14 +307,14 @@ int coder(char const *path, char const *mod)
     }
     if (model.readmets((void **)&metr, &spr) != 0)
     {
-      errorproc(1);
+      displayError(1);
       return -1;
     }
 
     metr[3] = i;
     if (write_metharfast(metr, &mhf) != 0)
     {
-      errorproc(2);
+      displayError(2);
       return -1;
     }
 
@@ -357,7 +335,7 @@ int coder(char const *path, char const *mod)
         metr[k + 4] = 0xc018;
         if (write_metharfast(metr, &mhf) != 0)
         {
-          errorproc(2);
+          displayError(2);
           return -1;
         }
 
@@ -368,7 +346,7 @@ int coder(char const *path, char const *mod)
     {
       if (write(hsp, fsbase, 400 * sizeof(F_SPR)) == -1)
       {
-        errorproc(2);
+        displayError(2);
         return -1;
       }
       fs = fsbase;
@@ -379,13 +357,13 @@ int coder(char const *path, char const *mod)
   }
   if (write(hsp, fsbase, (n % 400) * sizeof(F_SPR)) == -1)
   {
-    errorproc(2);
+    displayError(2);
     return -1;
   }
 
   if (lseek(hsp, sizeof(F_FORM), SEEK_SET) == -1)
   {
-    errorproc(2);
+    displayError(2);
     return -1;
   }
 
@@ -398,7 +376,7 @@ int coder(char const *path, char const *mod)
     {
       if (read(hsp, fsbase, 400 * sizeof(F_SPR)) == -1)
       {
-        errorproc(2);
+        displayError(2);
         return -1;
       }
 
@@ -406,13 +384,13 @@ int coder(char const *path, char const *mod)
       if (lseek(hsp, (unsigned long)(i) * sizeof(F_SPR) + sizeof(F_FORM),
                 SEEK_SET) == -1)
       {
-        errorproc(2);
+        displayError(2);
         return -1;
       }
     }
     if (model.readspr(&spr, es->Num) != 0)
     {
-      errorproc(1);
+      displayError(1);
       return -1;
     }
 
@@ -433,19 +411,19 @@ int coder(char const *path, char const *mod)
     {
       if (write(hsp, fsbase, 400 * sizeof(F_SPR)) == -1)
       {
-        errorproc(2);
+        displayError(2);
         return -1;
       }
     }
   }
   if (write(hsp, fsbase, (n % 400) * sizeof(F_SPR)) == -1)
   {
-    errorproc(2);
+    displayError(2);
     return -1;
   }
   if (lseek(hsp, 0, SEEK_SET) == -1)
   {
-    errorproc(2);
+    displayError(2);
     return -1;
   }
   fr.maxn = n;
@@ -455,30 +433,30 @@ int coder(char const *path, char const *mod)
   fr.ymax = model.ymaxm;
   if (write(hsp, &fr, sizeof(F_FORM)) == -1)
   {
-    errorproc(2);
+    displayError(2);
     return -1;
   }
   if (close(hsp) == -1)
   {
-    errorproc(3);
+    displayError(3);
     return -1;
   }
   *(mhf.mtbuf + mhf.nmtr) = 0xc018;
   *(mhf.mtbuf + mhf.nmtr + 1) = 0xc018;
   if (write(mhf.hmt, mhf.mtbuf, (mhf.nmtr & 0xff00) * 2 + 512) == -1)
   {
-    errorproc(1);
+    displayError(1);
     return -1;
   }
   if (close(mhf.hmt) == -1)
   {
-    errorproc(3);
+    displayError(3);
     return -1;
   }
   delete mhf.mtbuf;
   farfree(esbase);
   delete fsbase;
   of.close();
-  errorproc(5);
+  displayError(5);
   return 0;
 }

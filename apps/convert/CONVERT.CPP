@@ -3,10 +3,11 @@
 #include <string.h>
 
 #include "graphics.h"
-#include "app.hpp"
+#include "graphapp.hpp"
 #include "convert.hpp"
 #include "flibrt.hpp"
 #include "gdata.hpp"
+#include "apputils.hpp"
 
 int Init();
 
@@ -154,20 +155,45 @@ void asm_file()
   of.close();
 }
 
-class CConverterApplication : public CApplication
+const char *errorMessages[] =
 {
+  "Ошибка открытия исходной геобазы",     // 0
+  "Ошибка чтения исходной геобазы",       // 1
+  "Ошибка записи выходной геобазы",       // 2
+  "Ошибка закрытия выходной геобазы",     // 3
+  "Нет памяти для работы программы",      // 4
+  "Перегонка модели завершилась успешно", // 5
+  "Объект вне классификатора",
+  "Атрибут вне классификатора",          // 7
+  "Кодовый атрибут вне классификатора",  // 8
+  "Ошибка чтения файлов классификатора", // 9
+  "Числовой атрибут не число"
+};
+
+class CConverterApplication : public CGraphicApplication
+{
+protected:
+  virtual char const * getVersion(void) const;
 public:
   CConverterApplication(int argc, char *argv[]);
 
-  virtual int run(void);
+  virtual int runUI(void);
 };
 
-CConverterApplication::CConverterApplication(int argc, char *argv[]) : CApplication(argc, argv)
+CConverterApplication::CConverterApplication(int argc, char *argv[]) :
+  CGraphicApplication(argc, argv)
 {
 }
 
-int CConverterApplication::run(void)
+char const * CConverterApplication::getVersion(void) const
 {
+  return "Fast Converter";
+}
+
+int CConverterApplication::runUI(void)
+{
+  setErrorMessages(errorMessages, sizeof(errorMessages) / sizeof(errorMessages[0]));
+
   int ret = Init();
   if (ret == -1)
     return -1;
@@ -197,7 +223,6 @@ int CConverterApplication::run(void)
       asm_file();
     }
   } while (ret != -1);
-  closegraph();
   return 0;
 }
 

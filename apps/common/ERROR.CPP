@@ -29,7 +29,7 @@ private:
 public:
  CMessageKeeper();
 
- void displayMessage(int code, MESSAGE_MODE mode) const;
+ void displayMessage(int code, MESSAGE_MODE mode, char const *text) const;
  void setMessages(char const *texts[], int count);
 };
 
@@ -52,12 +52,16 @@ void CMessageKeeper::setMessages(char const *texts[], int count)
   _count = count;
 }
 
-void CMessageKeeper::displayMessage(int code, MESSAGE_MODE mode) const
+void CMessageKeeper::displayMessage(int code, MESSAGE_MODE mode, char const *text) const
 {
-  GRwnd wnd(170, 100, 450, 180, windowTitles[mode], windowColors[mode], 1, 1);
-  button bt1(275, 155, 345, 171, -1, "Выход");
+  int delta = (text != NULL) ? 30 : 0;
+
+  GRwnd wnd(170, 100, 450, 180 + delta, windowTitles[mode], windowColors[mode], 1, 1);
+  button bt1(275, 155 + delta, 345, 171 + delta, -1, "Выход");
   wnd.text("");
   wnd.text(getMessage(code));
+  if (text != NULL)
+    wnd.text(text);
   Menu_but menu;
   menu + &bt1;
   menu.menu_key();
@@ -75,13 +79,13 @@ void setErrorMessages(char const *texts[], int count)
   gErrors.setMessages(texts, count);
 }
 
-void displayError(int code)
+void displayError(int code, char const *text)
 {
-  gErrors.displayMessage(code, mmError);
+  gErrors.displayMessage(code, mmError, text);
 }
 
-void displayWarning(int code)
+void displayWarning(int code, char const *text)
 {
-  gWarnings.displayMessage(code, mmWarning);
+  gWarnings.displayMessage(code, mmWarning, text);
 }
 

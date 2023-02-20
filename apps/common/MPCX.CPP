@@ -10,6 +10,7 @@
 #include "apputils.hpp"
 #include "globals.hpp"
 #include "grwnd.hpp"
+#include "graphapp.hpp"
 
 struct PCXheader
 {
@@ -64,7 +65,7 @@ void codepalette(PCXheader *h)
   getpalette(&a);
   for (i = 0; i < 16; i++)
   {
-    if (!GdEGA)
+    if (!CGraphicApplication::getInstance()->isModeEGA())
       getpalettereg(a.colors[i], h->palette + i * 3, h->reserved2 + i * 3 + 4);
     else
       for (j = 0; j < 3; j++)
@@ -177,7 +178,7 @@ int pcx_d_f(char *filename, int xleft, int ytop, int xright, int ybot)
   head.bytesline = (head.xh + 7) / 8;
   head.paletteinfo = 1;
   codepalette(&head);
-  if (GdEGA)
+  if (CGraphicApplication::getInstance()->isModeEGA())
   {
     struct palettetype pt;
     getpalette(&pt);

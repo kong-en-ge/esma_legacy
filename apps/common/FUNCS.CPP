@@ -19,6 +19,7 @@
 #include "fatr.hpp"
 #include "textfile.hpp"
 #include "dbffunc.hpp"
+#include "graphapp.hpp"
 
 const unsigned mscur[] = {
     0xffff, 0xffff, 0xffff, 0xfc1f, 0xf3e7, 0xf777, 0xee3b, 0xec9b,
@@ -869,7 +870,7 @@ int drawrazd(void)
 l1:
   mouse_show(ON);
   setviewport(0, 0, getmaxx(), getmaxy(), 1);
-  if (!GdEGA)
+  if (!CGraphicApplication::getInstance()->isModeEGA())
     drawcram();
   FULL_MAP = 0;
 #ifdef DEMO
