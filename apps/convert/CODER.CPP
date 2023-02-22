@@ -1,7 +1,7 @@
 #include <io.h>
 
 #include "convert.hpp"
-#include "apputils.hpp"
+#include "errhand.hpp"
 
 struct esort
 {
@@ -69,7 +69,7 @@ struct METHARFAST
   unsigned char sts;
 };
 
-int write_metharfast(int *metr, METHARFAST *m)
+int write_metharfast(int *metr, METHARFAST *m, CErrorHandler* onError)
 {
   metr += 2;
   metr[0] = 0xc018;
@@ -81,7 +81,7 @@ int write_metharfast(int *metr, METHARFAST *m)
   {
     if (write(m->hmt, m->mtbuf, (m->nmtr & 0xff00) * 2) == -1)
     {
-      displayError(1);
+      handleError(onError, 1);
       return -1;
     }
 
@@ -96,7 +96,8 @@ int write_metharfast(int *metr, METHARFAST *m)
   return 0;
 }
 
-void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf)
+void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf,
+  CErrorHandler* onError)
 {
   char buff[512], str[40];
   mk_atr mk;
@@ -129,7 +130,7 @@ void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf)
           case 'N':
             z = strtod(mk.zna, &ch);
             if (*ch != 0)
-              displayError(10, str);
+              handleError(onError, 10, str);
             len = 4;
             memmove(buff + s + 2, &z, 4);
             break;
@@ -149,7 +150,7 @@ void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf)
               ch += strlen(ch) + 1;
             }
             if (len == 0)
-              displayError(8, str);
+              handleError(onError, 8, str);
             break;
           }
           buff[s] = i;
@@ -158,7 +159,7 @@ void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf)
           break;
         }
       if (i == ATRsize)
-        displayError(7, str);
+        handleError(onError, 7, str);
     }
   } while (ret == 0);
   if (s > 8)
@@ -168,9 +169,9 @@ void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf)
     s = (s + 1) & 0xfe;
     *(int *)(buff + s) = 0xC018;
     buff[ls + 1] |= 0x80;
-    if (write_metharfast((int *)buff, &mhf) != 0)
+    if (write_metharfast((int *)buff, &mhf, onError) != 0)
     {
-      displayError(2);
+      handleError(onError, 2);
       return;
     }
 
@@ -180,7 +181,7 @@ void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf)
   }
 }
 
-int coder(char const *path, char const *mod)
+int coder(char const *path, char const *mod, CErrorHandler* onError)
 {
   char pth[80];
   int _st, _nk;
@@ -197,7 +198,7 @@ int coder(char const *path, char const *mod)
   char patht[80];
   if (model.openexist(path, mod) != 0)
   {
-    displayError(0);
+    handleError(onError, 0);
     return -1;
   }
   sprintf(pth, "%s.ASM", path);
@@ -207,7 +208,7 @@ int coder(char const *path, char const *mod)
      << "_models\tlabel byte\n";
   if (model.readform(&orgForm) != 0)
   {
-    displayError(1);
+    handleError(onError, 1);
     return -1;
   }
   unsigned maxn = model.maxn, n = 0;
@@ -218,7 +219,7 @@ int coder(char const *path, char const *mod)
   esbase = (esort *)farmalloc((unsigned long)maxn * sizeof(esort));
   if (esbase == NULL)
   {
-    displayError(4);
+    handleError(onError, 4);
     return -1;
   }
   es = esbase;
@@ -243,7 +244,7 @@ int coder(char const *path, char const *mod)
   fsbase = new F_SPR[400];
   if (fsbase == NULL)
   {
-    displayError(4);
+    handleError(onError, 4);
     return -1;
   }
 
@@ -251,27 +252,27 @@ int coder(char const *path, char const *mod)
   sprintf(patht, "%s.c%s", path, mod);
   if ((hsp = _creat(patht, FA_ARCH)) == -1)
   {
-    displayError(2);
+    handleError(onError, 2);
     return -1;
   }
 
   if (write(hsp, fsbase, sizeof(F_FORM)) == -1)
   {
-    displayError(2);
+    handleError(onError, 2);
     return -1;
   }
 
   mhf.mtbuf = new int[100 * 256];
   if (mhf.mtbuf == NULL)
   {
-    displayError(4);
+    handleError(onError, 4);
     return -1;
   }
 
   sprintf(patht, "%s.d%s", path, mod);
   if ((mhf.hmt = _creat(patht, FA_ARCH)) == -1)
   {
-    displayError(2);
+    handleError(onError, 2);
     return -1;
   }
 
@@ -284,7 +285,7 @@ int coder(char const *path, char const *mod)
   {
     if (model.readspr(&spr, es->Num) != 0)
     {
-      displayError(1);
+      handleError(onError, 1);
       return -1;
     }
 
@@ -307,14 +308,14 @@ int coder(char const *path, char const *mod)
     }
     if (model.readmets((void **)&metr, &spr) != 0)
     {
-      displayError(1);
+      handleError(onError, 1);
       return -1;
     }
 
     metr[3] = i;
-    if (write_metharfast(metr, &mhf) != 0)
+    if (write_metharfast(metr, &mhf, onError) != 0)
     {
-      displayError(2);
+      handleError(onError, 2);
       return -1;
     }
 
@@ -333,9 +334,9 @@ int coder(char const *path, char const *mod)
         metr[3] = i;
         int k = ((strlen(str + 8) + 4) & 0xfffc) / 2;
         metr[k + 4] = 0xc018;
-        if (write_metharfast(metr, &mhf) != 0)
+        if (write_metharfast(metr, &mhf, onError) != 0)
         {
-          displayError(2);
+          handleError(onError, 2);
           return -1;
         }
 
@@ -346,7 +347,7 @@ int coder(char const *path, char const *mod)
     {
       if (write(hsp, fsbase, 400 * sizeof(F_SPR)) == -1)
       {
-        displayError(2);
+        handleError(onError, 1);
         return -1;
       }
       fs = fsbase;
@@ -357,13 +358,13 @@ int coder(char const *path, char const *mod)
   }
   if (write(hsp, fsbase, (n % 400) * sizeof(F_SPR)) == -1)
   {
-    displayError(2);
+    handleError(onError, 2);
     return -1;
   }
 
   if (lseek(hsp, sizeof(F_FORM), SEEK_SET) == -1)
   {
-    displayError(2);
+    handleError(onError, 2);
     return -1;
   }
 
@@ -376,7 +377,7 @@ int coder(char const *path, char const *mod)
     {
       if (read(hsp, fsbase, 400 * sizeof(F_SPR)) == -1)
       {
-        displayError(2);
+        handleError(onError, 2);
         return -1;
       }
 
@@ -384,13 +385,13 @@ int coder(char const *path, char const *mod)
       if (lseek(hsp, (unsigned long)(i) * sizeof(F_SPR) + sizeof(F_FORM),
                 SEEK_SET) == -1)
       {
-        displayError(2);
+        handleError(onError, 2);
         return -1;
       }
     }
     if (model.readspr(&spr, es->Num) != 0)
     {
-      displayError(1);
+      handleError(onError, 1);
       return -1;
     }
 
@@ -398,7 +399,7 @@ int coder(char const *path, char const *mod)
     {
       if (model.readhars((void **)&metr, &spr) == 0)
       {
-        make_fast_atrib(fs, i, (char *)metr, mhf);
+        make_fast_atrib(fs, i, (char *)metr, mhf, onError);
         if (har == 0)
         {
           fr.sbh = mhf.stm;
@@ -411,19 +412,19 @@ int coder(char const *path, char const *mod)
     {
       if (write(hsp, fsbase, 400 * sizeof(F_SPR)) == -1)
       {
-        displayError(2);
+        handleError(onError, 2);
         return -1;
       }
     }
   }
   if (write(hsp, fsbase, (n % 400) * sizeof(F_SPR)) == -1)
   {
-    displayError(2);
+    handleError(onError, 2);
     return -1;
   }
   if (lseek(hsp, 0, SEEK_SET) == -1)
   {
-    displayError(2);
+    handleError(onError, 2);
     return -1;
   }
   fr.maxn = n;
@@ -433,30 +434,30 @@ int coder(char const *path, char const *mod)
   fr.ymax = model.ymaxm;
   if (write(hsp, &fr, sizeof(F_FORM)) == -1)
   {
-    displayError(2);
+    handleError(onError, 2);
     return -1;
   }
   if (close(hsp) == -1)
   {
-    displayError(3);
+    handleError(onError, 3);
     return -1;
   }
   *(mhf.mtbuf + mhf.nmtr) = 0xc018;
   *(mhf.mtbuf + mhf.nmtr + 1) = 0xc018;
   if (write(mhf.hmt, mhf.mtbuf, (mhf.nmtr & 0xff00) * 2 + 512) == -1)
   {
-    displayError(1);
+    handleError(onError, 1);
     return -1;
   }
   if (close(mhf.hmt) == -1)
   {
-    displayError(3);
+    handleError(onError, 3);
     return -1;
   }
   delete mhf.mtbuf;
   farfree(esbase);
   delete fsbase;
   of.close();
-  displayError(5);
+  handleError(onError, 5);
   return 0;
 }
