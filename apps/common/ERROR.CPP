@@ -82,7 +82,7 @@ void setErrorMessages(char const *texts[], int count)
 void displayError(int code, char const *text)
 {
   gErrors.displayMessage(code, mmError, text);
-}
+                                                                }
 
 void displayWarning(int code, char const *text)
 {

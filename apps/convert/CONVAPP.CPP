@@ -1,14 +1,16 @@
+#include <alloc.h>
 #include <string.h>
+#include <dir.h>
 
 #include "convapp.hpp"
+#include "mouse.hpp"
 #include "button.hpp"
 #include "bigpath.hpp"
 #include "apputils.hpp"
 
-int Init();
-
-int coder(char const *, char const *);
+int coder(char const *, char const *, CErrorHandler*);
 void convertClassifier(void);
+int loadClassifier(char const *, CErrorHandler*);
 
 const char *errorMessages[] =
 {
@@ -25,9 +27,49 @@ const char *errorMessages[] =
   "Числовой атрибут не число"
 };
 
+void errorHandler(void* /*context*/, int code, char const* message)
+{
+  displayError(code, message);
+}
+
+int Init(CErrorHandler* onError)
+{
+  setfillstyle(1, BLACK);
+  bar(0, 0, getmaxx(), getmaxy());
+  setcolor(BLACK);
+  init_mouse();
+  asm mov ax, 0xf
+  asm mov cx, 10
+  asm mov dx, 8
+  asm int 0x33
+  mouse_show(ON);
+  if (farcoreleft() <= 0x20000l)
+  {
+    handleError(onError, 7);
+    return -1;
+  }
+
+  char path[MAXPATH];
+  path[0] = '\\';
+  getcurdir(0, path + 1);
+  strcat(path, "\\");
+
+  return loadClassifier(path, onError);
+}
+
+/*************************
+ * CConverterApplication *
+ *************************/
+
 CConverterApplication::CConverterApplication(int argc, char *argv[]) :
   CGraphicApplication(argc, argv)
 {
+  onError = new CErrorHandler(errorHandler);
+}
+
+CConverterApplication::~CConverterApplication(void)
+{
+  delete onError;
 }
 
 void CConverterApplication::convertMapData(void)
@@ -39,7 +81,7 @@ void CConverterApplication::convertMapData(void)
     mn.restore(BLACK);
     char *t = strchr(mn.path, '.');
     *t = 0;
-    coder(mn.path, t + 1);
+    coder(mn.path, t + 1, getErrorHandler());
   }
 }
 
@@ -52,7 +94,7 @@ int CConverterApplication::runUI(void)
 {
   setErrorMessages(errorMessages, sizeof(errorMessages) / sizeof(errorMessages[0]));
 
-  int ret = Init();
+  int ret = Init(getErrorHandler());
   if (ret)
     return -1;
 
