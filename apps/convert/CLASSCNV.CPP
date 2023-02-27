@@ -7,10 +7,10 @@
 #include "graphics.h"
 #include "flibrt.hpp"
 
-void convertClassifier(void)
+void convertClassifier(char const* filename)
 {
   char path[MAXPATH];
-  ofstream of("flib_txt.asm");
+  ofstream of(filename);
   of << "\t.MODEL LARGE\n"
      << "FLIB struc\n"
      << " KLCOD  DB 8 DUP(' ')\n"
