@@ -9,7 +9,7 @@
 #include "apputils.hpp"
 
 int coder(char const *, char const *, CErrorHandler*);
-void convertClassifier(void);
+void convertClassifier(char const *);
 int loadClassifier(char const *, CErrorHandler*);
 
 const char *errorMessages[] =
@@ -112,7 +112,7 @@ int CConverterApplication::runUI(void)
       break;
 
     case 1:
-      convertClassifier();
+      convertClassifier("flib_txt.asm");
       break;
 
     }
