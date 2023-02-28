@@ -1,7 +1,10 @@
 #include <alloc.h>
 #include <string.h>
 #include <dir.h>
+#include <stdio.h>
+#include <iostream.h>
 
+#include "utils.hpp"
 #include "convapp.hpp"
 #include "mouse.hpp"
 #include "button.hpp"
@@ -30,6 +33,11 @@ const char *errorMessages[] =
 void errorHandler(void* /*context*/, int code, char const* message)
 {
   displayError(code, message);
+}
+
+void errorHandlerC(void* /*context*/, int code, char const* message)
+{
+  cout << "ERR" << code << ":" << message << endl;
 }
 
 int Init(CErrorHandler* onError)
@@ -122,9 +130,85 @@ int CConverterApplication::runUI(void)
   return 0;
 }
 
+/********************************
+ * CConverterConsoleApplication *
+ ********************************/
+
+CConverterConsoleApplication::CConverterConsoleApplication(int argc, char *argv[]) :
+  CApplication(argc, argv)
+{
+  _argc = argc;
+  _argv = argv;
+  onError = new CErrorHandler(errorHandler);
+}
+
+CConverterConsoleApplication::~CConverterConsoleApplication(void)
+{
+  delete onError;
+}
+
+void CConverterConsoleApplication::convertClassifier(void)
+{
+  char filename[MAXPATH];
+  if (!findCommandLineParam("oc", filename))
+    return;
+
+  if (strlen(filename) == 0)
+    strcpy(filename, "flib_txt.asm");
+
+  ::convertClassifier(filename);
+}
+
+void CConverterConsoleApplication::convertMapData(void)
+{
+  char filename[MAXPATH];
+  if (!findCommandLineParam("source", filename))
+    return;
+
+  if (strlen(filename) == 0)
+    strcpy(filename, "map");
+
+  coder(filename, "00", getErrorHandler());
+}
+
+int CConverterConsoleApplication::findCommandLineParam(
+  char const* param, char* value) const
+{
+  return ::findCommandLineParam(_argc, _argv, param, value);
+}
+
+int CConverterConsoleApplication::loadClassifier(void)
+{
+  char path[MAXPATH];
+  if (!findCommandLineParam("classifier", path))
+  {
+    path[0] = '\\';
+    getcurdir(0, path + 1);
+    strcat(path, "\\");
+  }
+
+  return ::loadClassifier(path, getErrorHandler());
+}
+
+int CConverterConsoleApplication::run(void)
+{
+  if (!loadClassifier())
+  {
+    cout << "Classifier has been loaded" << endl;
+    convertClassifier();
+    convertMapData();
+  }
+  return 0;
+}
+
 int main(int argc, char *argv[])
 {
-  CApplication *app = new CConverterApplication(argc, argv);
+  CApplication *app;
+  if (!findCommandLineParam(argc, argv, "console"))
+    app = new CConverterApplication(argc, argv);
+  else
+    app = new CConverterConsoleApplication(argc, argv);
+
   int retValue = app->run();
   delete app;
   return retValue;
