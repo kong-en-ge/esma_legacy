@@ -20,6 +20,22 @@ public:
   virtual int runUI(void);
 };
 
+class CConverterConsoleApplication : public CApplication
+{
+private:
+  int _argc;
+  char **_argv;
+
+  int loadClassifier(void);
+  void convertClassifier(void);
+protected:
+  int findCommandLineParam(char const* param, char* value = NULL) const;
+public:
+  CConverterConsoleApplication(int argc, char *argv[]);
+
+  virtual int run(void);
+};
+
 inline CErrorHandler* CConverterApplication::getErrorHandler(void) const
 {
   return onError;

@@ -1,6 +1,8 @@
 #include <alloc.h>
 #include <string.h>
 #include <dir.h>
+#include <stdio.h>
+#include <iostream.h>
 
 #include "convapp.hpp"
 #include "mouse.hpp"
@@ -32,6 +34,11 @@ void errorHandler(void* /*context*/, int code, char const* message)
   displayError(code, message);
 }
 
+void errorHandlerC(void* /*context*/, int code, char const* message)
+{
+  cout << "ERR" << code << ":" << message << endl;
+}
+
 int Init(CErrorHandler* onError)
 {
   setfillstyle(1, BLACK);
@@ -55,6 +62,36 @@ int Init(CErrorHandler* onError)
   strcat(path, "\\");
 
   return loadClassifier(path, onError);
+}
+
+int findCommandLineParam(int argc, char *argv[], char const* param, char* value = NULL)
+{
+  char const* arg;
+  int paramLen = strlen(param);
+
+  for (int i = 1; i < argc; i++)
+  {
+    arg = argv[i];
+
+    if (*arg != '/' && *arg != '-')
+      continue;
+
+    if (strncmpi(arg + 1, param, paramLen))
+      continue;
+
+    if (arg[paramLen + 1] != 0)
+    {
+      if (arg[paramLen + 1] != ':')
+        continue;
+
+      if (value != NULL)
+        strcpy(value, arg + paramLen + 2);
+    }
+
+    return 1;
+  }
+
+  return 0;
 }
 
 /*************************
@@ -122,9 +159,68 @@ int CConverterApplication::runUI(void)
   return 0;
 }
 
+/********************************
+ * CConverterConsoleApplication *
+ ********************************/
+
+CConverterConsoleApplication::CConverterConsoleApplication(int argc, char *argv[]) :
+  CApplication(argc, argv)
+{
+  _argc = argc;
+  _argv = argv;
+}
+
+void CConverterConsoleApplication::convertClassifier(void)
+{
+  char filename[MAXPATH];
+  if (!findCommandLineParam("oc", filename))
+    return;
+
+  if (strlen(filename) == 0)
+    strcpy(filename, "flib_txt.asm");
+
+  ::convertClassifier(filename);
+}
+
+int CConverterConsoleApplication::findCommandLineParam(
+  char const* param, char* value) const
+{
+  return ::findCommandLineParam(_argc, _argv, param, value);
+}
+
+int CConverterConsoleApplication::loadClassifier(void)
+{
+  char path[MAXPATH];
+  if (!findCommandLineParam("classifier", path))
+  {
+    path[0] = '\\';
+    getcurdir(0, path + 1);
+    strcat(path, "\\");
+  }
+
+  CErrorHandler onError(errorHandlerC);
+
+  return ::loadClassifier(path, &onError);
+}
+
+int CConverterConsoleApplication::run(void)
+{
+  if (!loadClassifier())
+  {
+    cout << "Classifier has been loaded" << endl;
+    convertClassifier();
+  }
+  return 0;
+}
+
 int main(int argc, char *argv[])
 {
-  CApplication *app = new CConverterApplication(argc, argv);
+  CApplication *app;
+  if (!findCommandLineParam(argc, argv, "console"))
+    app = new CConverterApplication(argc, argv);
+  else
+    app = new CConverterConsoleApplication(argc, argv);
+
   int retValue = app->run();
   delete app;
   return retValue;
