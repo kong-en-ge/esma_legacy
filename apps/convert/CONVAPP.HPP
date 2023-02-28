@@ -25,18 +25,27 @@ class CConverterConsoleApplication : public CApplication
 private:
   int _argc;
   char **_argv;
+  CErrorHandler* onError;
 
   int loadClassifier(void);
   void convertClassifier(void);
+  void convertMapData(void);
+  CErrorHandler* getErrorHandler(void) const;
 protected:
   int findCommandLineParam(char const* param, char* value = NULL) const;
 public:
   CConverterConsoleApplication(int argc, char *argv[]);
+  virtual ~CConverterConsoleApplication(void);
 
   virtual int run(void);
 };
 
 inline CErrorHandler* CConverterApplication::getErrorHandler(void) const
+{
+  return onError;
+}
+
+inline CErrorHandler* CConverterConsoleApplication::getErrorHandler(void) const
 {
   return onError;
 }

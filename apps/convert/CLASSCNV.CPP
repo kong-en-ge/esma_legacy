@@ -9,7 +9,7 @@
 
 void convertClassifier(char const* filename)
 {
-  char path[MAXPATH];
+  char outputLine[100];
   ofstream of(filename);
   of << "\t.MODEL LARGE\n"
      << "FLIB struc\n"
@@ -29,10 +29,10 @@ void convertClassifier(char const* filename)
      << "_flibrt label byte\n";
   for (int i = 0; i < FLIBsize; i++)
   {
-    sprintf(path, "FLIB <'%.8s',%d,%d,%d,%d,%d,%d,%d>  ;%d\nDB   ",
+    sprintf(outputLine, "FLIB <'%.8s',%d,%d,%d,%d,%d,%d,%d>  ;%d\nDB   ",
             flibrt[i].clcod, flibrt[i].loc, flibrt[i].pr, flibrt[i].color,
             flibrt[i].colorg, flibrt[i].num, flibrt[i].minw, flibrt[i].maxw, i);
-    of << path;
+    of << outputLine;
     unsigned d;
     for (int j = 0; j < 16; j++)
     {
@@ -40,7 +40,7 @@ void convertClassifier(char const* filename)
       if (j != 15)
         of << ',';
     }
-    of << "\n";
+    of << endl;
   }
   of << "flibrtend label byte\n_flibsort label word";
   for (i = 0; i < FLIBsize; i++)
@@ -81,7 +81,7 @@ void convertClassifier(char const* filename)
       if (j != 15)
         of << ',';
     }
-    of << "\n";
+    of << endl;
   }
   of << "rasend label byte\n";
   of << "_fliblin label byte\n";
@@ -94,7 +94,7 @@ void convertClassifier(char const* filename)
       if (j != 4)
         of << ',';
     }
-    of << "\n";
+    of << endl;
   }
   of << "linend label byte\n"
      << "\t.FARDATA\n"
@@ -125,26 +125,30 @@ void convertClassifier(char const* filename)
          << "at" << i << '_' << j << "\t-_ATCD\n";
     }
   }
-  of << "_ATRN label byte\n";
+
+  of << "_ATRN label byte" << endl;
   for (i = 0; i < ATRsize; i++)
   {
+    sprintf(outputLine, "ATRB\t<'%s','%s','%c',", ATRN[i].atr, ATRN[i].name, ATRN[i].type);
+    of << outputLine;
+
     if (ATRN[i].type == 'K')
-      sprintf(path, "ATRB\t<'%s','%s','K',(atp%d-_ATCDP)/2,(atc%d-_ATCD)/2,%d>\n",
-              ATRN[i].atr, ATRN[i].name, i, i, ATRN[i].ncod);
+
+      sprintf(outputLine, "(atp%d-_ATCDP)/2,(atc%d-_ATCD)/2,%d", i, i, ATRN[i].ncod);
     else
-      sprintf(path, "ATRB\t<'%s','%s','%c',0,0,0>\n",
-              ATRN[i].atr, ATRN[i].name, ATRN[i].type);
-    of << path;
+      strcpy(outputLine, "0,0,0");
+
+    of << outputLine << ">" << endl;
   }
-  of << "atrend label byte\n"
-     << "_FLIBsize\tdw\t" << FLIBsize
-     << "\n_RASsize\tdw\t" << RASsize
-     << "\n_LINsize\tdw\t" << LINsize
-     << "\n_ATRsize\tdw\t" << ATRsize
-     << "\n  PUBLIC  _flibrt\n  PUBLIC  _FLIBsize\n  PUBLIC  _flibsort\n"
-     << "  PUBLIC  _KLSK\n  PUBLIC  _KLSKP\n  PUBLIC  _ras\n"
-     << "  PUBLIC  _RASsize\n  PUBLIC  _fliblin\n  PUBLIC  _LINsize\n"
-     << "  PUBLIC  _ATRN\n  PUBLIC  _ATRsize\n  PUBLIC  _ATCD\n"
-     << "  PUBLIC  _ATCDP\nEND\n";
+  of << "atrend label byte" << endl;
+
+  of << "_FLIBsize\tdw\t" << FLIBsize << endl
+     << "_RASsize\tdw\t" << RASsize << endl
+     << "_LINsize\tdw\t" << LINsize << endl
+     << "_ATRsize\tdw\t" << ATRsize << endl
+     << "PUBLIC\\" << endl
+     << "  _flibrt, _FLIBsize, _flibsort, _KLSK, _KLSKP, _ras, _RASsize, \\" << endl
+     << "  _fliblin, _LINsize, _ATRN, _ATRsize, _ATCD, _ATCDP\\" << endl
+     << "END" << endl;
   of.close();
 }

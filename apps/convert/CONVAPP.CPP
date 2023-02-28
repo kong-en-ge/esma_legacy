@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <iostream.h>
 
+#include "utils.hpp"
 #include "convapp.hpp"
 #include "mouse.hpp"
 #include "button.hpp"
@@ -62,36 +63,6 @@ int Init(CErrorHandler* onError)
   strcat(path, "\\");
 
   return loadClassifier(path, onError);
-}
-
-int findCommandLineParam(int argc, char *argv[], char const* param, char* value = NULL)
-{
-  char const* arg;
-  int paramLen = strlen(param);
-
-  for (int i = 1; i < argc; i++)
-  {
-    arg = argv[i];
-
-    if (*arg != '/' && *arg != '-')
-      continue;
-
-    if (strncmpi(arg + 1, param, paramLen))
-      continue;
-
-    if (arg[paramLen + 1] != 0)
-    {
-      if (arg[paramLen + 1] != ':')
-        continue;
-
-      if (value != NULL)
-        strcpy(value, arg + paramLen + 2);
-    }
-
-    return 1;
-  }
-
-  return 0;
 }
 
 /*************************
@@ -168,6 +139,12 @@ CConverterConsoleApplication::CConverterConsoleApplication(int argc, char *argv[
 {
   _argc = argc;
   _argv = argv;
+  onError = new CErrorHandler(errorHandler);
+}
+
+CConverterConsoleApplication::~CConverterConsoleApplication(void)
+{
+  delete onError;
 }
 
 void CConverterConsoleApplication::convertClassifier(void)
@@ -180,6 +157,18 @@ void CConverterConsoleApplication::convertClassifier(void)
     strcpy(filename, "flib_txt.asm");
 
   ::convertClassifier(filename);
+}
+
+void CConverterConsoleApplication::convertMapData(void)
+{
+  char filename[MAXPATH];
+  if (!findCommandLineParam("source", filename))
+    return;
+
+  if (strlen(filename) == 0)
+    strcpy(filename, "map");
+
+  coder(filename, "00", getErrorHandler());
 }
 
 int CConverterConsoleApplication::findCommandLineParam(
@@ -198,9 +187,7 @@ int CConverterConsoleApplication::loadClassifier(void)
     strcat(path, "\\");
   }
 
-  CErrorHandler onError(errorHandlerC);
-
-  return ::loadClassifier(path, &onError);
+  return ::loadClassifier(path, getErrorHandler());
 }
 
 int CConverterConsoleApplication::run(void)
@@ -209,6 +196,7 @@ int CConverterConsoleApplication::run(void)
   {
     cout << "Classifier has been loaded" << endl;
     convertClassifier();
+    convertMapData();
   }
   return 0;
 }
