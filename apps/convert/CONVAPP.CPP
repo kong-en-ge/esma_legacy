@@ -37,7 +37,10 @@ void errorHandler(void* /*context*/, int code, char const* message)
 
 void errorHandlerC(void* /*context*/, int code, char const* message)
 {
-  cout << "ERR" << code << ":" << message << endl;
+  cout << "ERR" << code << ":" << errorMessages[code];
+  if (message)
+    cout << message << endl;
+  cout << endl;
 }
 
 int Init(CErrorHandler* onError)
@@ -139,7 +142,7 @@ CConverterConsoleApplication::CConverterConsoleApplication(int argc, char *argv[
 {
   _argc = argc;
   _argv = argv;
-  onError = new CErrorHandler(errorHandler);
+  onError = new CErrorHandler(errorHandlerC);
 }
 
 CConverterConsoleApplication::~CConverterConsoleApplication(void)
