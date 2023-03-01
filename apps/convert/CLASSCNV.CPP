@@ -148,7 +148,7 @@ void convertClassifier(char const* filename)
      << "_ATRsize\tdw\t" << ATRsize << endl
      << "PUBLIC\\" << endl
      << "  _flibrt, _FLIBsize, _flibsort, _KLSK, _KLSKP, _ras, _RASsize, \\" << endl
-     << "  _fliblin, _LINsize, _ATRN, _ATRsize, _ATCD, _ATCDP\\" << endl
+     << "  _fliblin, _LINsize, _ATRN, _ATRsize, _ATCD, _ATCDP" << endl
      << "END" << endl;
   of.close();
 }
