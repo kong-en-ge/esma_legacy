@@ -11,7 +11,7 @@
 #include "bigpath.hpp"
 #include "apputils.hpp"
 
-int coder(char const *, char const *, CErrorHandler*);
+int coder(char const *, char const *, char const *, CErrorHandler*);
 void convertClassifier(char const *);
 int loadClassifier(char const *, CErrorHandler*);
 
@@ -92,7 +92,7 @@ void CConverterApplication::convertMapData(void)
     mn.restore(BLACK);
     char *t = strchr(mn.path, '.');
     *t = 0;
-    coder(mn.path, t + 1, getErrorHandler());
+    coder(mn.path, mn.path, t + 1, getErrorHandler());
   }
 }
 
@@ -164,14 +164,14 @@ void CConverterConsoleApplication::convertClassifier(void)
 
 void CConverterConsoleApplication::convertMapData(void)
 {
-  char filename[MAXPATH];
-  if (!findCommandLineParam("source", filename))
+  char filename[MAXPATH], output[MAXPATH];
+  if (!findCommandLineParam("source", filename) || strlen(filename) == 0)
     return;
 
-  if (strlen(filename) == 0)
-    strcpy(filename, "map");
+  if (!findCommandLineParam("om", output))
+    strcpy(output, filename);
 
-  coder(filename, "00", getErrorHandler());
+  coder(filename, "00", output, getErrorHandler());
 }
 
 int CConverterConsoleApplication::findCommandLineParam(

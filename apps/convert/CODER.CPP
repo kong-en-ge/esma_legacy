@@ -181,9 +181,9 @@ void make_fast_atrib(F_SPR *fs, unsigned n, char *atrib, METHARFAST &mhf,
   }
 }
 
-int coder(char const *path, char const *mod, CErrorHandler* onError)
+int coder(char const *path, char const *mod, char const *output, CErrorHandler* onError)
 {
-  char pth[80];
+  char pth[MAXPATH];
   int _st, _nk;
   GEO_MODEL model;
   F_FORM fr;
@@ -195,7 +195,7 @@ int coder(char const *path, char const *mod, CErrorHandler* onError)
   esort *esbase;
   esort huge *es;
   unsigned o;
-  char patht[80];
+  char outputMap[MAXPATH];
   if (model.openexist(path, mod) != 0)
   {
     handleError(onError, 0);
@@ -249,8 +249,8 @@ int coder(char const *path, char const *mod, CErrorHandler* onError)
   }
 
   memset(fsbase, 0, 400 * sizeof(F_SPR));
-  sprintf(patht, "%s.c%s", path, mod);
-  if ((hsp = _creat(patht, FA_ARCH)) == -1)
+  sprintf(outputMap, "%s.c%s", output, mod);
+  if ((hsp = _creat(outputMap, FA_ARCH)) == -1)
   {
     handleError(onError, 2);
     return -1;
@@ -269,8 +269,8 @@ int coder(char const *path, char const *mod, CErrorHandler* onError)
     return -1;
   }
 
-  sprintf(patht, "%s.d%s", path, mod);
-  if ((mhf.hmt = _creat(patht, FA_ARCH)) == -1)
+  sprintf(outputMap, "%s.d%s", output, mod);
+  if ((mhf.hmt = _creat(outputMap, FA_ARCH)) == -1)
   {
     handleError(onError, 2);
     return -1;
