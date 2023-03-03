@@ -36,7 +36,7 @@ int FAST_MODEL::open(const char far *name, const char far *model)
 int FAST_MODEL::readmets(int **metp, F_SPR *spr)
 {
   int *m, s = spr->sbm;
-  int e = s + ((spr->lnm + 508) / 512);
+  int e = s + (spr->lnm + spr->ssm - 2) / 256;
   int ret = hm.read(s, e, (void **)&m);
   *metp = m + spr->ssm;
   return ret;
@@ -45,7 +45,7 @@ int FAST_MODEL::readmets(int **metp, F_SPR *spr)
 int FAST_MODEL::readhars(int **harp, F_SPR *spr)
 {
   int *m, s = spr->sbh;
-  int e = s + ((spr->lnh + 508) / 512);
+  int e = s + ((spr->lnh + spr->ssh - 2) / 256);
   int ret = hh.read(s, e, (void **)&m);
   *harp = m + spr->ssh;
   return ret;
