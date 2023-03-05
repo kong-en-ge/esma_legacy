@@ -39,7 +39,7 @@ void errorHandlerC(void* /*context*/, int code, char const* message)
 {
   cout << "ERR" << code << ":" << errorMessages[code];
   if (message)
-    cout << message << endl;
+    cout << " " << message << endl;
   cout << endl;
 }
 
