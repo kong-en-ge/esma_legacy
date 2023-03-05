@@ -6,6 +6,15 @@ ENSURE_DIR=IF NOT EXIST name MD name
 ENSURE_TARGET_DIR=$(ENSURE_DIR:name=$@)
 COPY_SOURCE_SILENT=copy $** $@ >nul
 
+TOOLS_DIR=$(ROOT_DIR)\TOOLS
+
+CONVERT=$(TOOLS_DIR)\convert.exe
+
+GET_TOOL=$(MAKE) -f$(ROOT_DIR)\common\get_tool.mak ROOT_DIR=$(ROOT_DIR)
+
+$(CONVERT):
+  $(GET_TOOL) TOOL_DIR=$(ROOT_DIR)\APPS\CONVERT TOOL_NAME=convert
+
 null_target:
   rem
 
