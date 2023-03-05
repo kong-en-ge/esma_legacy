@@ -5,3 +5,5 @@ ROOT_DIR=..\..
 
 !include $(ROOT_DIR)\common\make_app.inc
 
+MAP_SOURCE=$(ROOT_DIR)\map\belarus
+!include "..\common\makefile.inc"
