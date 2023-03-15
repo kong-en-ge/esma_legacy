@@ -22,5 +22,18 @@
 #include "textfile.hpp"
 #include "fastmod.hpp"
 #include "atribut.hpp"
+#include "errhand.hpp"
+
+typedef struct
+{
+  char mapSrc[MAXPATH];
+  char mapDst[MAXPATH];
+  char mapSrcExt[3];
+  char mapDstExt[3];
+  char objectDirectory[MAXPATH];
+} MapConverterData;
+
+int encodeMapData(MapConverterData const* mapConverterData,
+  CErrorHandler* onError);
 
 #endif
