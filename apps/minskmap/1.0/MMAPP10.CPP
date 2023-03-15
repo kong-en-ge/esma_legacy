@@ -11,21 +11,6 @@
 #include "dbffunc.hpp"
 #include "globalda.hpp"
 
-const char *errorMessages[] =
-{
-  "Нет памяти для работы программы",                         // 0
-  "Ошибка чтения карты",                                     // 1
-  "Фатальные ошибки инициализации.  Продолжение невозможно", // 2
-  "Ошибка записи слайда"                                     // 3
-};
-
-const char * warningMessages[] =
-{
-  "Не найден объект в указанной точке",         // 0
-  "Достигнут максимальный масштаб отображения", // 1
-  "Не найден заданный объект"                   // 2
-};
-
 char const *ston = "Вкл. N";
 char const *stoff = "Выкл. N";
 
@@ -187,9 +172,6 @@ void CMinskMap10Application::runMainMenu(void)
 
 int CMinskMap10Application::runUI(void)
 {
-  setErrorMessages(errorMessages, sizeof(errorMessages) / sizeof(errorMessages[0]));
-  setWarningMessages(warningMessages, sizeof(warningMessages) / sizeof(warningMessages[0]));
-
   setfillstyle(1, BLACK);
   bar(0, 0, getmaxx(), getmaxy());
 
