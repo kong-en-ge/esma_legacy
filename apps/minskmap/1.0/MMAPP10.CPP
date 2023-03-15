@@ -197,12 +197,12 @@ int CMinskMap10Application::runUI(void)
   if (initState != STATE_SUCCESS)
   {
     displayError(state2error(initState));
-    return 0;
+    return EXIT_FAILURE;
   }
 
   if (argc != 3)
     if (!displaySplashBox(getVersion()))
-      return 0;
+      return EXIT_SUCCESS;
 
   mouse_show(OFF);
   cleardevice();
@@ -215,5 +215,5 @@ int CMinskMap10Application::runUI(void)
   executeApp();
 
   delete wndTitle;
-  return 1;
+  return EXIT_SUCCESS;
 }

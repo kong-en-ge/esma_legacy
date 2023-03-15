@@ -196,11 +196,11 @@ int CRbMapApplication::runUI(void)
   if (initState != STATE_SUCCESS)
   {
     displayError(state2error(initState));
-    return 0;
+    return EXIT_FAILURE;
   }
 
   if (!displaySplashBox(getVersion()))
-    return 0;
+    return EXIT_SUCCESS;
 
   mouse_show(OFF);
   cleardevice();
@@ -213,5 +213,5 @@ int CRbMapApplication::runUI(void)
   executeApp();
 
   delete wndTitle;
-  return 1;
+  return EXIT_SUCCESS;
 }
