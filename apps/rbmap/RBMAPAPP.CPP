@@ -9,21 +9,6 @@
 #include "menuall2.hpp"
 #include "dbffunc.hpp"
 
-const char *errorMessages[] =
-{
-  "Нет памяти для работы программы",                         // 0
-  "Ошибка чтения карты",                                     // 1
-  "Фатальные ошибки инициализации.  Продолжение невозможно", // 2
-  "Ошибка записи слайда"                                     // 3
-};
-
-const char * warningMessages[] =
-{
-  "Не найден объект в указанной точке",         // 0
-  "Достигнут максимальный масштаб отображения", // 1
-  "Не найден заданный объект"                   // 2
-};
-
 /*********************
  * CRbMapApplication *
  *********************/
@@ -185,8 +170,6 @@ void CRbMapApplication::runMainMenu(void)
 
 int CRbMapApplication::runUI(void)
 {
-  setErrorMessages(errorMessages, sizeof(errorMessages) / sizeof(errorMessages[0]));
-  setWarningMessages(warningMessages, sizeof(warningMessages) / sizeof(warningMessages[0]));
   LBSFilename = "BELARUS.LBS";
 
   setfillstyle(1, BLACK);

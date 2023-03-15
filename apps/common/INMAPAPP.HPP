@@ -16,9 +16,13 @@ private:
   int openMapData(void);
 protected:
   void displayHelp(void) const;
+  virtual char const ** getErrorMessages(void) const;
+  virtual int getErrorMessageCount(void) const;
   virtual char const * getIndexMapFilename(void) const = 0;
   virtual char const * getHelpFilename(void) const = 0;
   virtual char const * getMainMapFilename(void) const = 0;
+  virtual char const ** getWarningMessages(void) const;
+  virtual int getWarningMessageCount(void) const;
   virtual int initializeApplication(void);
   virtual void runMainMenu(void) = 0;
 public:

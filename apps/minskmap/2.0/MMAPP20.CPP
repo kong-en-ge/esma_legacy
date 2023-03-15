@@ -11,14 +11,6 @@
 #include "dbffunc.hpp"
 #include "globalda.hpp"
 
-const char *errorMessages[] =
-{
-  "Нет памяти для работы программы",                         // 0
-  "Ошибка чтения карты",                                     // 1
-  "Фатальные ошибки инициализации.  Продолжение невозможно", // 2
-  "Ошибка записи слайда"                                     // 3
-};
-
 const char * warningMessages[] =
 {
   "Не найден объект в указанной точке",         // 0
@@ -44,6 +36,16 @@ CMinskMap20Application::CMinskMap20Application(int argc, char *argv[]) :
 char const *CMinskMap20Application::getVersion(void) const
 {
   return "MINSK_MAP 2.0";
+}
+
+char const ** CMinskMap20Application::getWarningMessages(void) const
+{
+  return warningMessages;
+}
+
+int CMinskMap20Application::getWarningMessageCount(void) const
+{
+  return sizeof(warningMessages) / sizeof(warningMessages[0]);
 }
 
 void CMinskMap20Application::runMainMenu(void)
@@ -211,9 +213,6 @@ void CMinskMap20Application::runMainMenu(void)
 
 int CMinskMap20Application::runUI(void)
 {
-  setErrorMessages(errorMessages, sizeof(errorMessages) / sizeof(errorMessages[0]));
-  setWarningMessages(warningMessages, sizeof(warningMessages) / sizeof(warningMessages[0]));
-
   setfillstyle(1, BLACK);
   bar(0, 0, getmaxx(), getmaxy());
 
@@ -226,7 +225,7 @@ int CMinskMap20Application::runUI(void)
 
   if (argc != 3)
     if (!displaySplashBox(getVersion()))
-      return EXIT_FAILURE;
+      return EXIT_SUCCESS;
 
   mouse_show(OFF);
   cleardevice();

@@ -1,4 +1,4 @@
-#.silent
+.silent
 
 !ifndef TOOL_DIR
 !error TOOL_DIR is mandatory

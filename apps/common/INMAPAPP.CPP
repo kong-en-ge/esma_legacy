@@ -9,6 +9,21 @@
 #include "apputils.hpp"
 #include "textfile.hpp"
 
+static const char *errorMessages[] =
+{
+  "Нет памяти для работы программы",                         // 0
+  "Ошибка чтения карты",                                     // 1
+  "Фатальные ошибки инициализации.  Продолжение невозможно", // 2
+  "Ошибка записи слайда"                                     // 3
+};
+
+static const char * warningMessages[] =
+{
+  "Не найден объект в указанной точке",         // 0
+  "Достигнут максимальный масштаб отображения", // 1
+  "Не найден заданный объект"                   // 2
+};
+
 void DBF_FIL();
 
 int state2error(int state)
@@ -31,6 +46,7 @@ int state2error(int state)
 /***********************
  * CInfoMapApplication *
 ************************/
+
 CInfoMapApplication::CInfoMapApplication(int argc, char *argv[]) :
   CGraphicApplication(argc, argv)
 {
@@ -41,10 +57,33 @@ void CInfoMapApplication::displayHelp(void) const
   help(getHelpFilename());
 }
 
+char const ** CInfoMapApplication::getErrorMessages(void) const
+{
+  return errorMessages;
+}
+
+int CInfoMapApplication::getErrorMessageCount(void) const
+{
+  return sizeof(errorMessages) / sizeof(errorMessages[0]);
+}
+
+char const ** CInfoMapApplication::getWarningMessages(void) const
+{
+  return warningMessages;
+}
+
+int CInfoMapApplication::getWarningMessageCount(void) const
+{
+  return sizeof(warningMessages) / sizeof(warningMessages[0]);
+}
+
 int CInfoMapApplication::initializeApplication(void)
 {
   if (farcoreleft() <= 0x18000l)
     return STATE_LOW_MEMORY;
+
+  setErrorMessages(getErrorMessages(), getErrorMessageCount());
+  setWarningMessages(getWarningMessages(), getWarningMessageCount());
 
   YMAXMAPE = getmaxy();
 
