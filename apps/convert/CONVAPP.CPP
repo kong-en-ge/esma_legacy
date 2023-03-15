@@ -10,8 +10,8 @@
 #include "button.hpp"
 #include "bigpath.hpp"
 #include "apputils.hpp"
+#include "convert.hpp"
 
-int coder(char const *, char const *, char const *, CErrorHandler*);
 void convertClassifier(char const *);
 int loadClassifier(char const *, CErrorHandler*);
 
@@ -92,7 +92,17 @@ void CConverterApplication::convertMapData(void)
     mn.restore(BLACK);
     char *t = strchr(mn.path, '.');
     *t = 0;
-    coder(mn.path, mn.path, t + 1, getErrorHandler());
+
+    MapConverterData *mapConverterData = new MapConverterData;
+    strcpy(mapConverterData->mapSrc, mn.path);
+    strncpy(mapConverterData->mapSrcExt, t + 1, 2);
+    strcpy(mapConverterData->mapDst, mapConverterData->mapSrc);
+    strcpy(mapConverterData->mapDstExt, mapConverterData->mapSrcExt);
+    strcpy(mapConverterData->objectDirectory, mapConverterData->mapSrc);
+    strcat(mapConverterData->objectDirectory, ".asm");
+    encodeMapData(mapConverterData, getErrorHandler());
+
+    delete mapConverterData;
   }
 }
 
@@ -164,14 +174,35 @@ void CConverterConsoleApplication::convertClassifier(void)
 
 void CConverterConsoleApplication::convertMapData(void)
 {
-  char filename[MAXPATH], output[MAXPATH];
-  if (!findCommandLineParam("source", filename) || strlen(filename) == 0)
-    return;
+  char tempStr[MAXPATH];
+  MapConverterData* mapConverterData = new MapConverterData;
+  memset(mapConverterData, 0, sizeof(MapConverterData));
 
-  if (!findCommandLineParam("om", output))
-    strcpy(output, filename);
+  if (findCommandLineParam("ms", mapConverterData->mapSrc) && strlen(mapConverterData->mapSrc) != 0)
+  {
+    if (findCommandLineParam("es", tempStr))
+      strncpy(mapConverterData->mapSrcExt, tempStr, 2);
+    else
+      strcpy(mapConverterData->mapSrcExt, "00");
 
-  coder(filename, "00", output, getErrorHandler());
+    if (!findCommandLineParam("md", mapConverterData->mapDst))
+      strcpy(mapConverterData->mapDst, mapConverterData->mapSrc);
+
+    if (findCommandLineParam("ed", tempStr))
+      strncpy(mapConverterData->mapDstExt, tempStr, 2);
+    else
+      strcpy(mapConverterData->mapDstExt, mapConverterData->mapSrcExt);
+
+    if (!findCommandLineParam("od", mapConverterData->objectDirectory))
+    {
+      strcpy(mapConverterData->objectDirectory, mapConverterData->mapDst);
+      strcat(mapConverterData->objectDirectory, ".asm");
+    }
+
+    encodeMapData(mapConverterData, getErrorHandler());
+  }
+
+  delete mapConverterData;
 }
 
 int CConverterConsoleApplication::findCommandLineParam(
