@@ -16,6 +16,7 @@
 CRbMapApplication::CRbMapApplication(int argc, char *argv[]) :
   CInfoMapApplication(argc, argv)
 {
+  LBSFilename = "BELARUS.LBS";
   SCALEMIN = 50000;
   SCALEMAX = 10000000;
 }
@@ -166,35 +167,4 @@ void CRbMapApplication::runMainMenu(void)
       break;
     }
   } while (keym != -1);
-}
-
-int CRbMapApplication::runUI(void)
-{
-  LBSFilename = "BELARUS.LBS";
-
-  setfillstyle(1, BLACK);
-  bar(0, 0, getmaxx(), getmaxy());
-
-  int initState = initializeApplication();
-  if (initState != STATE_SUCCESS)
-  {
-    displayError(state2error(initState));
-    return EXIT_FAILURE;
-  }
-
-  if (!displaySplashBox(getVersion()))
-    return EXIT_SUCCESS;
-
-  mouse_show(OFF);
-  cleardevice();
-
-  GRwnd* wndTitle = createTitleWindow();
-
-  indexMapImage.paintImage(XMINEC, YMINEC);
-  mouse_show(ON);
-
-  executeApp();
-
-  delete wndTitle;
-  return EXIT_SUCCESS;
 }

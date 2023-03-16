@@ -15,6 +15,7 @@ protected:
   virtual char const * getIndexMapFilename(void) const;
   virtual char const * getHelpFilename(void) const;
   virtual char const * getMainMapFilename(void) const;
+  virtual int suppressStartSplash(void) const;
 public:
   CMinskMapApplication(int argc, char *argv[]);
 };

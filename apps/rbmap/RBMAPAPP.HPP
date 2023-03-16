@@ -12,7 +12,6 @@ protected:
   virtual char const * getHelpFilename(void) const;
   virtual char const * getVersion(void) const;
   virtual void runMainMenu(void);
-  virtual int runUI(void);
 public:
   CRbMapApplication(int argc, char *argv[]);
 };

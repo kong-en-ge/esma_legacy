@@ -176,3 +176,37 @@ int CInfoMapApplication::openMapData(void)
     return 0;
 }
 
+int CInfoMapApplication::runUI(void)
+{
+  setfillstyle(1, BLACK);
+  bar(0, 0, getmaxx(), getmaxy());
+
+  int initState = initializeApplication();
+  if (initState != STATE_SUCCESS)
+  {
+    displayError(state2error(initState));
+    return EXIT_FAILURE;
+  }
+
+  if (!suppressStartSplash())
+    if (!displaySplashBox(getVersion()))
+      return EXIT_SUCCESS;
+
+  mouse_show(OFF);
+  cleardevice();
+
+  GRwnd* wndTitle = createTitleWindow();
+
+  indexMapImage.paintImage(XMINEC, YMINEC);
+  mouse_show(ON);
+
+  executeApp();
+
+  delete wndTitle;
+  return EXIT_SUCCESS;
+}
+
+int CInfoMapApplication::suppressStartSplash(void) const
+{
+  return 0;
+}

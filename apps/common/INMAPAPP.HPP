@@ -16,6 +16,7 @@ private:
   int openMapData(void);
 protected:
   void displayHelp(void) const;
+  virtual void executeApp(void) = 0;
   virtual char const ** getErrorMessages(void) const;
   virtual int getErrorMessageCount(void) const;
   virtual char const * getIndexMapFilename(void) const = 0;
@@ -25,6 +26,8 @@ protected:
   virtual int getWarningMessageCount(void) const;
   virtual int initializeApplication(void);
   virtual void runMainMenu(void) = 0;
+  virtual int runUI(void);
+  virtual int suppressStartSplash(void) const;
 public:
   CInfoMapApplication(int argc, char *argv[]);
 };
