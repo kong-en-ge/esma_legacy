@@ -210,33 +210,3 @@ void CMinskMap20Application::runMainMenu(void)
   if (uzl == 1)
     delete uzly;
 }
-
-int CMinskMap20Application::runUI(void)
-{
-  setfillstyle(1, BLACK);
-  bar(0, 0, getmaxx(), getmaxy());
-
-  int initState = initializeApplication();
-  if (initState != STATE_SUCCESS)
-  {
-    displayError(state2error(initState));
-    return EXIT_FAILURE;
-  }
-
-  if (argc != 3)
-    if (!displaySplashBox(getVersion()))
-      return EXIT_SUCCESS;
-
-  mouse_show(OFF);
-  cleardevice();
-
-  GRwnd* wndTitle = createTitleWindow();
-
-  indexMapImage.paintImage(XMINEC, YMINEC);
-  mouse_show(ON);
-
-  executeApp();
-
-  delete wndTitle;
-  return EXIT_SUCCESS;
-}

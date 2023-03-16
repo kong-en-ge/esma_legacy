@@ -50,3 +50,8 @@ char const *CMinskMapApplication::getMainMapFilename(void) const
 {
   return "minsk";
 }
+
+int CMinskMapApplication::suppressStartSplash(void) const
+{
+  return (argc == 3);
+}
