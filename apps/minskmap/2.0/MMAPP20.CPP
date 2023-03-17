@@ -20,10 +20,6 @@ const char * warningMessages[] =
   "Маршрут не найден"                           // 4
 };
 
-
-char const *ston = "Вкл. N";
-char const *stoff = "Выкл. N";
-
 /**************************
  * CMinskMap20Application *
  **************************/
@@ -48,9 +44,27 @@ int CMinskMap20Application::getWarningMessageCount(void) const
   return sizeof(warningMessages) / sizeof(warningMessages[0]);
 }
 
+void CMinskMap20Application::handleCommand(int command)
+{
+  switch (command)
+  {
+  case 26:
+    howstop();
+    break;
+  case 27:
+    where_from();
+    break;
+  case 28:
+    if (pr)
+      where();
+    break;
+  default:
+    CMinskMapApplication::handleCommand(command);
+  }
+}
+
 void CMinskMap20Application::runMainMenu(void)
 {
-  int keym = 0;
   prmt = 0;
   uzl = 0;
   setcolor(BLACK);
@@ -86,6 +100,7 @@ void CMinskMap20Application::runMainMenu(void)
       b19(560, 261, 639, 276, 24, "Уд.объект"),
       b20(480, 279, 559, 294, 25, "Справка"),
       b21(560, 279, 639, 294, -1, "Выход");
+  btnOnOff = &b10;
   Menu_but menm;
   menm + &b1 + &b2 + &b3 + &b4 + &b31 + &b41 + &b5 + &b51 + &b6 + &b7 + &b8 + &b9 + &b81 + &b82 + &b83 + &b91 + &b92 +
       &b10 + &b11 + &b12 + &b13 + &b14 + &b15 + &b16 + &b17 + &b18 + &b19 + &b20 + &b21;
@@ -97,114 +112,7 @@ void CMinskMap20Application::runMainMenu(void)
   if (parst)
     if (find_bl(parst, parbl))
       all();
-  // int keym;
-  while (keym != -1)
-  {
-    // do {
-    keym = menm.menu_key2();
-    switch (keym)
-    {
-    case 1:
-      all();
-      break;
-    case 2:
-      fragment();
-      break;
-    case 3:
-      centr();
-      break;
-    case 4:
-      restore_otkat();
-      break;
-    case 14:
-      plmash();
-      break;
-    case 15:
-      minmash();
-      break;
-    case 5:
-      rasst();
-      break;
-    case 16:
-    {
-      if (N_on)
-      {
-        N_on = 0;
-        b51.text = ston;
-      }
-      else
-      {
-        N_on = 1;
-        b51.text = stoff;
-      }
-      menm.draw();
-      if (CURRENTSCALE < 12.0 * SCALEMIN)
-        drawrazd();
-      break;
-    }
-    case 6:
-      whatisit();
-      break;
-    case 7:
-      find_bl();
-      break;
-    case 8:
-      find_st();
-      break;
-    case 9:
-      find_rg();
-      break;
-    case 17:
-      printwnd(0, 0, XMAXMAPE, getmaxy(), 0xaf28, 0x4096);
-      break;
-    case 18:
-      slide();
-      break;
-    case 10:
-      onoff();
-      break;
-    case 11:
-      chmark();
-      break;
-    case 12:
-      whatisitd(0);
-      break;
-    case 13:
-      finddbf();
-      break;
-    case 19:
-      new_dbf();
-      break;
-    case 20:
-      del_dbf();
-      break;
-    case 21:
-      act_dbf();
-      break;
-    case 22:
-      pnt_dbf();
-      break;
-    case 23:
-      red_rec();
-      break;
-    case 24:
-      whatisitd(1);
-      break;
-    case 25:
-      displayHelp();
-      break;
-    case 26:
-      howstop();
-      break;
-    case 27:
-      where_from();
-      break;
-    case 28:
-      if (pr)
-        where();
-      break;
-    }
-  } // while (keym!=-1);
+  runMenu(&menm);
   if (prmt == 1)
     delete metro;
   if (uzl == 1)
