@@ -9,6 +9,7 @@ protected:
   virtual char const * getVersion(void) const;
   virtual char const ** getWarningMessages(void) const;
   virtual int getWarningMessageCount(void) const;
+  virtual void handleCommand(int command);
   virtual void runMainMenu(void);
 public:
   CMinskMap20Application(int argc, char *argv[]);

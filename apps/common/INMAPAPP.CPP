@@ -8,6 +8,7 @@
 #include "funcs.hpp"
 #include "apputils.hpp"
 #include "textfile.hpp"
+#include "dbffunc.hpp"
 
 static const char *errorMessages[] =
 {
@@ -75,6 +76,96 @@ char const ** CInfoMapApplication::getWarningMessages(void) const
 int CInfoMapApplication::getWarningMessageCount(void) const
 {
   return sizeof(warningMessages) / sizeof(warningMessages[0]);
+}
+
+void CInfoMapApplication::handleCommand(int command)
+{
+  switch(command)
+  {
+  case 1:
+    all();
+    break;
+
+  case 2:
+    fragment();
+    break;
+
+  case 3:
+    centr();
+    break;
+
+  case 4:
+    restore_otkat();
+    break;
+
+  case 5:
+    rasst();
+    break;
+
+  case 6:
+    whatisit();
+    break;
+
+  case 10:
+    onoff(  );
+    break;
+
+  case 11:
+    chmark();
+    break;
+
+  case 12:
+    whatisitd(0);
+    break;
+
+  case 13:
+    finddbf();
+    break;
+
+  case 14:
+    plmash();
+    break;
+
+  case 15:
+    minmash();
+    break;
+
+  case 17:
+    printwnd(0, 0, XMAXMAPE, getmaxy(), 0xaf28, 0x4096);
+    break;
+
+  case 18:
+    slide();
+    break;
+
+  case 19:
+    new_dbf();
+    break;
+
+  case 20:
+    del_dbf();
+    break;
+
+  case 21:
+    act_dbf();
+    break;
+
+  case 22:
+    pnt_dbf();
+    break;
+
+  case 23:
+    red_rec();
+    break;
+
+  case 24:
+    whatisitd(1);
+    break;
+
+  case 25:
+    displayHelp();
+    break;
+  }
 }
 
 int CInfoMapApplication::initializeApplication(void)
@@ -174,6 +265,17 @@ int CInfoMapApplication::openMapData(void)
   }
   else
     return 0;
+}
+
+void CInfoMapApplication::runMenu(Menu_but* menu)
+{
+  int command;
+  activeMenu = menu;
+
+  while ((command = menu->menu_key2()) != -1)
+    handleCommand(command);
+
+  activeMenu = NULL;
 }
 
 int CInfoMapApplication::runUI(void)

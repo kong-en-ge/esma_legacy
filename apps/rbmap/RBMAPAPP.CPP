@@ -7,7 +7,6 @@
 #include "mouse.hpp"
 #include "funcs.hpp"
 #include "menuall2.hpp"
-#include "dbffunc.hpp"
 
 /*********************
  * CRbMapApplication *
@@ -52,6 +51,23 @@ char const *CRbMapApplication::getVersion(void) const
   return "RB_MAP 1.0";
 }
 
+void CRbMapApplication::handleCommand(int command)
+{
+  switch (command)
+  {
+  case 8:
+    find_punct();
+    break;
+
+  case 9:
+    find_rg();
+    break;
+
+  default:
+    CInfoMapApplication::handleCommand(command);
+  }
+}
+
 void CRbMapApplication::runMainMenu(void)
 {
   setcolor(BLACK);
@@ -65,7 +81,7 @@ void CRbMapApplication::runMainMenu(void)
       b31(480, 81, 559, 96, 14, "Крупнее"),
       b41(560, 81, 639, 96, 15, "Мельче"),
       b6(480, 107, 559, 122, 6, "Что это"),
-      b7(560, 107, 639, 122, 7, "Расст-ние"),
+      b7(560, 107, 639, 122, 5, "Расст-ние"),
       b8(480, 123, 559, 138, 8, "Нас.пункт"),
       b9(560, 123, 639, 138, 9, "Район"),
       b91(480, 139, 559, 154, 17, "Печать"),
@@ -90,81 +106,5 @@ void CRbMapApplication::runMainMenu(void)
   outtextxy(560, 102, "К а р т а");
   outtextxy(562, 160, "Б а з ы");
   mouse_show(ON);
-  int keym;
-  do
-  {
-    keym = menm.menu_key2();
-    switch (keym)
-    {
-    case 1:
-      all();
-      break;
-    case 2:
-      fragment();
-      break;
-    case 3:
-      centr();
-      break;
-    case 4:
-      restore_otkat();
-      break;
-    case 14:
-      plmash();
-      break;
-    case 15:
-      minmash();
-      break;
-    case 6:
-      whatisit();
-      break;
-    case 7:
-      rasst();
-      break;
-    case 8:
-      find_punct();
-      break;
-    case 9:
-      find_rg();
-      break;
-    case 17:
-      printwnd(0, 0, XMAXMAPE, getmaxy(), 0xaf28, 0x4096);
-      break;
-    case 18:
-      slide();
-      break;
-    case 10:
-      onoff();
-      break;
-    case 11:
-      chmark();
-      break;
-    case 12:
-      whatisitd(0);
-      break;
-    case 13:
-      finddbf();
-      break;
-    case 19:
-      new_dbf();
-      break;
-    case 20:
-      del_dbf();
-      break;
-    case 21:
-      act_dbf();
-      break;
-    case 22:
-      pnt_dbf();
-      break;
-    case 23:
-      red_rec();
-      break;
-    case 24:
-      whatisitd(1);
-      break;
-    case 25:
-      displayHelp();
-      break;
-    }
-  } while (keym != -1);
+  runMenu(&menm);
 }
