@@ -1,12 +1,10 @@
 #include <math.h>
 #include <string.h>
 
-#include "mouse.hpp"
 #include "globals.hpp"
 #include "drawpl.hpp"
 #include "fatr.hpp"
 #include "funcs.hpp"
-#include "dbffunc.hpp"
 
 void drawcram(void)
 {
