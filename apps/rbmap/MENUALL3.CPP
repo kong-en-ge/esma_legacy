@@ -94,7 +94,7 @@ void find_punct(void)
     double xd = XDISRAZ(punct[ret].y);
     double yd = YDISRAZ(punct[ret].x);
     redraw(xd, yd, xd, yd, 18);
-    setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     draw_one_obj(punct[ret].nob, 12, 1);
     settwink(12, 10);
     int at;
@@ -152,7 +152,7 @@ void find_rg(void)
     count++;
     redraw(XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
            YDISRAZ(spr.xmax), 120);
-    setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     draw_one_obj(ret, 12, 1);
     settwink(12, 4);
     {

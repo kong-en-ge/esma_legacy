@@ -1,9 +1,9 @@
 #include "globals.hpp"
 
-double XMING, YMING, XMAXG, YMAXG;     // габаритные координаты
-double XMINV, YMINV, XMAXV, YMAXV;     // габаритные координаты окна вид
-double XMINM, YMINM, XMAXM, YMAXM;     //габаритные координаты карты в мск
-int XMINE, YMINE, XMAXE, YMAXE;     // габаритные координаты окна карты на экр
+CRectD boundsG; // габаритные координаты
+CRectD boundsV; // габаритные координаты окна вид
+CRectD boundsM; // габаритные координаты карты в мск
+CRectS boundsE; // габаритные координаты окна карты на экр
 double XMINVC, YMINVC, XMAXVC, YMAXVC; // габаритные координаты контр.окна вид
 int XMINRE, YMINRE, XMAXRE, YMAXRE; // габаритные координаты окна раздела экр
 int XMINEC, YMINEC, XMAXEC, YMAXEC; // габаритные координаты контр.окна карты на экр
@@ -23,7 +23,7 @@ float SCALEO;
 
 int All_Map;
 
-double otkat[4 * MAX_STORED_VIEWS];
+CRectD otkat[MAX_STORED_VIEWS];
 int otkatn;
 
 FST_MODEL model;

@@ -624,7 +624,7 @@ void howstop()
       delete[] obs;
       goto ex;
     }
-    setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     for (int i = 0; i < ob; i++)
       draw_one_obj(obs[i].nobj, 12, 1);
     settwink(12, 15);
@@ -1257,7 +1257,7 @@ void where()
     else if (j1 != 0)
     { // ¯à
       ob = ATRFR(&tp, j1);
-      setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+      setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     } // ¯à
     else if ((j2 != 0) || (j3 != 0) || (j4 != 0) || (j5 != 0))
     { // á ¯
@@ -1270,7 +1270,7 @@ void where()
           else if (flag == 2)
             ATRTM(&tp, ob);
           delete[] ps;
-          setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+          setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
         }
         if (j3 != 0)
         {
@@ -1278,14 +1278,14 @@ void where()
             tp.add("         ˆ‹ˆ        ");
           ATRPER(&tp, ob3);
           delete[] psu;
-          setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+          setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
         }
       } // 1 peresad
       else if (j4 != 0)
       { // 2 peresad
         ATR2PER(&tp, ob4);
         delete[] pstwo;
-        setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+        setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
       } // 2 peresad
       else if (j5 != 0)
       { // 3 peresad
@@ -1340,7 +1340,7 @@ void where()
         tp.add("  „€‹……  ");
         ATR2PER(&tp, ob4);
         delete[] pstwo;
-        setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+        setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
       } // 3 peresad
     }   // á ¯
     tp.draw();
@@ -1348,7 +1348,7 @@ void where()
     key = tp.menu_key2();
     tp.restore();
     tp.del();
-    setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
   } // ¢ë¢®¤
 ex:
   pr = 0;

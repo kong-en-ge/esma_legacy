@@ -8,10 +8,10 @@ void drawcram()
   indexMapImage.paintImage(XMINEC, YMINEC);
 
   int xminec, yminec, xmaxec, ymaxec;
-  xminec = XMINEC + (YMINV - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);
-  yminec = YMAXEC - (XMAXV - XMINVC) / (XMAXVC - XMINVC) * (YMAXEC - YMINEC);
-  xmaxec = XMINEC + (YMAXV - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);
-  ymaxec = YMAXEC - (XMINV - XMINVC) / (XMAXVC - XMINVC) * (YMAXEC - YMINEC);
+  xminec = XMINEC + (boundsV.top - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);
+  yminec = YMAXEC - (boundsV.right - XMINVC) / (XMAXVC - XMINVC) * (YMAXEC - YMINEC);
+  xmaxec = XMINEC + (boundsV.bottom - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);
+  ymaxec = YMAXEC - (boundsV.left - XMINVC) / (XMAXVC - XMINVC) * (YMAXEC - YMINEC);
   int d = -1;
   if ((xmaxec - xminec) < 64)
     d = 0;

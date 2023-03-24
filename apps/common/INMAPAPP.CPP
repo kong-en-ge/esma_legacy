@@ -248,17 +248,17 @@ int CInfoMapApplication::openMapData(void)
   {
     double dxv, dyv;
 
-    memmove(&XMING, &model.fm.xminm, 4 * sizeof(XMING));
-    memmove(&XMINV, &XMING, 4 * sizeof(XMING));
-    dyv = XMAXV - XMINV;
-    dxv = YMAXV - YMINV;
+    memmove(&boundsG, &model.fm.xminm, sizeof(CRectD));
+    boundsV = boundsG;
+    dyv = boundsV.getWidth();
+    dxv = boundsV.getHeight();
     if (dxv > dyv)
       dyv = dxv;
     else
       dxv = dyv;
-    XMINVC = (XMAXV + XMINV - dxv) / 2;
+    XMINVC = (boundsV.right + boundsV.left - dxv) / 2;
     XMAXVC = XMINVC + dxv;
-    YMINVC = (YMAXV + YMINV - dyv) / 2;
+    YMINVC = (boundsV.bottom + boundsV.top - dyv) / 2;
     YMAXVC = YMINVC + dyv;
 
     return 1;
