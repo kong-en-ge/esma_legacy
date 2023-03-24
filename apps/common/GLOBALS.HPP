@@ -6,6 +6,7 @@
 #include "font.hpp"
 #include "flibrt.hpp"
 #include "indexmap.hpp"
+#include "geometry.hpp"
 
 #define WHITE 0
 #define BLACK 15
@@ -23,9 +24,9 @@ struct List_base
 };
 
 extern int XMAXMAPE, YMAXMAPE;
-extern double XMING, YMING, XMAXG, YMAXG;     // Максимальные координаты
-extern double XMINM, YMINM, XMAXM, YMAXM;     //габаритные координаты карты в мск
-extern double XMINV, YMINV, XMAXV, YMAXV;     // габаритные координаты окна вид
+extern CRectD boundsG; // габаритные координаты
+extern CRectD boundsM; //габаритные координаты карты в мск
+extern CRectD boundsV; // габаритные координаты окна вид
 extern int XMINE, YMINE, XMAXE, YMAXE;
 extern double XMINVC, YMINVC, XMAXVC, YMAXVC; // габаритные координаты  контр.окна вид
 extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
@@ -43,7 +44,7 @@ extern float SCALEO; // основание степени
 
 extern int All_Map;
 
-extern double otkat[];
+extern CRectD otkat[];
 extern int otkatn;
 
 extern FST_MODEL model;

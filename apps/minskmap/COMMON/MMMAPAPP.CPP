@@ -27,7 +27,7 @@ void CMinskMapApplication::executeApp(void)
   {
     parst = argv[1];
     parbl = atoi(argv[2]);
-    memmove(&XMINM, &XMING, 4 * sizeof(double));
+    boundsM = boundsG;
   }
   else
     all();

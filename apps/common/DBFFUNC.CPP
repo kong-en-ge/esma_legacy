@@ -114,7 +114,7 @@ void draw_fld(void)
         continue;
       double xd = dbf.F_value(dbf.F_ref("Xcoord"));
       double yd = dbf.F_value(dbf.F_ref("Ycoord"));
-      if ((xd <= XMINV) || (xd >= XMAXV) || (yd <= YMINV) || (yd >= YMAXV))
+      if (!boundsV.containsPoint(xd, yd))
         continue;
       draw_one_d(xd, yd, color, type);
     }

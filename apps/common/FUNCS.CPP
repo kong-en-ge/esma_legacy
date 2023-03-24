@@ -29,53 +29,53 @@ const unsigned mscur[] = {
 
 double XEKRAZD(int y)
 {
-  return (YMAXMAPE - y) * (XMAXV - XMINV) / YMAXMAPE + XMINV;
+  return (YMAXMAPE - y) * boundsV.getWidth() / YMAXMAPE + boundsV.left;
 }
 
 double YEKRAZD(int x)
 {
-  return x * (YMAXV - YMINV) / XMAXMAPE + YMINV;
+  return x * boundsV.getHeight() / XMAXMAPE + boundsV.top;
 }
 
 int XRAZEKR(float y)
 {
-  return float((y - YMINV) * (XMAXMAPE + 1) / (YMAXV - YMINV));
+  return float((y - boundsV.top) * (XMAXMAPE + 1) / boundsV.getHeight());
 }
 
 int YRAZEKR(float x)
 {
-  return float((XMAXV - x) * (YMAXMAPE + 1) / (XMAXV - XMINV));
+  return float((boundsV.right - x) * (YMAXMAPE + 1) / boundsV.getWidth());
 }
 
 double XDISRAZ(int y)
 {
-  return (y - model.fm.ymin) * (XMAXM - XMINM) / (model.fm.ymax - model.fm.ymin) + XMINM;
+  return (y - model.fm.ymin) * boundsM.getWidth() / (model.fm.ymax - model.fm.ymin) + boundsM.left;
 }
 
 double YDISRAZ(int x)
 {
-  return (x - model.fm.xmin) * (YMAXM - YMINM) / (model.fm.xmax - model.fm.xmin) + YMINM;
+  return (x - model.fm.xmin) * boundsM.getHeight() / (model.fm.xmax - model.fm.xmin) + boundsM.top;
 }
 
 int XRAZDIS(double y)
 {
-  return double((y - YMINM) * (model.fm.xmax - model.fm.xmin)) / (YMAXM - YMINM) + model.fm.xmin;
+  return double((y - boundsM.top) * (model.fm.xmax - model.fm.xmin)) / boundsM.getHeight() + model.fm.xmin;
 }
 
 int YRAZDIS(double x)
 {
-  return double((x - XMINM) * (model.fm.ymax - model.fm.ymin)) / (XMAXM - XMINM) + model.fm.ymin;
+  return double((x - boundsM.left) * (model.fm.ymax - model.fm.ymin)) / boundsM.getWidth() + model.fm.ymin;
 }
 
 int DXEKRDIS(int dx)
 {
-  double d = dx * (YMAXV - YMINV) * (model.fm.xmax - model.fm.xmin) / (XMAXMAPE + 1) / (YMAXM - YMINM);
+  double d = dx * boundsV.getHeight() * (model.fm.xmax - model.fm.xmin) / (XMAXMAPE + 1) / boundsM.getHeight();
   return d > 32767.0 ? 32767 : d;
 }
 
 double DXDISEKR(int dx)
 {
-  double d = dx * (YMAXM - YMINM) * (XMAXMAPE + 1) / (YMAXV - YMINV) / (model.fm.xmax - model.fm.xmin);
+  double d = dx * boundsM.getHeight() * (XMAXMAPE + 1) / boundsV.getHeight() / (model.fm.xmax - model.fm.xmin);
   return d > 32767.0 ? 32767 : d;
 }
 
@@ -101,15 +101,15 @@ int next_model(int index, int ignoreScaleFilter)
 
 void store_otkat(void)
 {
-  if (otkatn && (!memcmp(&XMINV, &otkat[(otkatn - 1) * 4], 4 * sizeof(double))))
+  if (otkatn && (!memcmp(&boundsV, &otkat[otkatn - 1], sizeof(CRectD))))
     return;
 
   if (otkatn >= MAX_STORED_VIEWS)
   {
-    memmove(otkat, otkat + 4, 4 * sizeof(double) * (MAX_STORED_VIEWS - 1));
+    memmove(otkat, otkat + 1, sizeof(CRectD) * (MAX_STORED_VIEWS - 1));
     otkatn = MAX_STORED_VIEWS - 1;
   }
-  memmove(otkat + otkatn * 4, &XMINV, 4 * sizeof(double));
+  otkat[otkatn] = boundsV;
   otkatn++;
 }
 
@@ -117,8 +117,8 @@ void restore_otkat(void)
 {
   if (otkatn <= 1)
     return;
-  otkatn -= 2;
-  memmove(&XMINV, otkat + otkatn * 4, 4 * sizeof(double));
+  otkatn -= 4;
+  boundsV = otkat[otkatn];
   drawrazd();
 }
 
@@ -287,85 +287,84 @@ int upcase(int symb)
 
 void cor_V(void)
 {
-  if (XMINV < XMING)
-  {
-    XMAXV += XMING - XMINV;
-    XMINV = XMING;
-  }
-  if (YMINV < YMING)
-  {
-    YMAXV += YMING - YMINV;
-    YMINV = YMING;
-  }
-  if (XMAXV > XMAXG)
-  {
-    XMINV -= XMAXV - XMAXG;
-    XMAXV = XMAXG;
-  }
-  if (YMAXV > YMAXG)
-  {
-    YMINV -= YMAXV - YMAXG;
-    YMAXV = YMAXG;
-  }
+  double delta;
+
+  delta = boundsG.left - boundsV.left;
+  if (delta > 0)
+    boundsV.offset(delta, 0);
+
+  delta = boundsG.top - boundsV.top;
+  if (delta > 0)
+    boundsV.offset(0, delta);
+
+  delta = boundsG.right - boundsV.right;
+  if (delta < 0)
+    boundsV.offset(delta, 0);
+
+  delta = boundsG.bottom - boundsV.bottom;
+  if (delta < 0)
+    boundsV.offset(delta, 0);
 }
+
+#define MAX_VIEW_RATIO 0.00001
 
 int setviewMAP(void)
 {
   // int XMINE,YMINE,XMAXE,YMAXE;
-  if ((XMAXM <= XMINM) || (YMINM >= YMAXM))
+  if ((boundsM.right <= boundsM.left) || (boundsM.top >= boundsM.bottom))
     return 0;
-  if ((XMAXV - XMINV) < (XMAXM - XMINM) * 0.00001)
+  if (boundsV.getWidth() < boundsM.getWidth() * MAX_VIEW_RATIO)
     return 0;
-  if ((YMAXV - YMINV) < (YMAXM - YMINM) * 0.00001)
+  if (boundsV.getHeight() < boundsM.getHeight() * MAX_VIEW_RATIO)
     return 0;
   int xminm, yminm, xmaxm, ymaxm;
-  if (YMAXM > YMAXV)
+  if (boundsM.bottom > boundsV.bottom)
   {
-    xmaxm = float((YMAXV - YMINM) * (model.fm.xmax - model.fm.xmin) /
-                  (YMAXM - YMINM)) +
+    xmaxm = float((boundsV.bottom - boundsM.top) * (model.fm.xmax - model.fm.xmin) /
+                  boundsM.getHeight()) +
             model.fm.xmin;
     XMAXE = XMAXMAPE;
   }
   else
   {
     xmaxm = model.fm.xmax;
-    XMAXE = XMAXMAPE * (YMAXM - YMINV) / (YMAXV - YMINV);
+    XMAXE = XMAXMAPE * (boundsM.bottom - boundsV.top) / (boundsV.getHeight());
   }
-  if (YMINM < YMINV)
+  if (boundsM.top < boundsV.top)
   {
-    xminm = float((YMINV - YMINM) * (model.fm.xmax - model.fm.xmin) /
-                  (YMAXM - YMINM)) +
+    xminm = float((boundsV.top - boundsM.top) * (model.fm.xmax - model.fm.xmin) /
+                  boundsM.getHeight()) +
             model.fm.xmin;
     XMINE = 0;
   }
   else
   {
     xminm = model.fm.xmin;
-    XMINE = XMAXMAPE * (YMINM - YMINV) / (YMAXV - YMINV);
+    XMINE = XMAXMAPE * (boundsM.top - boundsV.top) / boundsV.getHeight();
   }
-  if (XMAXM > XMAXV)
+  if (boundsM.right > boundsV.right)
   {
-    ymaxm = float((XMAXV - XMINM) * (model.fm.ymax - model.fm.ymin) /
-                  (XMAXM - XMINM)) +
+    ymaxm = float((boundsV.right - boundsM.left) * (model.fm.ymax - model.fm.ymin) /
+                  boundsM.getWidth()) +
             model.fm.ymin;
     YMINE = 0;
   }
   else
   {
     ymaxm = model.fm.ymax;
-    YMINE = YMAXMAPE * (XMAXV - XMAXM) / (XMAXV - XMINV);
+    YMINE = YMAXMAPE * (boundsV.right - boundsM.right) / boundsV.getWidth();
   }
-  if (XMINM < XMINV)
+  if (boundsM.left < boundsV.left)
   {
-    yminm = float((XMINV - XMINM) * (model.fm.ymax - model.fm.ymin) /
-                  (XMAXM - XMINM)) +
+    yminm = float((boundsV.left - boundsM.left) * (model.fm.ymax - model.fm.ymin) /
+                  boundsM.getWidth()) +
             model.fm.ymin;
     YMAXE = YMAXMAPE;
   }
   else
   {
     yminm = model.fm.ymin;
-    YMAXE = YMAXMAPE * (XMAXV - XMINM) / (XMAXV - XMINV);
+    YMAXE = YMAXMAPE * (boundsV.right - boundsM.left) / boundsV.getWidth();
   }
   if ((XMINE + 1 >= XMAXE) || (YMINE + 1 >= YMAXE))
     return 0;
@@ -395,10 +394,12 @@ void all(void)
 {
   if (!All_Map)
   {
-    memmove(&XMINV, &XMING, 4 * sizeof(double));
+    boundsV = boundsG;
     drawrazd();
   }
 }
+
+#define MIN_VIEW_SIZE 200
 
 void plmash(void)
 {
@@ -407,15 +408,12 @@ void plmash(void)
     displayWarning(1);
     return;
   }
-  double dxm = (XMAXV - XMINV) / 4, dym = (YMAXV - YMINV) / 4;
-  XMINV += dxm;
-  XMAXV -= dxm;
-  YMINV += dym;
-  YMAXV -= dym;
-  if ((XMAXV - XMINV) < 200)
-    XMAXV = XMINV + 200;
-  if ((YMAXV - YMINV) < 200)
-    YMAXV = YMINV + 200;
+  double dxm = boundsV.getWidth() / 4, dym = boundsV.getHeight() / 4;
+  boundsV.inflate(-dxm, -dym);
+  if (boundsV.getWidth() < MIN_VIEW_SIZE)
+    boundsV.right = boundsV.left + MIN_VIEW_SIZE;
+  if (boundsV.getHeight() < MIN_VIEW_SIZE)
+    boundsV.bottom = boundsV.top + MIN_VIEW_SIZE;
   drawrazd();
 }
 
@@ -423,16 +421,13 @@ void minmash(void)
 {
   if (All_Map)
     return;
-  if ((XMAXV - XMINV) > 0.75 * (XMAXG - XMING))
+  if (boundsV.getWidth() > 0.75 * boundsG.getWidth())
   {
     all();
     return;
   }
-  double dxm = (XMAXV - XMINV) / 4, dym = (YMAXV - YMINV) / 4;
-  XMINV -= dxm;
-  XMAXV += dxm;
-  YMINV -= dym;
-  YMAXV += dym;
+  double dxm = boundsV.getWidth() / 4, dym = boundsV.getHeight() / 4;
+  boundsV.inflate(dxm, dym);
   cor_V();
   drawrazd();
 }
@@ -505,11 +500,11 @@ void fragment(void)
     dxm = 200;
   dxm /= 2;
   float dxc = (_DXM + xminm) / 2;
-  XMINV = dxc - dxm;
-  XMAXV = dxc + dxm;
+  boundsV.left = dxc - dxm;
+  boundsV.right = dxc + dxm;
   dxc = (_DYM + yminm) / 2;
-  YMINV = dxc - dxm;
-  YMAXV = dxc + dxm;
+  boundsV.top = dxc - dxm;
+  boundsV.bottom = dxc + dxm;
   cor_V();
   drawrazd();
 }
@@ -521,11 +516,9 @@ void centr(void)
   int x1, y1;
   if (M_K_R_status() == -1)
     return;
-  double dxm = (XMAXV - XMINV) / 2, dym = (YMAXV - YMINV) / 2;
-  XMINV = _DXM - dxm;
-  XMAXV = _DXM + dxm;
-  YMINV = _DYM - dym;
-  YMAXV = _DYM + dym;
+  double dxm = boundsV.getWidth() / 2, dym = boundsV.getHeight() / 2;
+  boundsV.initByPoint(_DXM, _DYM);
+  boundsV.inflate(dxm, dym);
   cor_V();
   drawrazd();
 }
@@ -584,14 +577,7 @@ void draw_kr(const void *)
 
 void cor_dxdy(double *dx, double *dy)
 {
-  if (*dx > XMAXV)
-    *dx = XMAXV;
-  if (*dy > YMAXV)
-    *dy = YMAXV;
-  if (*dx < XMINV)
-    *dx = XMINV;
-  if (*dy < YMINV)
-    *dy = YMINV;
+  boundsV.putPointInside(dx, dy);
 }
 
 int M_K_R_status(DrawCursorFunc drawCursor, int (*keyhandler)(int),
@@ -704,29 +690,29 @@ ex:
 
 void redraw(double x1, double y1, double x2, double y2, int d)
 {
-  double xmn = x1 - (XMAXG - XMING) / d;
-  if (xmn < XMING)
-    xmn = XMING;
-  double xmx = x2 + (XMAXG - XMING) / d;
-  if (xmx > XMAXG)
-    xmx = XMAXG;
-  double ymn = y1 - (YMAXG - YMING) / d;
-  if (ymn < YMING)
-    ymn = YMING;
-  double ymx = y2 + (YMAXG - YMING) / d;
-  if (ymx > YMAXG)
-    ymx = YMAXG;
+  double xmn = x1 - boundsG.getWidth() / d;
+  if (xmn < boundsG.left)
+    xmn = boundsG.left;
+  double xmx = x2 + boundsG.getWidth() / d;
+  if (xmx > boundsG.right)
+    xmx = boundsG.right;
+  double ymn = y1 - boundsG.getHeight() / d;
+  if (ymn < boundsG.top)
+    ymn = boundsG.top;
+  double ymx = y2 + boundsG.getHeight() / d;
+  if (ymx > boundsG.bottom)
+    ymx = boundsG.bottom;
   double dxm = xmx - xmn;
   double dym = ymx - ymn;
   if (dym >= dxm)
     dxm = dym;
   dxm /= 2;
   float dxc = (xmx + xmn) / 2;
-  XMINV = dxc - dxm;
-  XMAXV = dxc + dxm;
+  boundsV.left = dxc - dxm;
+  boundsV.right = dxc + dxm;
   dxc = (ymx + ymn) / 2;
-  YMINV = dxc - dxm;
-  YMAXV = dxc + dxm;
+  boundsV.top = dxc - dxm;
+  boundsV.bottom = dxc + dxm;
   drawrazd();
 }
 
@@ -812,22 +798,18 @@ int drawrazd(void)
   setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
   clearviewport();
   //  int dxe=XMAXMAPE,dye=YMAXMAPE;
-  double dyv = XMAXV - XMINV, dxv = YMAXV - YMINV;
+  double dyv = boundsV.getWidth(), dxv = boundsV.getHeight();
   if ((dxv <= 0) || (dyv <= 0))
     goto l1;
   if (dxv > dyv)
-  {
     dyv = dxv;
-  }
   else
-  {
     dxv = dyv;
-  }
-  All_Map = !memcmp(&XMINV, &XMING, 4 * sizeof(double));
-  XMINV = (XMAXV + XMINV - dxv) / 2;
-  XMAXV = XMINV + dxv;
-  YMINV = (YMAXV + YMINV - dyv) / 2;
-  YMAXV = YMINV + dyv;
+  All_Map = !memcmp(&boundsV, &boundsG, sizeof(CRectD));
+  boundsV.left = (boundsV.left + boundsV.right - dxv) / 2;
+  boundsV.right = boundsV.left + dxv;
+  boundsV.top = (boundsV.top + boundsV.bottom - dyv) / 2;
+  boundsV.bottom = boundsV.top + dyv;
   CURRENTSCALE = dyv / 0.18;
   if ((CURRENTSCALE >= SCALEMAX) || (CURRENTSCALE <= SCALEMIN))
   {
@@ -845,16 +827,16 @@ int drawrazd(void)
     }
     SCALES = ss;
     dxv = dxv * sc / CURRENTSCALE;
-    XMINV = (XMAXV + XMINV - dxv) / 2.0;
-    XMAXV = XMINV + dxv;
+    boundsV.left = (boundsV.right + boundsV.left - dxv) / 2.0;
+    boundsV.right = boundsV.left + dxv;
     dyv = dyv * sc / CURRENTSCALE;
-    YMINV = (YMAXV + YMINV - dxv) / 2.0;
-    YMAXV = YMINV + dyv;
+    boundsV.top = (boundsV.bottom + boundsV.top - dxv) / 2.0;
+    boundsV.bottom = boundsV.top + dyv;
     CURRENTSCALE = sc;
   }
   else
     SCALES = log(CURRENTSCALE / SCALEMIN) / SCALEO;
-  memmove(&XMINM, &XMING, 4 * sizeof(double));
+  boundsM = boundsG;
   setviewMAP();
   pos = 0;
   store_otkat();
