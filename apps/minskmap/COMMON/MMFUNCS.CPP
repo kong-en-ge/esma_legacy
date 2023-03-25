@@ -56,7 +56,7 @@ void find_rg(void)
     count++;
     if (!All_Map)
       all();
-    setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     draw_one_obj(ret, 12, 0);
     settwink(12, WHITE);
     {
@@ -127,7 +127,7 @@ void find_st(void)
       redraw(XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
              YDISRAZ(spr.xmax), 24);
     }
-    setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     draw_one_obj(ret, 12, 0);
     settwink(12, WHITE);
     {
@@ -236,7 +236,7 @@ int find_bl(char const *st, int bl)
       settextjustify(t.horiz, t.vert);
       redraw(XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
              YDISRAZ(spr.xmax), 64);
-      setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+      setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     }
     draw_one_obj(ret, 12, 0);
     settwink(12, WHITE);

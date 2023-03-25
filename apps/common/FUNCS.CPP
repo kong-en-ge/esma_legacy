@@ -151,7 +151,7 @@ void rasst(void)
   char *mous_buf = new char[mouse_size_buff()];
   if (mous_buf != NULL)
     mouse_store(mous_buf);
-  mouse_screen_size(XMINE, YMINE, XMAXE, YMAXE);
+  mouse_screen_size(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom);
   mouse_setgraphcursor(8, 8, mscur);
   set_position(XMAXMAPE / 2, YMAXMAPE / 2);
   int status, x1 = -1, x2, y1, y2, col = getcolor();
@@ -323,63 +323,63 @@ int setviewMAP(void)
     xmaxm = float((boundsV.bottom - boundsM.top) * (model.fm.xmax - model.fm.xmin) /
                   boundsM.getHeight()) +
             model.fm.xmin;
-    XMAXE = XMAXMAPE;
+    boundsE.right = XMAXMAPE;
   }
   else
   {
     xmaxm = model.fm.xmax;
-    XMAXE = XMAXMAPE * (boundsM.bottom - boundsV.top) / (boundsV.getHeight());
+    boundsE.right = XMAXMAPE * (boundsM.bottom - boundsV.top) / (boundsV.getHeight());
   }
   if (boundsM.top < boundsV.top)
   {
     xminm = float((boundsV.top - boundsM.top) * (model.fm.xmax - model.fm.xmin) /
                   boundsM.getHeight()) +
             model.fm.xmin;
-    XMINE = 0;
+    boundsE.left = 0;
   }
   else
   {
     xminm = model.fm.xmin;
-    XMINE = XMAXMAPE * (boundsM.top - boundsV.top) / boundsV.getHeight();
+    boundsE.left = XMAXMAPE * (boundsM.top - boundsV.top) / boundsV.getHeight();
   }
   if (boundsM.right > boundsV.right)
   {
     ymaxm = float((boundsV.right - boundsM.left) * (model.fm.ymax - model.fm.ymin) /
                   boundsM.getWidth()) +
             model.fm.ymin;
-    YMINE = 0;
+    boundsE.top = 0;
   }
   else
   {
     ymaxm = model.fm.ymax;
-    YMINE = YMAXMAPE * (boundsV.right - boundsM.right) / boundsV.getWidth();
+    boundsE.top = YMAXMAPE * (boundsV.right - boundsM.right) / boundsV.getWidth();
   }
   if (boundsM.left < boundsV.left)
   {
     yminm = float((boundsV.left - boundsM.left) * (model.fm.ymax - model.fm.ymin) /
                   boundsM.getWidth()) +
             model.fm.ymin;
-    YMAXE = YMAXMAPE;
+    boundsE.bottom = YMAXMAPE;
   }
   else
   {
     yminm = model.fm.ymin;
-    YMAXE = YMAXMAPE * (boundsV.right - boundsM.left) / boundsV.getWidth();
+    boundsE.bottom = YMAXMAPE * (boundsV.right - boundsM.left) / boundsV.getWidth();
   }
-  if ((XMINE + 1 >= XMAXE) || (YMINE + 1 >= YMAXE))
+  if ((boundsE.left >= boundsE.right) || (boundsE.top >= boundsE.bottom))
     return 0;
 
-  setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+  setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
   setviewmap(xminm, yminm, xmaxm, ymaxm);
-  setview(0, 0, XMAXE - XMINE, YMAXE - YMINE);
-  scr.assign(0, 0, XMAXE - XMINE, YMAXE - YMINE);
+  setview(0, 0, boundsE.getWidth(), boundsE.getHeight());
+  scr.assign(0, 0, boundsE.getWidth(), boundsE.getHeight());
   scr.assign_map(xminm, yminm, xmaxm, ymaxm);
   model.xminw = xminm;
   model.yminw = yminm;
   model.xmaxw = xmaxm;
   model.ymaxw = ymaxm;
-  asm mov cx, XMAXE
-  asm sub cx, XMINE
+  asm mov cx, word ptr boundsE[4];//.right
+  asm sub cx, word ptr boundsE[0];//.left
   asm mov ax, xmaxm
   asm sub ax, xminm
   asm mov dx, 3
@@ -880,7 +880,7 @@ int chooseObject(const OBJND *obj, int nobj)
 
   if (nobj > 0)
   {
-    setviewport(XMINE, YMINE, XMAXE, YMAXE, 1);
+    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     for (int i = 0; i < nobj; i++)
     {
       draw_one_obj(obj[i].nobj, 12);
