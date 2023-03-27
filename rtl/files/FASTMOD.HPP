@@ -48,7 +48,6 @@ struct F_SPR
 struct FAST_MODEL
 {
   F_FORM fm;
-  int xminw, yminw, xmaxw, ymaxw;
   XMSFiles hs, hm, hh; // handles справки и метрики
 
   ~FAST_MODEL();
