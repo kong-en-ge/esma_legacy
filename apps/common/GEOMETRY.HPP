@@ -67,6 +67,8 @@ public:
   void inflate(T dx, T dy);
   void initByPoint(CPoint<T> const& value);
   void initByPoint(T x, T y);
+  int intersect(CRect<T> const& src1, CRect<T> const& src2);
+  int intersect(CRect<T> const& src);
   void offset(T x, T y);
   void offset(CPoint<T> const& value);
   void putPointInside(T *x, T *y) const;
@@ -99,6 +101,11 @@ template <class T> inline void CRect<T>::initByPoint(CPoint<T> const& value)
 template <class T> inline void CRect<T>::initByPoint(T x, T y)
 {
   setValues(x, y, x, y);
+}
+
+template <class T> inline int CRect<T>::intersect(CRect<T> const& src)
+{
+  return intersect(*this, src);
 }
 
 template <class T> inline void CRect<T>::setValues(T left, T top, T right, T bottom)
