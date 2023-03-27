@@ -1,7 +1,9 @@
 #ifndef menuall2
 #define menuall2
 
-void find_rg(void);
-void find_punct(void);
+#include "viewctx.hpp"
+
+void find_rg(CViewContext const& viewContext);
+void find_punct(CViewContext const& viewContext);
 
 #endif

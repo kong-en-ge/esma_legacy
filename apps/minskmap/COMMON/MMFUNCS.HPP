@@ -1,8 +1,10 @@
 #ifndef __MMFUNCS_HPP__
 #define __MMFUNCS_HPP__
 
-void find_rg(void);
-void find_st(void);
-int find_bl(char const *st, int bl);
+#include "viewctx.hpp"
+
+void find_rg(CViewContext const& viewContext);
+void find_st(CViewContext const& viewContext);
+int find_bl(CViewContext const& viewContext, char const *st, int bl);
 
 #endif

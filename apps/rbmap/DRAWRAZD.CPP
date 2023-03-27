@@ -84,12 +84,12 @@ void dr_pn_n(F_SPR *spr, char *clcod, int color, int en, int cod)
   scr.outstring(namstd, mst, &ft);
 }
 
-int draw_one_obj(unsigned obj, int color, int en)
+int draw_one_obj(CViewContext const& viewContext, unsigned obj, int color, int en)
 {
   F_SPR spr;
   if (model.readspr(&spr, obj) == -1)
     return -1;
-  if ((!en) && (!obj_enabled(&spr)))
+  if ((!en) && (!obj_enabled(viewContext, &spr)))
     return 0;
   FLIB *flib = flibrt + spr.numincl;
   int loc = flib->loc;

@@ -8,7 +8,8 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn)
+int otk_met_kuda(CViewContext const& viewContext,
+  PERES *pss, OBSTOP *otkd, int retkdot, int nn)
 {
   OBSTOP *kudan, *peres;
   int r, ckot, ckkd, j2 = 0;
@@ -77,7 +78,7 @@ int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn)
     { //
       xmt = metro[iv].x;
       ymt = metro[iv].y;
-      int retmt = poisk(2, &xmt, &ymt);
+      int retmt = poisk(viewContext, 2, &xmt, &ymt);
       if (!retmt)
       {
         iv++;

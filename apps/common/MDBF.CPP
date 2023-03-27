@@ -14,7 +14,6 @@
 #include "funcs.hpp"
 
 int dcdpar(char *codp, char *znp, int zn);
-void redraw(double, double, double, double, int);
 
 struct F_dbf
 {
@@ -347,10 +346,10 @@ struct DBF_REC : public TEXT_PACK_MENUS
                                    m != 1 ? 7 : 6, m == 0 ? "Что здесь?" : m == 1 ? "Удаление"
                                                                                   : "Поиск в БД",
                                    NULL, 1, 2000, 50, 1, m != 1 ? 1 : 3) { mode = m; };
-  int menu_key();
+  int menu_key(CViewContext const& viewContext);
 };
 
-int DBF_REC::menu_key()
+int DBF_REC::menu_key(CViewContext const& viewContext)
 {
   char str3[256];
   DBF dbf;
@@ -401,7 +400,7 @@ int DBF_REC::menu_key()
   nottwink();
   restore();
   if (k)
-    drawrazd();
+    drawrazd(viewContext);
   else
     draw_one_d(dbf.F_value(dbf.F_ref("Xcoord")), dbf.F_value(dbf.F_ref("Ycoord")),
                colordbf[(LBS + nfile)->mark[1] - 'A'], (LBS + nfile)->mark[0] - 'A');
@@ -409,7 +408,7 @@ int DBF_REC::menu_key()
   return -1;
 }
 
-void whatisitd(int mode)
+void whatisitd(CViewContext const& viewContext, int mode)
 {
   if (LBSsize == 0)
     return;
@@ -423,7 +422,7 @@ void whatisitd(int mode)
   if (nrec <= 0)
     return;
   DBF_REC tp(mode);
-  tp.menu_key();
+  tp.menu_key(viewContext);
 }
 
 char actb[100];
@@ -491,7 +490,7 @@ void OneB::draw_one(int num)
   draw_one_str(str, num);
 }
 
-void finddbf()
+void finddbf(CViewContext const& viewContext)
 {
   if (LBSsize == 0)
     return;
@@ -519,7 +518,7 @@ void finddbf()
   double xd = db.F_value(db.F_ref("Xcoord"));
   double yd = db.F_value(db.F_ref("Ycoord"));
   db.Close();
-  redraw(xd, yd, xd, yd, 20);
+  redraw(viewContext, xd, yd, xd, yd, 20);
   //    setviewport(XMINE,YMINE,XMAXE,YMAXE,1);
   int type = lb->mark[0] - 'A';
   int color = colordbf[lb->mark[1] - 'A'];
@@ -527,7 +526,7 @@ void finddbf()
   settwink(12, color);
   {
     DBF_REC tp(2);
-    tp.menu_key();
+    tp.menu_key(viewContext);
   }
   nottwink();
   draw_one_d(xd, yd, color, type);

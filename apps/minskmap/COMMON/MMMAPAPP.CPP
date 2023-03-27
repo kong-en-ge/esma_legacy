@@ -27,10 +27,10 @@ void CMinskMapApplication::executeApp(void)
   {
     parst = argv[1];
     parbl = atoi(argv[2]);
-    boundsM = boundsG;
+    boundsM = getViewContext().getMapTotalBounds();
   }
   else
-    all();
+    all(getViewContext());
 
   do
   {
@@ -73,17 +73,21 @@ void CMinskMapApplication::handleCommand(int command)
     }
     getActiveMenu()->draw();
     if (CURRENTSCALE < 12.0 * SCALEMIN)
-      drawrazd();
+      drawrazd(getViewContext());
     break;
+
   case 7:
-    find_bl();
+    find_bl(getViewContext());
     break;
+
   case 8:
-    find_st();
+    find_st(getViewContext());
     break;
+
   case 9:
-    find_rg();
+    find_rg(getViewContext());
     break;
+
   default:
     CInfoMapApplication::handleCommand(command);
   }

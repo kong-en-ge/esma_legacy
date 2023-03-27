@@ -48,6 +48,11 @@ template <class T> int CRect<T>::intersect(CRect<T> const& src1,
   return left < right && top < bottom;
 }
 
+template <class T> int CRect<T>::isEmpty(void) const
+{
+  return left >= right || top >= bottom;
+}
+
 template <class T> void CRect<T>::offset(T dx, T dy)
 {
   left += dx;

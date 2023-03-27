@@ -69,6 +69,7 @@ public:
   void initByPoint(T x, T y);
   int intersect(CRect<T> const& src1, CRect<T> const& src2);
   int intersect(CRect<T> const& src);
+  int isEmpty(void) const;
   void offset(T x, T y);
   void offset(CPoint<T> const& value);
   void putPointInside(T *x, T *y) const;

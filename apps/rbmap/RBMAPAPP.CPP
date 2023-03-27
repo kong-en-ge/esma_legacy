@@ -22,7 +22,7 @@ CRbMapApplication::CRbMapApplication(int argc, char *argv[]) :
 
 void CRbMapApplication::executeApp(void)
 {
-  all();
+  all(getViewContext());
 
   do
   {
@@ -56,11 +56,11 @@ void CRbMapApplication::handleCommand(int command)
   switch (command)
   {
   case 8:
-    find_punct();
+    find_punct(getViewContext());
     break;
 
   case 9:
-    find_rg();
+    find_rg(getViewContext());
     break;
 
   default:

@@ -49,15 +49,18 @@ void CMinskMap20Application::handleCommand(int command)
   switch (command)
   {
   case 26:
-    howstop();
+    howstop(getViewContext());
     break;
+
   case 27:
-    where_from();
+    where_from(getViewContext());
     break;
+
   case 28:
     if (pr)
-      where();
+      where(getViewContext());
     break;
+
   default:
     CMinskMapApplication::handleCommand(command);
   }
@@ -100,7 +103,7 @@ void CMinskMap20Application::runMainMenu(void)
       b19(560, 261, 639, 276, 24, "Уд.объект"),
       b20(480, 279, 559, 294, 25, "Справка"),
       b21(560, 279, 639, 294, -1, "Выход");
-  btnOnOff = &b10;
+  btnOnOff = &b51;
   Menu_but menm;
   menm + &b1 + &b2 + &b3 + &b4 + &b31 + &b41 + &b5 + &b51 + &b6 + &b7 + &b8 + &b9 + &b81 + &b82 + &b83 + &b91 + &b92 +
       &b10 + &b11 + &b12 + &b13 + &b14 + &b15 + &b16 + &b17 + &b18 + &b19 + &b20 + &b21;
@@ -110,8 +113,8 @@ void CMinskMap20Application::runMainMenu(void)
   outtextxy(562, 191, "Б а з ы");
   mouse_show(ON);
   if (parst)
-    if (find_bl(parst, parbl))
-      all();
+    if (find_bl(getViewContext(), parst, parbl))
+      all(getViewContext());
   runMenu(&menm);
   if (prmt == 1)
     delete metro;

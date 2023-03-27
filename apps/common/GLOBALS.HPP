@@ -24,16 +24,13 @@ struct List_base
 };
 
 extern int XMAXMAPE, YMAXMAPE;
-extern CRectD boundsG; // габаритные координаты
 extern CRectD boundsM; //габаритные координаты карты в мск
 extern CRectD boundsV; // габаритные координаты окна вид
-extern CRectS boundsE; // габаритные координаты окна карты на экр
 extern double XMINVC, YMINVC, XMAXVC, YMAXVC; // габаритные координаты  контр.окна вид
 extern int XMINEC, YMINEC, XMAXEC, YMAXEC;
 extern unsigned char SCALES;     // степень увеличения
 
 extern double _DXM, _DYM;
-extern int DXM;
 
 extern SCRIPT scr;
 extern fonttype ft;
