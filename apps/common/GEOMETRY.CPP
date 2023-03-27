@@ -1,4 +1,9 @@
+#include <stdlib.h>
+
 #include "geometry.hpp"
+
+#define min(a, b) (a)<(b)?(a):(b)
+#define max(a, b) (a)>(b)?(a):(b)
 
 template <class T> int CRect<T>::containsPoint(T x, T y) const
 {
@@ -31,6 +36,16 @@ template <class T> void CRect<T>::inflate(T dx, T dy)
   top -= dy;
   right += dx;
   bottom += dy;
+}
+
+template <class T> int CRect<T>::intersect(CRect<T> const& src1,
+  CRect<T> const& src2)
+{
+  left = max(src1.left, src2.left);
+  top = max(src1.top, src2.top);
+  right = min(src1.right, src2.right);
+  bottom = min(src1.bottom, src2.bottom);
+  return left < right && top < bottom;
 }
 
 template <class T> void CRect<T>::offset(T dx, T dy)
