@@ -16,9 +16,7 @@
 #include "funcs.hpp"
 #include "codesel.hpp"
 
-FLIB *findobj(SPR *spr);
-
-void find_rg(void)
+void find_rg(CViewContext const& viewContext)
 {
   FINDatrf fa;
   fa.natr = 1;
@@ -55,9 +53,9 @@ void find_rg(void)
       continue;
     count++;
     if (!All_Map)
-      all();
+      all(viewContext);
     setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
-    draw_one_obj(ret, 12, 0);
+    draw_one_obj(viewContext, ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -75,7 +73,7 @@ void find_rg(void)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(ret, -1, 0);
+      draw_one_obj(viewContext, ret, -1, 0);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;
@@ -86,7 +84,7 @@ void find_rg(void)
   return;
 }
 
-void find_st(void)
+void find_st(CViewContext const& viewContext)
 {
   textsettingstype t;
   gettextsettings(&t);
@@ -107,6 +105,7 @@ void find_st(void)
   fa.blok = model.fm.sbh;
   fa.smes = model.fm.ssh;
   unsigned ret, count = 0;
+  CRectS const& clipBounds = viewContext.getMapClipBounds();
   do
   {
     ret = findobj(model, fa);
@@ -119,16 +118,17 @@ void find_st(void)
       continue;
     count++;
     int dx = xwinmap(30) - xwinmap(0);
-    if ((!obj_enabled(&spr)) || (spr.xmin < model.xminw) ||
-        (spr.ymin < model.yminw) || (spr.xmax > (model.xmaxw - dx)) ||
-        (spr.ymax > model.ymaxw))
+    if (!obj_enabled(viewContext, &spr) || 
+        spr.xmin < clipBounds.left || spr.ymin < clipBounds.top || 
+        spr.xmax > clipBounds.right - dx || spr.ymax > clipBounds.bottom)
     {
       settextjustify(t.horiz, t.vert);
-      redraw(XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
-             YDISRAZ(spr.xmax), 24);
+      redraw(viewContext,
+        XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
+        YDISRAZ(spr.xmax), 24);
     }
     setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
-    draw_one_obj(ret, 12, 0);
+    draw_one_obj(viewContext, ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -145,7 +145,7 @@ void find_st(void)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(ret, -1, 0);
+      draw_one_obj(viewContext, ret, -1, 0);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;
@@ -156,7 +156,7 @@ void find_st(void)
   return;
 }
 
-int find_bl(char const *st, int bl)
+int find_bl(CViewContext const& viewContext, char const *st, int bl)
 {
   textsettingstype t;
   gettextsettings(&t);
@@ -217,6 +217,7 @@ int find_bl(char const *st, int bl)
   fa.blok = model.fm.sbh;
   fa.smes = model.fm.ssh;
   unsigned ret, count = 0;
+  CRectS const& clipBounds = viewContext.getMapClipBounds();
   do
   {
     ret = findobj(model, fa);
@@ -229,16 +230,17 @@ int find_bl(char const *st, int bl)
       continue;
     count++;
     int dx = xwinmap(30) - xwinmap(0);
-    if ((!obj_enabled(&spr)) || (spr.xmin < model.xminw) ||
-        (spr.ymin < model.yminw) || (spr.xmax > (model.xmaxw - dx)) ||
-        (spr.ymax > model.ymaxw))
+    if (!obj_enabled(viewContext, &spr) || 
+        spr.xmin < clipBounds.left || spr.ymin < clipBounds.top ||
+        spr.xmax > clipBounds.right - dx || spr.ymax > clipBounds.bottom)
     {
       settextjustify(t.horiz, t.vert);
-      redraw(XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
-             YDISRAZ(spr.xmax), 64);
+      redraw(viewContext,
+        XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
+        YDISRAZ(spr.xmax), 64);
       setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     }
-    draw_one_obj(ret, 12, 0);
+    draw_one_obj(viewContext, ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -255,7 +257,7 @@ int find_bl(char const *st, int bl)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(ret, -1, 0);
+      draw_one_obj(viewContext, ret, -1, 0);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;

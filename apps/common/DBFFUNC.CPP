@@ -44,7 +44,7 @@ void BigMB::draw_one(int num)
 }
 
 
-void onoff(void)
+void onoff(CViewContext const& viewContext)
 {
   if (!LBSsize)
     return;
@@ -67,7 +67,7 @@ void onoff(void)
   }
   mb.restore();
   if (ccoff)
-    drawrazd();
+    drawrazd(viewContext);
   else if (ccon)
     draw_fld();
 }
@@ -162,7 +162,7 @@ int mark_dbf(List_base *lbs)
   return 0;
 }
 
-void chmark(void)
+void chmark(CViewContext const& viewContext)
 {
   if (!LBSsize)
     return;
@@ -184,7 +184,7 @@ void chmark(void)
   {
     write_lbs();
     if (cca)
-      drawrazd();
+      drawrazd(viewContext);
   }
 }
 
@@ -257,7 +257,7 @@ void new_dbf(void)
   (LBS + LBSsize - 1)->activ = 1;
 }
 
-void del_dbf(void)
+void del_dbf(CViewContext const& viewContext)
 {
   if (!LBSsize)
     return;
@@ -301,7 +301,7 @@ void del_dbf(void)
     }
   }
   if (cc)
-    drawrazd();
+    drawrazd(viewContext);
 }
 
 void act_dbf(void)

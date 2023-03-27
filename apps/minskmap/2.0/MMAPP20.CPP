@@ -49,15 +49,18 @@ void CMinskMap20Application::handleCommand(int command)
   switch (command)
   {
   case 26:
-    howstop();
+    howstop(getViewContext());
     break;
+
   case 27:
-    where_from();
+    where_from(getViewContext());
     break;
+
   case 28:
     if (pr)
-      where();
+      where(getViewContext());
     break;
+
   default:
     CMinskMapApplication::handleCommand(command);
   }
@@ -110,8 +113,8 @@ void CMinskMap20Application::runMainMenu(void)
   outtextxy(562, 191, "Å † ß Î");
   mouse_show(ON);
   if (parst)
-    if (find_bl(parst, parbl))
-      all();
+    if (find_bl(getViewContext(), parst, parbl))
+      all(getViewContext());
   runMenu(&menm);
   if (prmt == 1)
     delete metro;

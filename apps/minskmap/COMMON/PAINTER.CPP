@@ -75,7 +75,7 @@ r_en:
   return;
 }
 
-void dr_st_n(F_SPR *spr, int *metr)
+void dr_st_n(CViewContext const& viewContext, F_SPR *spr, int *metr)
 {
   mk_atrf ma;
   if ((spr->sbh == 0) || (model.readhars((int **)&ma.har, spr) == -1))
@@ -96,14 +96,15 @@ void dr_st_n(F_SPR *spr, int *metr)
   int bp = 1, x1, y1, x2, y2;
   int dx = xwinmap(8) - xwinmap(0);
   int dy = -ywinmap(8) + ywinmap(0);
+  CRectS const& clipBounds = viewContext.getMapClipBounds();
   while (*(mi + 2) != 0xc018)
   {
     x1 = *mi;
     y1 = *(mi + 1);
     x2 = *(mi + 2);
     y2 = *(mi + 3);
-    int fl = lin_wnd(&x1, &y1, &x2, &y2, model.xminw + dx, model.yminw + dy,
-                     model.xmaxw - dx, model.ymaxw - dy);
+    int fl = lin_wnd(&x1, &y1, &x2, &y2, clipBounds.left + dx, clipBounds.top + dy,
+                     clipBounds.right - dx, clipBounds.bottom - dy);
     if (fl != -1)
     {
       if (bp)
@@ -141,12 +142,13 @@ void dr_st_n(F_SPR *spr, int *metr)
   scr.outstring(namst, mst, &ft);
 }
 
-int draw_one_obj(unsigned obj, int color, int drawDisabled)
+int draw_one_obj(CViewContext const& viewContext,
+  unsigned obj, int color, int drawDisabled)
 {
   F_SPR spr;
   if (model.readspr(&spr, obj) == -1)
     return -1;
-  if (!drawDisabled && !obj_enabled(&spr))
+  if (!drawDisabled && !obj_enabled(viewContext, &spr))
     return 0;
   FLIB *flib = flibrt + spr.numincl;
   int loc = flib->loc;
@@ -179,7 +181,7 @@ int draw_one_obj(unsigned obj, int color, int drawDisabled)
       drawingline(metr - 2, loc == 2 ? flib->num : 0);
       if ((FULL_MAP) && (SCALES < 118) &&
           (!strncmp(flib->clcod, "45", 2)) && (loc == 2))
-        dr_st_n(&spr, metr);
+        dr_st_n(viewContext, &spr, metr);
     }
     else
     {

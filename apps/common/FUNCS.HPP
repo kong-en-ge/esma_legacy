@@ -5,9 +5,10 @@
 
 #include "txtpacks.hpp"
 #include "fastmod.hpp"
+#include "viewctx.hpp"
 
 void store_otkat(void);
-void restore_otkat(void);
+void restore_otkat(CViewContext const& viewContext);
 int upcase(int symb);
 void rasst(void);
 void help(const char* help_file);
@@ -60,8 +61,9 @@ public:
 };
 
 int selectObjectPoint(double *x, double *y);
-int chooseObject(const OBJND *obj, int nobj);
-void whatisit(void);
+int chooseObject(CViewContext const& viewContext,
+  const OBJND *obj, int nobj);
+void whatisit(CViewContext const& viewContext);
 void displayObjectInfo(int objIndex);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
 
@@ -71,21 +73,21 @@ int getAttributeIndex(char const* name);
 char const * getLookupAttributeValue(int attrIndex, int valueIndex);
 int findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l);
 
-int setviewMAP(void);
-void fragment(void);
-void all(void);
-void centr(void);
+int setviewMAP(CViewContext const * pViewContext);
+void fragment(CViewContext const& viewContext);
+void all(CViewContext const& viewContext);
+void centr(CViewContext const& viewContext);
 void rasst(void);
-void plmash(void);
-void minmash(void);
-void cor_V(void);
-int drawmap(void);
+void plmash(CViewContext const& viewContext);
+void minmash(CViewContext const& viewContext);
+int drawmap(CViewContext const& viewContext);
 void drawingline(int *metr, int num);
 void draw_one_d(int x, int y, int color, int type);
 void draw_one_d(double x, double y, int color, int type);
-void redraw(double x1, double y1, double x2, double y2, int d);
-int drawrazd(void);
-int obj_enabled(F_SPR const *spr);
+void redraw(CViewContext const& viewContext,
+  double x1, double y1, double x2, double y2, int d);
+int drawrazd(CViewContext const& viewContext);
+int obj_enabled(CViewContext const& viewContext, F_SPR const *spr);
 
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 void slide(void);
@@ -96,8 +98,9 @@ int M_K_R_status(DrawCursorFunc drawCursor = NULL, int (*keyhandler)(int) = NULL
   const void *drawContext = NULL);
 
 // the following functions are to be implemented within the project
-int draw_one_obj(unsigned num, int color, int drawDisabled = 0);
+int draw_one_obj(CViewContext const& viewContext,
+  unsigned obj, int color, int drawDisabled = 0);
 void drawcram(void);
-int poisk(int mode, int *x = NULL, int *y = NULL);
+int poisk(CViewContext const& viewContext, int mode, int *x = NULL, int *y = NULL);
 
 #endif

@@ -83,19 +83,19 @@ void CInfoMapApplication::handleCommand(int command)
   switch(command)
   {
   case 1:
-    all();
+    all(getViewContext());
     break;
 
   case 2:
-    fragment();
+    fragment(getViewContext());
     break;
 
   case 3:
-    centr();
+    centr(getViewContext());
     break;
 
   case 4:
-    restore_otkat();
+    restore_otkat(getViewContext());
     break;
 
   case 5:
@@ -103,31 +103,31 @@ void CInfoMapApplication::handleCommand(int command)
     break;
 
   case 6:
-    whatisit();
+    whatisit(getViewContext());
     break;
 
   case 10:
-    onoff(  );
+    onoff(getViewContext());
     break;
 
   case 11:
-    chmark();
+    chmark(getViewContext());
     break;
 
   case 12:
-    whatisitd(0);
+    whatisitd(getViewContext(), 0);
     break;
 
   case 13:
-    finddbf();
+    finddbf(getViewContext());
     break;
 
   case 14:
-    plmash();
+    plmash(getViewContext());
     break;
 
   case 15:
-    minmash();
+    minmash(getViewContext());
     break;
 
   case 17:
@@ -143,7 +143,7 @@ void CInfoMapApplication::handleCommand(int command)
     break;
 
   case 20:
-    del_dbf();
+    del_dbf(getViewContext());
     break;
 
   case 21:
@@ -159,7 +159,7 @@ void CInfoMapApplication::handleCommand(int command)
     break;
 
   case 24:
-    whatisitd(1);
+    whatisitd(getViewContext(), 1);
     break;
 
   case 25:
@@ -248,8 +248,11 @@ int CInfoMapApplication::openMapData(void)
   {
     double dxv, dyv;
 
-    memmove(&boundsG, &model.fm.xminm, sizeof(CRectD));
-    boundsV = boundsG;
+    getViewContext().setMapTotalBounds(
+      model.fm.xminm, model.fm.yminm,
+      model.fm.xmaxm, model.fm.ymaxm
+      );
+    boundsV = getViewContext().getMapTotalBounds();
     dyv = boundsV.getWidth();
     dxv = boundsV.getHeight();
     if (dxv > dyv)

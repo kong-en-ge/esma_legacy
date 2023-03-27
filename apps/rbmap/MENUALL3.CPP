@@ -15,7 +15,7 @@ struct Bpunct
 };
 
 
-void find_punct(void)
+void find_punct(CViewContext const& viewContext)
 {
   char szName[MAX_CITYNAME_SIZE];
   szName[0] = 0;
@@ -93,9 +93,9 @@ void find_punct(void)
   {
     double xd = XDISRAZ(punct[ret].y);
     double yd = YDISRAZ(punct[ret].x);
-    redraw(xd, yd, xd, yd, 18);
+    redraw(viewContext, xd, yd, xd, yd, 18);
     setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
-    draw_one_obj(punct[ret].nob, 12, 1);
+    draw_one_obj(viewContext, punct[ret].nob, 12, 1);
     settwink(12, 10);
     int at;
     TEXT_PACK_MENUS tp(450, 185, 632, 7, "Нас.пункт", "", 1, 4000, 200, 1, 1);
@@ -110,7 +110,7 @@ void find_punct(void)
     at = tp.menu_key2();
     tp.restore();
     nottwink();
-    draw_one_obj(punct[ret].nob, -1, 1);
+    draw_one_obj(viewContext, punct[ret].nob, -1, 1);
     tp.del();
     if (at == -1)
       break;
@@ -118,7 +118,7 @@ void find_punct(void)
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
 }
 
-void find_rg(void)
+void find_rg(CViewContext const& viewContext)
 {
 //  textsettingstype t;
 //  gettextsettings(&t);
@@ -150,10 +150,11 @@ void find_rg(void)
     if (strncmp(flibrt[spr.numincl].clcod, "8115", 4))
       continue;
     count++;
-    redraw(XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
+    redraw(viewContext,
+           XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
            YDISRAZ(spr.xmax), 120);
     setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
-    draw_one_obj(ret, 12, 1);
+    draw_one_obj(viewContext, ret, 12, 1);
     settwink(12, 4);
     {
       int at;
@@ -170,7 +171,7 @@ void find_rg(void)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(ret, -1, 1);
+      draw_one_obj(viewContext, ret, -1, 1);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;

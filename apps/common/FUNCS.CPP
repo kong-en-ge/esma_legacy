@@ -113,13 +113,13 @@ void store_otkat(void)
   otkatn++;
 }
 
-void restore_otkat(void)
+void restore_otkat(CViewContext const& viewContext)
 {
   if (otkatn <= 1)
     return;
   otkatn -= 4;
   boundsV = otkat[otkatn];
-  drawrazd();
+  drawrazd(viewContext);
 }
 
 int selectObjectPoint(double *x, double *y)
@@ -285,30 +285,31 @@ int upcase(int symb)
   return Russ[symb];
 }
 
-void cor_V(void)
+void cor_V(CViewContext const& viewContext)
 {
   double delta;
+  CRectD const& totalBounds = viewContext.getMapTotalBounds();
 
-  delta = boundsG.left - boundsV.left;
+  delta = totalBounds.left - boundsV.left;
   if (delta > 0)
     boundsV.offset(delta, 0);
 
-  delta = boundsG.top - boundsV.top;
+  delta = totalBounds.top - boundsV.top;
   if (delta > 0)
     boundsV.offset(0, delta);
 
-  delta = boundsG.right - boundsV.right;
+  delta = totalBounds.right - boundsV.right;
   if (delta < 0)
     boundsV.offset(delta, 0);
 
-  delta = boundsG.bottom - boundsV.bottom;
+  delta = totalBounds.bottom - boundsV.bottom;
   if (delta < 0)
     boundsV.offset(delta, 0);
 }
 
 #define MAX_VIEW_RATIO 0.00001
 
-int setviewMAP(void)
+int setviewMAP(CViewContext const* pViewContext)
 {
   // int XMINE,YMINE,XMAXE,YMAXE;
   if ((boundsM.right <= boundsM.left) || (boundsM.top >= boundsM.bottom))
@@ -374,34 +375,26 @@ int setviewMAP(void)
   setview(0, 0, boundsE.getWidth(), boundsE.getHeight());
   scr.assign(0, 0, boundsE.getWidth(), boundsE.getHeight());
   scr.assign_map(xminm, yminm, xmaxm, ymaxm);
-  model.xminw = xminm;
-  model.yminw = yminm;
-  model.xmaxw = xmaxm;
-  model.ymaxw = ymaxm;
-  asm mov cx, word ptr boundsE[4];//.right
-  asm sub cx, word ptr boundsE[0];//.left
-  asm mov ax, xmaxm
-  asm sub ax, xminm
-  asm mov dx, 3
-  asm mul dx
-  asm add cx, 3
-  asm div cx
-  asm mov DXM,ax
+  pViewContext->setMapClipBounds(xminm, yminm, xmaxm, ymaxm);
+
+  pViewContext->setMinObjectSize(
+    (xmaxm - xminm) * 3.0 / (boundsE.getWidth() + 3)
+  );
   return 1;
 }
 
-void all(void)
+void all(CViewContext const& viewContext)
 {
   if (!All_Map)
   {
-    boundsV = boundsG;
-    drawrazd();
+    boundsV = viewContext.getMapTotalBounds();
+    drawrazd(viewContext);
   }
 }
 
 #define MIN_VIEW_SIZE 200
 
-void plmash(void)
+void plmash(CViewContext const& viewContext)
 {
   if (CURRENTSCALE < 2.8 * SCALEMIN)
   {
@@ -414,22 +407,22 @@ void plmash(void)
     boundsV.right = boundsV.left + MIN_VIEW_SIZE;
   if (boundsV.getHeight() < MIN_VIEW_SIZE)
     boundsV.bottom = boundsV.top + MIN_VIEW_SIZE;
-  drawrazd();
+  drawrazd(viewContext);
 }
 
-void minmash(void)
+void minmash(CViewContext const& viewContext)
 {
   if (All_Map)
     return;
-  if (boundsV.getWidth() > 0.75 * boundsG.getWidth())
+  if (boundsV.getWidth() > 0.75 * viewContext.getMapTotalBounds().getWidth())
   {
-    all();
+    all(viewContext);
     return;
   }
   double dxm = boundsV.getWidth() / 4, dym = boundsV.getHeight() / 4;
   boundsV.inflate(dxm, dym);
-  cor_V();
-  drawrazd();
+  cor_V(viewContext);
+  drawrazd(viewContext);
 }
 
 struct DrawFrameContext {
@@ -455,7 +448,7 @@ void draw_fr(void const *drawContext)
   setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
 }
 
-void fragment(void)
+void fragment(CViewContext const& viewContext)
 {
   if (CURRENTSCALE < 2.8 * SCALEMIN)
   {
@@ -505,11 +498,11 @@ void fragment(void)
   dxc = (_DYM + yminm) / 2;
   boundsV.top = dxc - dxm;
   boundsV.bottom = dxc + dxm;
-  cor_V();
-  drawrazd();
+  cor_V(viewContext);
+  drawrazd(viewContext);
 }
 
-void centr(void)
+void centr(CViewContext const& viewContext)
 {
   if (All_Map)
     return;
@@ -519,11 +512,11 @@ void centr(void)
   double dxm = boundsV.getWidth() / 2, dym = boundsV.getHeight() / 2;
   boundsV.initByPoint(_DXM, _DYM);
   boundsV.inflate(dxm, dym);
-  cor_V();
-  drawrazd();
+  cor_V(viewContext);
+  drawrazd(viewContext);
 }
 
-int drawmap(void)
+int drawmap(CViewContext const& viewContext)
 {
   int exp = 0;
   F_SPR spr;
@@ -539,7 +532,7 @@ int drawmap(void)
       break;
     }
 #endif
-    draw_one_obj(i, -1, 0 /* drawDisabled */);
+    draw_one_obj(viewContext, i, -1, 0 /* drawDisabled */);
   }
 drawex:
   return exp;
@@ -688,20 +681,21 @@ ex:
   return ret;
 }
 
-void redraw(double x1, double y1, double x2, double y2, int d)
+void redraw(CViewContext const& viewContext, double x1, double y1, double x2, double y2, int d)
 {
-  double xmn = x1 - boundsG.getWidth() / d;
-  if (xmn < boundsG.left)
-    xmn = boundsG.left;
-  double xmx = x2 + boundsG.getWidth() / d;
-  if (xmx > boundsG.right)
-    xmx = boundsG.right;
-  double ymn = y1 - boundsG.getHeight() / d;
-  if (ymn < boundsG.top)
-    ymn = boundsG.top;
-  double ymx = y2 + boundsG.getHeight() / d;
-  if (ymx > boundsG.bottom)
-    ymx = boundsG.bottom;
+  CRectD const& totalBounds = viewContext.getMapTotalBounds();
+  double xmn = x1 - totalBounds.getWidth() / d;
+  if (xmn < totalBounds.left)
+    xmn = totalBounds.left;
+  double xmx = x2 + totalBounds.getWidth() / d;
+  if (xmx > totalBounds.right)
+    xmx = totalBounds.right;
+  double ymn = y1 - totalBounds.getHeight() / d;
+  if (ymn < totalBounds.top)
+    ymn = totalBounds.top;
+  double ymx = y2 + totalBounds.getHeight() / d;
+  if (ymx > totalBounds.bottom)
+    ymx = totalBounds.bottom;
   double dxm = xmx - xmn;
   double dym = ymx - ymn;
   if (dym >= dxm)
@@ -713,7 +707,7 @@ void redraw(double x1, double y1, double x2, double y2, int d)
   dxc = (ymx + ymn) / 2;
   boundsV.top = dxc - dxm;
   boundsV.bottom = dxc + dxm;
-  drawrazd();
+  drawrazd(viewContext);
 }
 
 int ATR(TEXT_PACK_MENUS *tp, int obj)
@@ -774,20 +768,20 @@ void displayObjectInfo(int objIndex)
     displayError(0);
 }
 
-void whatisit()
+void whatisit(CViewContext const& viewContext)
 {
   int x, y;
-  int objIndex = poisk(0 /*mode*/);
+  int objIndex = poisk(viewContext, 0 /*mode*/);
   if (objIndex >= 0)
   {
     displayObjectInfo(objIndex);
     nottwink();
-    draw_one_obj(objIndex, -1);
+    draw_one_obj(viewContext, objIndex, -1);
   }
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
 }
 
-int drawrazd(void)
+int drawrazd(CViewContext const& viewContext)
 {
 #ifdef DEMO
   STOPTIME();
@@ -797,7 +791,7 @@ int drawrazd(void)
   mouse_show(OFF);
   setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
   clearviewport();
-  //  int dxe=XMAXMAPE,dye=YMAXMAPE;
+  CRectD const& totalBounds = viewContext.getMapTotalBounds();
   double dyv = boundsV.getWidth(), dxv = boundsV.getHeight();
   if ((dxv <= 0) || (dyv <= 0))
     goto l1;
@@ -805,7 +799,7 @@ int drawrazd(void)
     dyv = dxv;
   else
     dxv = dyv;
-  All_Map = !memcmp(&boundsV, &boundsG, sizeof(CRectD));
+  All_Map = !memcmp(&boundsV, &totalBounds, sizeof(CRectD));
   boundsV.left = (boundsV.left + boundsV.right - dxv) / 2;
   boundsV.right = boundsV.left + dxv;
   boundsV.top = (boundsV.top + boundsV.bottom - dyv) / 2;
@@ -836,13 +830,13 @@ int drawrazd(void)
   }
   else
     SCALES = log(CURRENTSCALE / SCALEMIN) / SCALEO;
-  boundsM = boundsG;
-  setviewMAP();
+  boundsM = totalBounds;
+  setviewMAP(&viewContext);
   pos = 0;
   store_otkat();
   while (((pos = next_model(pos)) > 0) && (!ret2))
   {
-    ret2 = drawmap();
+    ret2 = drawmap(viewContext);
   }
   setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
   if (ret2)
@@ -861,20 +855,21 @@ l1:
   return pos;
 }
 
-int obj_enabled(F_SPR const *spr)
+int obj_enabled(CViewContext const& viewContext, F_SPR const *spr)
 {
-  if (!regionregion((REGION *)&model.xminw, (REGION *)&spr->xmin))
+  if (!viewContext.checkObjectVisible(*spr))
     return 0;
   if (flibrt[spr->numincl].minw > SCALES || flibrt[spr->numincl].maxw < SCALES)
     return 0;
   if (flibrt[spr->numincl].loc != 3)
     return 1;
-  if ((spr->xmax - spr->xmin <= DXM) && (spr->ymax - spr->ymin <= DXM))
+  if ((spr->xmax - spr->xmin <= viewContext.getMinObjectSize()) &&
+    (spr->ymax - spr->ymin <= viewContext.getMinObjectSize()))
     return 0;
   return 1;
 }
 
-int chooseObject(const OBJND *obj, int nobj)
+int chooseObject(CViewContext const& viewContext, const OBJND *obj, int nobj)
 {
   int retValue = -1;
 
@@ -883,7 +878,7 @@ int chooseObject(const OBJND *obj, int nobj)
     setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     for (int i = 0; i < nobj; i++)
     {
-      draw_one_obj(obj[i].nobj, 12);
+      draw_one_obj(viewContext, obj[i].nobj, 12);
       settwink(12, obj[i].color);
       GRwnd wndHelper(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
       wndHelper.text("Этот объект ?");
@@ -896,7 +891,7 @@ int chooseObject(const OBJND *obj, int nobj)
       if (k == -1)
       {
         nottwink();
-        draw_one_obj(obj[i].nobj, -1);
+        draw_one_obj(viewContext, obj[i].nobj, -1);
         continue;
       }
       retValue = obj[i].nobj;

@@ -33,7 +33,8 @@ void ATRMT(TEXT_PACK_MENUS *tp, int ob);
 void ATRTM(TEXT_PACK_MENUS *tp, int ob);
 void ATRPER(TEXT_PACK_MENUS *tp, int ob);
 void ATR2PER(TEXT_PACK_MENUS *tp, int ob);
-int otk_met_kuda(PERES *pss, OBSTOP *otkd, int retkdot, int nn);
+int otk_met_kuda(CViewContext const& viewContext, 
+  PERES *pss, OBSTOP *otkd, int retkdot, int nn);
 int peresad(PERESU *ps, OBSTOP *kuda, int retkd);
 int twoperes(TWOPERES *ps, OBSTOP *kuda, int retkd);
 int three(TWOPERES *ps, OBSTOP *kuda, int retkd);
@@ -572,14 +573,14 @@ int ATRFR(TEXT_PACK_MENUS *tp, int j1)
   }
 } // ATRFR
 
-void howstop()
+void howstop(CViewContext const& viewContext)
 {
   obstop = new OBSTOP[20];
   OBSTOP *obs;
   obs = new OBSTOP[4];
   char str[80];
   int ob = 0, num, nm1 = 0;
-  int ret = poisk(1);
+  int ret = poisk(viewContext, 1);
   if (!ret)
   {
     delete[] obstop;
@@ -626,7 +627,7 @@ void howstop()
     }
     setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
     for (int i = 0; i < ob; i++)
-      draw_one_obj(obs[i].nobj, 12, 1);
+      draw_one_obj(viewContext, obs[i].nobj, 12, 1);
     settwink(12, 15);
     ATRTR(&tp, ob, obs);
     tp.draw();
@@ -636,7 +637,7 @@ void howstop()
     tp.del();
     nottwink();
     for (int ii = 0; ii < ob; ii++)
-      draw_one_obj(obs[ii].nobj, -1, 1);
+      draw_one_obj(viewContext, obs[ii].nobj, -1, 1);
     setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
     delete[] obstop;
     delete[] obs;
@@ -800,10 +801,10 @@ int comuzel()
   return klm;
 } // comuzel
 
-void where_from()
+void where_from(CViewContext const& viewContext)
 {
   obstop = new OBSTOP[21];
-  retot = poisk(1, &xo, &yo);
+  retot = poisk(viewContext, 1, &xo, &yo);
   if (pr == 1)
     delete[] otkuda;
   if (!retot)
@@ -860,7 +861,7 @@ void where_from()
   delete[] obstop;
 }
 
-void where()
+void where(CViewContext const& viewContext)
 {
   if (retot == 0)
     return;
@@ -868,7 +869,7 @@ void where()
   OBSTOP *kuda;
   obstop = new OBSTOP[21];
   int key, at, ob, ob3, ob4, flag = 0;
-  int retkd = poisk(1, &xo, &yo);
+  int retkd = poisk(viewContext, 1, &xo, &yo);
   int j1 = 0, j2 = 0, j3 = 0, j4 = 0, j5 = 0;
   if (!retkd)
   {
@@ -1109,7 +1110,7 @@ void where()
           displayError(0);
           goto ex;
         }
-        j2 = otk_met_kuda(ps, kuda, retkd, otkuda[0].nobj);
+        j2 = otk_met_kuda(viewContext, ps, kuda, retkd, otkuda[0].nobj);
         if (j2 != 0)
           flag = 1;
         else
@@ -1136,7 +1137,7 @@ void where()
           displayError(0);
           goto ex;
         }
-        j2 = otk_met_kuda(ps, otkuda, retot, kuda[0].nobj);
+        j2 = otk_met_kuda(viewContext, ps, otkuda, retot, kuda[0].nobj);
         if (j2 != 0)
         {
           if (model.readspr(&sprkd, kuda[0].nobj) == -1)

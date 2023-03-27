@@ -67,8 +67,8 @@ void CMinskMap10Application::runMainMenu(void)
   outtextxy(562, 176, "Å † ß Î");
   mouse_show(ON);
   if (parst)
-    if (find_bl(parst, parbl))
-      all();
+    if (find_bl(getViewContext(), parst, parbl))
+      all(getViewContext());
 
   runMenu(&menm);
 }

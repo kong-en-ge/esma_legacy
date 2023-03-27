@@ -9,7 +9,7 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 
-int poisk(int /*mode*/, int *x, int *y)
+int poisk(CViewContext const& viewContext, int /*mode*/, int *x, int *y)
 {
   CSearchResultCollector resultCollector(5);
   F_SPR spr;
@@ -41,7 +41,7 @@ int poisk(int /*mode*/, int *x, int *y)
         continue;
       if (!xydregion(xc, yc, flibrt[spr.numincl].loc == 1 ? d2 : d, (REGION *)&spr.xmin))
         continue;
-      if (!obj_enabled(&spr))
+      if (!obj_enabled(viewContext, &spr))
         continue;
       if (flibrt[spr.numincl].loc == 1)
       {
@@ -69,7 +69,7 @@ int poisk(int /*mode*/, int *x, int *y)
     } // for
   }   // while
 
-  int retValue = chooseObject(resultCollector.getObj(), resultCollector.getCount());
+  int retValue = chooseObject(viewContext, resultCollector.getObj(), resultCollector.getCount());
   if (retValue >= 0)
   {
     if (x != NULL)
