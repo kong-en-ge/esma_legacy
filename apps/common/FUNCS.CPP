@@ -20,6 +20,7 @@
 #include "textfile.hpp"
 #include "dbffunc.hpp"
 #include "graphapp.hpp"
+#include "transfrm.hpp"
 
 const unsigned mscur[] = {
     0xffff, 0xffff, 0xffff, 0xfc1f, 0xf3e7, 0xf777, 0xee3b, 0xec9b,
@@ -140,8 +141,9 @@ int selectObjectPoint(double *x, double *y)
   return retValue;
 }
 
-void rasst(void)
+void rasst(CViewContext const& viewContext)
 {
+  CRectS const& mapViewBounds = viewContext.getMapViewBounds();
   mouse_show(OFF);
   struct xy
   {
@@ -151,7 +153,7 @@ void rasst(void)
   char *mous_buf = new char[mouse_size_buff()];
   if (mous_buf != NULL)
     mouse_store(mous_buf);
-  mouse_screen_size(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom);
+  mouse_screen_size(mapViewBounds.left, mapViewBounds.top, mapViewBounds.right, mapViewBounds.bottom);
   mouse_setgraphcursor(8, 8, mscur);
   set_position(XMAXMAPE / 2, YMAXMAPE / 2);
   int status, x1 = -1, x2, y1, y2, col = getcolor();
@@ -311,7 +313,23 @@ void cor_V(CViewContext const& viewContext)
 
 int setviewMAP(CViewContext const* pViewContext)
 {
-  // int XMINE,YMINE,XMAXE,YMAXE;
+  CRectL rc;
+  CRectD rcMapView;
+  CRectS rcView, rcMap;
+  CRcRTransform view, map;
+
+  CRectS boundsE;
+
+  rc.setValues(0, 0, XMAXMAPE, YMAXMAPE);
+  view.setBounds(&rc, &boundsV);
+
+  rc.setValues(model.fm.xmin, model.fm.ymin, model.fm.xmax, model.fm.ymax);
+  map.setBounds(&rc, &boundsM);
+
+  rcMapView.intersect(boundsV, boundsM);
+  view.RtoS(&rcMapView, &rcView, 2);
+  map.RtoS(&rcMapView, &rcMap, 2);
+
   if ((boundsM.right <= boundsM.left) || (boundsM.top >= boundsM.bottom))
     return 0;
   if (boundsV.getWidth() < boundsM.getWidth() * MAX_VIEW_RATIO)
@@ -370,15 +388,18 @@ int setviewMAP(CViewContext const* pViewContext)
   if ((boundsE.left >= boundsE.right) || (boundsE.top >= boundsE.bottom))
     return 0;
 
-  setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+  pViewContext->setMapViewBounds(boundsE);
+  pViewContext->updateViewPort();
   setviewmap(xminm, yminm, xmaxm, ymaxm);
   setview(0, 0, boundsE.getWidth(), boundsE.getHeight());
   scr.assign(0, 0, boundsE.getWidth(), boundsE.getHeight());
   scr.assign_map(xminm, yminm, xmaxm, ymaxm);
+
+//  pViewContext->setMapClipBounds(rcMap.left, rcMap.top, rcMap.right, rcMap.bottom);
   pViewContext->setMapClipBounds(xminm, yminm, xmaxm, ymaxm);
 
   pViewContext->setMinObjectSize(
-    (xmaxm - xminm) * 3.0 / (boundsE.getWidth() + 3)
+    rcMap.getWidth() * 3.0 / (boundsE.getWidth() + 3)
   );
   return 1;
 }
@@ -875,7 +896,7 @@ int chooseObject(CViewContext const& viewContext, const OBJND *obj, int nobj)
 
   if (nobj > 0)
   {
-    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+    viewContext.updateViewPort();
     for (int i = 0; i < nobj; i++)
     {
       draw_one_obj(viewContext, obj[i].nobj, 12);

@@ -94,7 +94,7 @@ void find_punct(CViewContext const& viewContext)
     double xd = XDISRAZ(punct[ret].y);
     double yd = YDISRAZ(punct[ret].x);
     redraw(viewContext, xd, yd, xd, yd, 18);
-    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+    viewContext.updateViewPort();
     draw_one_obj(viewContext, punct[ret].nob, 12, 1);
     settwink(12, 10);
     int at;
@@ -153,7 +153,7 @@ void find_rg(CViewContext const& viewContext)
     redraw(viewContext,
            XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
            YDISRAZ(spr.xmax), 120);
-    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+    viewContext.updateViewPort();
     draw_one_obj(viewContext, ret, 12, 1);
     settwink(12, 4);
     {

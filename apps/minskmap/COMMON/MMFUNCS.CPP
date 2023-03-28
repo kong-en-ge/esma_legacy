@@ -54,7 +54,7 @@ void find_rg(CViewContext const& viewContext)
     count++;
     if (!All_Map)
       all(viewContext);
-    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+    viewContext.updateViewPort();
     draw_one_obj(viewContext, ret, 12, 0);
     settwink(12, WHITE);
     {
@@ -127,7 +127,7 @@ void find_st(CViewContext const& viewContext)
         XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
         YDISRAZ(spr.xmax), 24);
     }
-    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+    viewContext.updateViewPort();
     draw_one_obj(viewContext, ret, 12, 0);
     settwink(12, WHITE);
     {
@@ -238,7 +238,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
       redraw(viewContext,
         XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
         YDISRAZ(spr.xmax), 64);
-      setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+      viewContext.updateViewPort();
     }
     draw_one_obj(viewContext, ret, 12, 0);
     settwink(12, WHITE);

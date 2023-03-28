@@ -99,7 +99,7 @@ void CInfoMapApplication::handleCommand(int command)
     break;
 
   case 5:
-    rasst();
+    rasst(getViewContext());
     break;
 
   case 6:

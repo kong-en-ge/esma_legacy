@@ -10,7 +10,7 @@
 void store_otkat(void);
 void restore_otkat(CViewContext const& viewContext);
 int upcase(int symb);
-void rasst(void);
+void rasst(CViewContext const& viewContext);
 void help(const char* help_file);
 
 int next_model(int index, int ignoreScaleFilter = 0);

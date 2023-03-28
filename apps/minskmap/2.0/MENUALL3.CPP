@@ -625,7 +625,7 @@ void howstop(CViewContext const& viewContext)
       delete[] obs;
       goto ex;
     }
-    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+    viewContext.updateViewPort();
     for (int i = 0; i < ob; i++)
       draw_one_obj(viewContext, obs[i].nobj, 12, 1);
     settwink(12, 15);
@@ -1258,7 +1258,7 @@ void where(CViewContext const& viewContext)
     else if (j1 != 0)
     { // ¯à
       ob = ATRFR(&tp, j1);
-      setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+      viewContext.updateViewPort();
     } // ¯à
     else if ((j2 != 0) || (j3 != 0) || (j4 != 0) || (j5 != 0))
     { // á ¯
@@ -1271,7 +1271,7 @@ void where(CViewContext const& viewContext)
           else if (flag == 2)
             ATRTM(&tp, ob);
           delete[] ps;
-          setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+          viewContext.updateViewPort();
         }
         if (j3 != 0)
         {
@@ -1279,14 +1279,14 @@ void where(CViewContext const& viewContext)
             tp.add("         ˆ‹ˆ        ");
           ATRPER(&tp, ob3);
           delete[] psu;
-          setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+          viewContext.updateViewPort();
         }
       } // 1 peresad
       else if (j4 != 0)
       { // 2 peresad
         ATR2PER(&tp, ob4);
         delete[] pstwo;
-        setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+        viewContext.updateViewPort();
       } // 2 peresad
       else if (j5 != 0)
       { // 3 peresad
@@ -1341,7 +1341,7 @@ void where(CViewContext const& viewContext)
         tp.add("  „€‹……  ");
         ATR2PER(&tp, ob4);
         delete[] pstwo;
-        setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+        viewContext.updateViewPort();
       } // 3 peresad
     }   // á ¯
     tp.draw();
@@ -1349,7 +1349,7 @@ void where(CViewContext const& viewContext)
     key = tp.menu_key2();
     tp.restore();
     tp.del();
-    setviewport(boundsE.left, boundsE.top, boundsE.right, boundsE.bottom, 1);
+    viewContext.updateViewPort();
   } // ¢ë¢®¤
 ex:
   pr = 0;
