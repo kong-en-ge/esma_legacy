@@ -318,8 +318,6 @@ int setviewMAP(CViewContext const* pViewContext)
   CRectS rcView, rcMap;
   CRcRTransform view, map;
 
-  CRectS boundsE;
-
   rc.setValues(0, 0, XMAXMAPE, YMAXMAPE);
   view.setBounds(&rc, &boundsV);
 
@@ -336,70 +334,22 @@ int setviewMAP(CViewContext const* pViewContext)
     return 0;
   if (boundsV.getHeight() < boundsM.getHeight() * MAX_VIEW_RATIO)
     return 0;
-  int xminm, yminm, xmaxm, ymaxm;
-  if (boundsM.bottom > boundsV.bottom)
-  {
-    xmaxm = float((boundsV.bottom - boundsM.top) * (model.fm.xmax - model.fm.xmin) /
-                  boundsM.getHeight()) +
-            model.fm.xmin;
-    boundsE.right = XMAXMAPE;
-  }
-  else
-  {
-    xmaxm = model.fm.xmax;
-    boundsE.right = XMAXMAPE * (boundsM.bottom - boundsV.top) / (boundsV.getHeight());
-  }
-  if (boundsM.top < boundsV.top)
-  {
-    xminm = float((boundsV.top - boundsM.top) * (model.fm.xmax - model.fm.xmin) /
-                  boundsM.getHeight()) +
-            model.fm.xmin;
-    boundsE.left = 0;
-  }
-  else
-  {
-    xminm = model.fm.xmin;
-    boundsE.left = XMAXMAPE * (boundsM.top - boundsV.top) / boundsV.getHeight();
-  }
-  if (boundsM.right > boundsV.right)
-  {
-    ymaxm = float((boundsV.right - boundsM.left) * (model.fm.ymax - model.fm.ymin) /
-                  boundsM.getWidth()) +
-            model.fm.ymin;
-    boundsE.top = 0;
-  }
-  else
-  {
-    ymaxm = model.fm.ymax;
-    boundsE.top = YMAXMAPE * (boundsV.right - boundsM.right) / boundsV.getWidth();
-  }
-  if (boundsM.left < boundsV.left)
-  {
-    yminm = float((boundsV.left - boundsM.left) * (model.fm.ymax - model.fm.ymin) /
-                  boundsM.getWidth()) +
-            model.fm.ymin;
-    boundsE.bottom = YMAXMAPE;
-  }
-  else
-  {
-    yminm = model.fm.ymin;
-    boundsE.bottom = YMAXMAPE * (boundsV.right - boundsM.left) / boundsV.getWidth();
-  }
-  if ((boundsE.left >= boundsE.right) || (boundsE.top >= boundsE.bottom))
-    return 0;
 
-  pViewContext->setMapViewBounds(boundsE);
+  if (rcView.isEmpty())
+   return 0;
+
+  pViewContext->setMapViewBounds(rcView);
+  pViewContext->setMapClipBounds(rcMap.left, rcMap.top, rcMap.right, rcMap.bottom);
   pViewContext->updateViewPort();
-  setviewmap(xminm, yminm, xmaxm, ymaxm);
-  setview(0, 0, boundsE.getWidth(), boundsE.getHeight());
-  scr.assign(0, 0, boundsE.getWidth(), boundsE.getHeight());
-  scr.assign_map(xminm, yminm, xmaxm, ymaxm);
 
-//  pViewContext->setMapClipBounds(rcMap.left, rcMap.top, rcMap.right, rcMap.bottom);
-  pViewContext->setMapClipBounds(xminm, yminm, xmaxm, ymaxm);
+  setview(0, 0, rcView.getWidth(), rcView.getHeight());
+  setviewmap(rcMap.left, rcMap.top, rcMap.right, rcMap.bottom);
+
+  scr.assign(0, 0, rcView.getWidth(), rcView.getHeight());
+  scr.assign_map(rcMap.left, rcMap.top, rcMap.right, rcMap.bottom);
 
   pViewContext->setMinObjectSize(
-    rcMap.getWidth() * 3.0 / (boundsE.getWidth() + 3)
+    rcMap.getWidth() * 3.0 / (rcView.getWidth() + 3)
   );
   return 1;
 }
