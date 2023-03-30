@@ -627,7 +627,7 @@ void howstop(CViewContext const& viewContext)
     }
     viewContext.updateViewPort();
     for (int i = 0; i < ob; i++)
-      draw_one_obj(viewContext, obs[i].nobj, 12, 1);
+      gMapDataHandler->draw_one_obj(viewContext, obs[i].nobj, 12, 1);
     settwink(12, 15);
     ATRTR(&tp, ob, obs);
     tp.draw();
@@ -637,8 +637,8 @@ void howstop(CViewContext const& viewContext)
     tp.del();
     nottwink();
     for (int ii = 0; ii < ob; ii++)
-      draw_one_obj(viewContext, obs[ii].nobj, -1, 1);
-    setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
+      gMapDataHandler->draw_one_obj(viewContext, obs[ii].nobj, -1, 1);
+    viewContext.updateViewPort();
     delete[] obstop;
     delete[] obs;
   }

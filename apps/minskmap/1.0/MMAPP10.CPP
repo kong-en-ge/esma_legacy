@@ -9,7 +9,6 @@
 #include "funcs.hpp"
 #include "menuall2.hpp"
 #include "dbffunc.hpp"
-#include "globalda.hpp"
 
 /**************************
  * CMinskMap10Application *

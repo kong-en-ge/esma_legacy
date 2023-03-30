@@ -55,7 +55,7 @@ void find_rg(CViewContext const& viewContext)
     if (!All_Map)
       all(viewContext);
     viewContext.updateViewPort();
-    draw_one_obj(viewContext, ret, 12, 0);
+    gMapDataHandler->draw_one_obj(viewContext, ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -73,7 +73,7 @@ void find_rg(CViewContext const& viewContext)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(viewContext, ret, -1, 0);
+      gMapDataHandler->draw_one_obj(viewContext, ret, -1, 0);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;
@@ -118,8 +118,8 @@ void find_st(CViewContext const& viewContext)
       continue;
     count++;
     int dx = xwinmap(30) - xwinmap(0);
-    if (!obj_enabled(viewContext, &spr) || 
-        spr.xmin < clipBounds.left || spr.ymin < clipBounds.top || 
+    if (!obj_enabled(viewContext, &spr) ||
+        spr.xmin < clipBounds.left || spr.ymin < clipBounds.top ||
         spr.xmax > clipBounds.right - dx || spr.ymax > clipBounds.bottom)
     {
       settextjustify(t.horiz, t.vert);
@@ -128,7 +128,7 @@ void find_st(CViewContext const& viewContext)
         YDISRAZ(spr.xmax), 24);
     }
     viewContext.updateViewPort();
-    draw_one_obj(viewContext, ret, 12, 0);
+    gMapDataHandler->draw_one_obj(viewContext, ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -145,8 +145,8 @@ void find_st(CViewContext const& viewContext)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(viewContext, ret, -1, 0);
-      setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
+      gMapDataHandler->draw_one_obj(viewContext, ret, -1, 0);
+      viewContext.updateViewPort();
       tp.del();
       ret = at;
     }
@@ -240,7 +240,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
         YDISRAZ(spr.xmax), 64);
       viewContext.updateViewPort();
     }
-    draw_one_obj(viewContext, ret, 12, 0);
+    gMapDataHandler->draw_one_obj(viewContext, ret, 12, 0);
     settwink(12, WHITE);
     {
       int at;
@@ -257,8 +257,8 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(viewContext, ret, -1, 0);
-      setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
+      gMapDataHandler->draw_one_obj(viewContext, ret, -1, 0);
+      viewContext.updateViewPort();
       tp.del();
       ret = at;
     }

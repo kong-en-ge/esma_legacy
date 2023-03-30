@@ -35,3 +35,5 @@ int actdbf = 0;
 char const * LBSFilename;
 
 CIndexMapImage indexMapImage;
+
+CMapDataHandler *gMapDataHandler;

@@ -2,8 +2,8 @@
 #include "globals.hpp"
 #include "funcs.hpp"
 #include "apputils.hpp"
-#include "globalda.hpp"
 #include "menuall2.hpp"
+#include "mmmaphn.hpp"
 
 char const * CMinskMapApplication::ston = "Вкл. N";
 char const * CMinskMapApplication::stoff = "Выкл. N";
@@ -16,6 +16,12 @@ CMinskMapApplication::CMinskMapApplication(int argc, char *argv[]) :
   SCALEMAX = 200000;
   this->argc = argc;
   this->argv = argv;
+}
+
+CMapDataHandler* CMinskMapApplication::createMapDataHandler(void)
+{
+  pMapDataHandler = new CMinskMapDataHandler();
+  return pMapDataHandler;
 }
 
 void CMinskMapApplication::executeApp(void)
@@ -61,14 +67,14 @@ void CMinskMapApplication::handleCommand(int command)
   switch (command)
   {
   case 16:
-    if (N_on)
+    if (pMapDataHandler->getDisplayNumbers())
     {
-      N_on = 0;
+      pMapDataHandler->setDisplayNumbers(0);
       btnOnOff->text = ston;
     }
     else
     {
-      N_on = 1;
+      pMapDataHandler->setDisplayNumbers(1);
       btnOnOff->text = stoff;
     }
     getActiveMenu()->draw();

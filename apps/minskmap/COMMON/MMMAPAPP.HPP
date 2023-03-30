@@ -2,9 +2,12 @@
 #define __MMMAPAPP_HPP__
 
 #include "inmapapp.hpp"
+#include "mmmaphn.hpp"
 
 class CMinskMapApplication : public CInfoMapApplication
 {
+private:
+  CMinskMapDataHandler* pMapDataHandler;
 protected:
   int argc;
   char ** argv;
@@ -13,6 +16,7 @@ protected:
   static char const *ston;
   static char const *stoff;
 
+  virtual CMapDataHandler* createMapDataHandler(void);
   virtual void executeApp(void);
   virtual char const * getIndexMapFilename(void) const;
   virtual char const * getHelpFilename(void) const;

@@ -6,6 +6,7 @@
 class CRbMapApplication : public CInfoMapApplication
 {
 protected:
+  virtual CMapDataHandler* createMapDataHandler(void);
   virtual void executeApp(void);
   virtual char const * getIndexMapFilename(void) const;
   virtual char const * getMainMapFilename(void) const;

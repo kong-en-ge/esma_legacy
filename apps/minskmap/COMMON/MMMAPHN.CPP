@@ -1,11 +1,11 @@
 #include <string.h>
 
+#include "mmmaphn.hpp"
 #include "globals.hpp"
-#include "globalda.hpp"
 #include "funcs.hpp"
 #include "fatr.hpp"
 #include "drawpl.hpp"
-        
+
 int lin_wnd(int *, int *, int *, int *, int, int, int, int);
 
 void dr_bl_n(int *metr, F_SPR *spr, char *clcod)
@@ -142,8 +142,17 @@ void dr_st_n(CViewContext const& viewContext, F_SPR *spr, int *metr)
   scr.outstring(namst, mst, &ft);
 }
 
-int draw_one_obj(CViewContext const& viewContext,
-  unsigned obj, int color, int drawDisabled)
+/************************
+ * CMinskMapDataHandler *
+ ************************/
+
+CMinskMapDataHandler::CMinskMapDataHandler(void)
+{
+  displayNumbers = 0;
+}
+
+int CMinskMapDataHandler::draw_one_obj(CViewContext const& viewContext, unsigned obj, 
+  int color, int drawDisabled)
 {
   F_SPR spr;
   if (model.readspr(&spr, obj) == -1)
@@ -173,7 +182,7 @@ int draw_one_obj(CViewContext const& viewContext,
     {
       setfillstyle(flib->num, flib->color);
       polygon(metr - 2);
-      if (N_on)
+      if (displayNumbers)
         dr_bl_n(metr, &spr, flib->clcod);
     }
     else if (loc != 4)
@@ -201,4 +210,3 @@ int draw_one_obj(CViewContext const& viewContext,
   }
   return 0;
 }
-
