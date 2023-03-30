@@ -6,7 +6,7 @@
 class CRbMapDataHandler : public CMapDataHandler
 {
 public:
-  virtual int draw_one_obj(CViewContext const& viewContext, unsigned obj, 
+  virtual bool draw_one_obj(CViewContext const& viewContext, unsigned obj,
     int color, int drawDisabled = 0);
 };
 

@@ -22,7 +22,7 @@ protected:
   virtual char const * getHelpFilename(void) const;
   virtual char const * getMainMapFilename(void) const;
   virtual void handleCommand(int command);
-  virtual int suppressStartSplash(void) const;
+  virtual bool suppressStartSplash(void) const;
 public:
   CMinskMapApplication(int argc, char *argv[]);
 };

@@ -156,7 +156,7 @@ void find_st(CViewContext const& viewContext)
   return;
 }
 
-int find_bl(CViewContext const& viewContext, char const *st, int bl)
+bool find_bl(CViewContext const& viewContext, char const *st, int bl)
 {
   textsettingstype t;
   gettextsettings(&t);
@@ -164,7 +164,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
   fa.natr = 2;
   int ia = getAttributeIndex("ST");
   if (ia < 0)
-    return -1;
+    return false;
   fa.atr[0].natr = ia;
   if (!st)
   {
@@ -172,7 +172,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
     mn.draw();
     int key = mn.menu_key2();
     if (key == -1)
-      return -1;
+      return false;
     fa.atr[0].znk = key;
   }
   else
@@ -193,13 +193,13 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
     if (ii == ATRN[ia].ncod)
     {
       displayWarning(2);
-      return -1;
+      return false;
     }
     fa.atr[0].znk = ii;
   }
   ia = getAttributeIndex("BN");
   if (ia < 0)
-    return -1;
+    return false;
   fa.atr[1].natr = ia;
   if (!bl)
   {
@@ -209,7 +209,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
     wnd2.readfloat(&bln, 0, 900, 3);
     wnd2.restore();
     if (!bln)
-      return -1;
+      return false;
     fa.atr[1].znn = bln;
   }
   else
@@ -249,7 +249,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
       if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
       {
         displayError(0);
-        return -1;
+        return false;
       }
       at = ATR(&tp, ret);
       tp.draw();
@@ -266,7 +266,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
   if (count == 0)
   {
     displayWarning(2);
-    return -1;
+    return false;
   }
-  return 0;
+  return true;
 }

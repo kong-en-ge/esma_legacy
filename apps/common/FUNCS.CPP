@@ -102,7 +102,7 @@ int next_model(int index, int ignoreScaleFilter)
 
 void store_otkat(void)
 {
-  if (otkatn && (!memcmp(&boundsV, &otkat[otkatn - 1], sizeof(CRectD))))
+  if (otkatn && boundsV.isEqual(otkat[otkatn - 1]))
     return;
 
   if (otkatn >= MAX_STORED_VIEWS)
@@ -123,19 +123,19 @@ void restore_otkat(CViewContext const& viewContext)
   drawrazd(viewContext);
 }
 
-int selectObjectPoint(double *x, double *y)
+bool selectObjectPoint(double *x, double *y)
 {
-  int retValue;
+  bool retValue;
   GRwnd infoWindow(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
   infoWindow.text("Укажите точку объекта");
   if (M_K_R_status() != -1)
   {
     *x = _DXM;
     *y = _DYM;
-    retValue = 1;
+    retValue = true;
   }
   else
-    retValue = 0;
+    retValue = false;
 
   infoWindow.restore();
   return retValue;
@@ -311,7 +311,7 @@ void cor_V(CViewContext const& viewContext)
 
 #define MAX_VIEW_RATIO 0.00001
 
-int setviewMAP(CViewContext const* pViewContext)
+bool setviewMAP(CViewContext const* pViewContext)
 {
   CRectL rc;
   CRectD rcMapView;
@@ -329,14 +329,14 @@ int setviewMAP(CViewContext const* pViewContext)
   map.RtoS(&rcMapView, &rcMap, 2);
 
   if ((boundsM.right <= boundsM.left) || (boundsM.top >= boundsM.bottom))
-    return 0;
+    return false;
   if (boundsV.getWidth() < boundsM.getWidth() * MAX_VIEW_RATIO)
-    return 0;
+    return false;
   if (boundsV.getHeight() < boundsM.getHeight() * MAX_VIEW_RATIO)
-    return 0;
+    return false;
 
   if (rcView.isEmpty())
-   return 0;
+   return false;
 
   pViewContext->setMapViewBounds(rcView);
   pViewContext->setMapClipBounds(rcMap.left, rcMap.top, rcMap.right, rcMap.bottom);
@@ -351,7 +351,8 @@ int setviewMAP(CViewContext const* pViewContext)
   pViewContext->setMinObjectSize(
     rcMap.getWidth() * 3.0 / (rcView.getWidth() + 3)
   );
-  return 1;
+
+  return true;
 }
 
 void all(CViewContext const& viewContext)
@@ -735,8 +736,9 @@ int drawrazd(CViewContext const& viewContext)
 #ifdef DEMO
   STOPTIME();
 #endif
-  FULL_MAP = 1;
-  int pos = 0, ret2 = 0;
+  FULL_MAP = true;
+  bool terminated;
+  int pos = 0;
   mouse_show(OFF);
   setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
   clearviewport();
@@ -748,7 +750,7 @@ int drawrazd(CViewContext const& viewContext)
     dyv = dxv;
   else
     dxv = dyv;
-  All_Map = !memcmp(&boundsV, &totalBounds, sizeof(CRectD));
+  All_Map = boundsV.isEqual(totalBounds);
   boundsV.left = (boundsV.left + boundsV.right - dxv) / 2;
   boundsV.right = boundsV.left + dxv;
   boundsV.top = (boundsV.top + boundsV.bottom - dyv) / 2;
@@ -783,39 +785,39 @@ int drawrazd(CViewContext const& viewContext)
   setviewMAP(&viewContext);
   pos = 0;
   store_otkat();
-  while (((pos = next_model(pos)) > 0) && (!ret2))
-  {
-    ret2 = gMapDataHandler->drawMap(viewContext);
-  }
+
+  terminated = false;
+  while (((pos = next_model(pos)) > 0) && !terminated)
+    terminated = !gMapDataHandler->drawMap(viewContext);
+
   setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
-  if (ret2)
-    goto l1;
-  if (LBSsize)
-    draw_fld();
+  if (!terminated)
+    if (LBSsize)
+      draw_fld();
 l1:
   mouse_show(ON);
   setviewport(0, 0, getmaxx(), getmaxy(), 1);
   if (!CGraphicApplication::getInstance()->isModeEGA())
     drawcram();
-  FULL_MAP = 0;
+  FULL_MAP = false;
 #ifdef DEMO
   STARTTIME();
 #endif
   return pos;
 }
 
-int obj_enabled(CViewContext const& viewContext, F_SPR const *spr)
+bool obj_enabled(CViewContext const& viewContext, F_SPR const *spr)
 {
   if (!viewContext.checkObjectVisible(*spr))
-    return 0;
+    return false;
   if (flibrt[spr->numincl].minw > SCALES || flibrt[spr->numincl].maxw < SCALES)
-    return 0;
+    return false;
   if (flibrt[spr->numincl].loc != 3)
-    return 1;
+    return true;
   if ((spr->xmax - spr->xmin <= viewContext.getMinObjectSize()) &&
     (spr->ymax - spr->ymin <= viewContext.getMinObjectSize()))
-    return 0;
-  return 1;
+    return false;
+  return true;
 }
 
 int chooseObject(CViewContext const& viewContext, const OBJND *obj, int nobj)
@@ -854,13 +856,13 @@ int chooseObject(CViewContext const& viewContext, const OBJND *obj, int nobj)
   return retValue;
 }
 
-int checkAttributeName(int index, char const* name)
+bool checkAttributeName(int index, char const* name)
 {
   atrname const* atrn = ATRN + index;
   return !strncmp(atrn->atr, name, 2);
 }
 
-int checkAttributeDef(int index, char const* name, char type)
+bool checkAttributeDef(int index, char const* name, char type)
 {
   atrname const* atrn = ATRN + index;
   return (atrn->type == type) && checkAttributeName(index, name);
@@ -880,7 +882,7 @@ char const * getLookupAttributeValue(int attrIndex, int valueIndex)
   return ATCD + ATCDP[ATRN[attrIndex].start + valueIndex];
 }
 
-int findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
+bool findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
 {
   int x1, y1;
   double D, len = 0, l2 = 0;
@@ -958,9 +960,9 @@ int findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
   } // просмотр метрики
 
   if (b == 0)
-    return 0;
+    return false;
 
-  return 1;
+  return true;
 }
 
 /**************************

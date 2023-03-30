@@ -151,14 +151,14 @@ CMinskMapDataHandler::CMinskMapDataHandler(void)
   displayNumbers = 0;
 }
 
-int CMinskMapDataHandler::draw_one_obj(CViewContext const& viewContext, unsigned obj, 
+bool CMinskMapDataHandler::draw_one_obj(CViewContext const& viewContext, unsigned obj, 
   int color, int drawDisabled)
 {
   F_SPR spr;
   if (model.readspr(&spr, obj) == -1)
-    return -1;
+    return false;
   if (!drawDisabled && !obj_enabled(viewContext, &spr))
-    return 0;
+    return true;
   FLIB *flib = flibrt + spr.numincl;
   int loc = flib->loc;
   if (color == -1)
@@ -208,5 +208,5 @@ int CMinskMapDataHandler::draw_one_obj(CViewContext const& viewContext, unsigned
       scr.outstring((char *)(metr + size_methar(metr) + 1), metr - 2, &ft);
     }
   }
-  return 0;
+  return true;
 }

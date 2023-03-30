@@ -6,22 +6,22 @@
 class CMinskMapDataHandler : public CMapDataHandler
 {
 private:
-  int displayNumbers;
+  bool displayNumbers;
 public:
   CMinskMapDataHandler(void);
 
-  virtual int draw_one_obj(CViewContext const& viewContext, unsigned obj,
+  virtual bool draw_one_obj(CViewContext const& viewContext, unsigned obj,
     int color, int drawDisabled);
-  int getDisplayNumbers(void) const;
-  void setDisplayNumbers(int value);
+  bool getDisplayNumbers(void) const;
+  void setDisplayNumbers(bool value);
 };
 
-inline int CMinskMapDataHandler::getDisplayNumbers(void) const
+inline bool CMinskMapDataHandler::getDisplayNumbers(void) const
 {
   return displayNumbers;
 }
 
-inline void CMinskMapDataHandler::setDisplayNumbers(int value)
+inline void CMinskMapDataHandler::setDisplayNumbers(bool value)
 {
   displayNumbers = value;
 }

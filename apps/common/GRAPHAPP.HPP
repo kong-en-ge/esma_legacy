@@ -1,6 +1,7 @@
 #ifndef __GRAPHAPP_HPP__
 #define __GRAPHAPP_HPP__
 
+#include "coretype.hpp"
 #include "graphics.h"
 #include "grwnd.hpp"
 #include "app.hpp"
@@ -11,7 +12,7 @@ private:
   static CGraphicApplication* _instance;
   int _graphicMode;
 
-  int enterGraphicMode(void);
+  bool enterGraphicMode(void);
   void leaveGraphicMode(void);
   void setupPalette(void);
 protected:
@@ -24,7 +25,7 @@ public:
 
   virtual int run(void);
 
-  int isModeEGA(void) const;
+  bool isModeEGA(void) const;
 
   static CGraphicApplication* getInstance(void);
 };
@@ -34,7 +35,7 @@ inline static CGraphicApplication* CGraphicApplication::getInstance(void)
   return _instance;
 }
 
-inline int CGraphicApplication::isModeEGA(void) const
+inline bool CGraphicApplication::isModeEGA(void) const
 {
   return _graphicMode == EGA;
 }

@@ -1,7 +1,7 @@
 #include "button.hpp"
 #include "apputils.hpp"
 
-int displaySplashBox(const char * version)
+bool displaySplashBox(const char * version)
 {
   GRwnd wnd2(170, 40, 470, 180, version, LIGHTBLUE, 0, 1);
   Menu_but mn;
@@ -18,7 +18,7 @@ int displaySplashBox(const char * version)
   return mn.menu_key() == 0;
 }
 
-int confirmExit()
+bool confirmExit()
 {
   GRwnd wnd(170, 100, 450, 180, "Внимание", LIGHTBLUE, 1, 1);
   button bt1(222, 155, 293, 171, 1, "Да"),

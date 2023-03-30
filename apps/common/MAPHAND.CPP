@@ -6,24 +6,24 @@ CMapDataHandler::~CMapDataHandler(void)
 {
 }
 
-int CMapDataHandler::drawMap(CViewContext const& viewContext)
+bool CMapDataHandler::drawMap(CViewContext const& viewContext)
 {
-  int exp = 0;
+  bool retValue = true;
   F_SPR spr;
   for (unsigned i = model.pm.start; i <= model.pm.end; i++)
   {
-    int key;
 #ifndef DEMO
+    int key;
     if ((mouse_key_status(&key, &key)) == -1)
     {
       while (mouse_key_status(&key, &key))
         ;
-      exp = -1;
+      retValue = false;
       break;
     }
 #endif
     draw_one_obj(viewContext, i, -1, 0 /* drawDisabled */);
   }
-drawex:
-  return exp;
+
+  return retValue;
 }

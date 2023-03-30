@@ -317,7 +317,7 @@ int CInfoMapApplication::runUI(void)
   return EXIT_SUCCESS;
 }
 
-int CInfoMapApplication::suppressStartSplash(void) const
+bool CInfoMapApplication::suppressStartSplash(void) const
 {
-  return 0;
+  return false;
 }

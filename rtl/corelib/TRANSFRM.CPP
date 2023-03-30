@@ -97,7 +97,7 @@ void CRcRTransform::getBounds(CRectL* pOrdBounds, CRectD* pFloatBounds) const
     *pFloatBounds = boundsR;
 }
 
-int CRcRTransform::isCorrect(void) const
+bool CRcRTransform::isCorrect(void) const
 {
   return (boundsD.left != boundsD.right) &&
     (boundsD.top != boundsD.bottom) &&
@@ -116,7 +116,7 @@ void CRcRTransform::reCalc(void)
   calcScaling(boundsD.top, boundsR.left, boundsD.getHeight(), boundsR.getWidth(), &drCoeffs.y);
   calcScaling(boundsR.left, boundsD.top, boundsR.getWidth(), boundsD.getHeight(), &rdCoeffs.x);
   calcScaling(boundsR.top, boundsD.left, boundsR.getHeight(), boundsD.getWidth(), &rdCoeffs.y);
-  valid = 1;
+  valid = true;
 }
 
 void CRcRTransform::setBounds(CRectL const* pOrdBounds, CRectD const* pFloatBounds)
@@ -125,5 +125,5 @@ void CRcRTransform::setBounds(CRectL const* pOrdBounds, CRectD const* pFloatBoun
     boundsD = *pOrdBounds;
   if (pFloatBounds)
     boundsR = *pFloatBounds;
-  valid = 0;
+  valid = false;
 }

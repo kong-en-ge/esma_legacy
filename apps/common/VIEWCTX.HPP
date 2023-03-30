@@ -16,7 +16,7 @@ public:
   CViewContext(void);
   virtual ~CViewContext(void);
 
-  int checkObjectVisible(F_SPR const& spr) const;
+  bool checkObjectVisible(F_SPR const& spr) const;
   CRectS const& getMapClipBounds(void) const;
   CRectD const& getMapTotalBounds(void) const;
   CRectS const& getMapViewBounds(void) const;

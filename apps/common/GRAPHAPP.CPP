@@ -25,7 +25,7 @@ GRwnd* CGraphicApplication::createTitleWindow(void)
   return wnd;
 }
 
-int CGraphicApplication::enterGraphicMode(void)
+bool CGraphicApplication::enterGraphicMode(void)
 {
   setgraphbufsize(8000);
   int gd, gm;
@@ -38,10 +38,10 @@ int CGraphicApplication::enterGraphicMode(void)
   if (graphresult() == grOk)
   {
     setupPalette();
-    return 1;
+    return true;
   }
   else
-    return 0;
+    return false;
 }
 
 void CGraphicApplication::leaveGraphicMode(void)
