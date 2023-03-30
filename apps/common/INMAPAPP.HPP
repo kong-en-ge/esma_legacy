@@ -40,7 +40,7 @@ protected:
   virtual void runMainMenu(void) = 0;
   void runMenu(Menu_but* menu);
   virtual int runUI(void);
-  virtual int suppressStartSplash(void) const;
+  virtual bool suppressStartSplash(void) const;
 public:
   CInfoMapApplication(int argc, char *argv[]);
   virtual ~CInfoMapApplication(void);

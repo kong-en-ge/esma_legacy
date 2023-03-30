@@ -15,6 +15,7 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 #include "codesel.hpp"
+#include "utils.hpp"
 
 void find_rg(CViewContext const& viewContext)
 {
@@ -27,7 +28,7 @@ void find_rg(CViewContext const& viewContext)
   {
     TEXT_PACK_MENUS tpr(150, 100, 470, 9, "Район", "Укажите район", 1, 200, 10);
     for (int i = 0; i < FLIBsize; i++)
-      if (!strncmp(flibrt[i].clcod, "46", 2))
+      if (!strStartCmp(flibrt[i].clcod, "46"))
         tpr.add((char far *)KLSKP[i]);
     i = tpr.menu_key();
     if (i != -1)
@@ -49,7 +50,7 @@ void find_rg(CViewContext const& viewContext)
     F_SPR spr;
     if (model.readspr(&spr, ret) != 1)
       break;
-    if (strncmp(flibrt[spr.numincl].clcod, "46", 2))
+    if (strStartCmp(flibrt[spr.numincl].clcod, "46"))
       continue;
     count++;
     if (!All_Map)
@@ -114,8 +115,11 @@ void find_st(CViewContext const& viewContext)
     F_SPR spr;
     if (model.readspr(&spr, ret) != 1)
       break;
-    if ((strncmp(flibrt[spr.numincl].clcod, "452", 3)) && (strncmp(flibrt[spr.numincl].clcod, "453", 3)) && (strncmp(flibrt[spr.numincl].clcod, "450", 3)))
+
+    char const* code = flibrt[spr.numincl].clcod;
+    if ((strStartCmp(code, "452")) && (strStartCmp(code, "453")) && (strStartCmp(code, "450")))
       continue;
+
     count++;
     int dx = xwinmap(30) - xwinmap(0);
     if (!obj_enabled(viewContext, &spr) ||
@@ -156,7 +160,7 @@ void find_st(CViewContext const& viewContext)
   return;
 }
 
-int find_bl(CViewContext const& viewContext, char const *st, int bl)
+bool find_bl(CViewContext const& viewContext, char const *st, int bl)
 {
   textsettingstype t;
   gettextsettings(&t);
@@ -164,7 +168,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
   fa.natr = 2;
   int ia = getAttributeIndex("ST");
   if (ia < 0)
-    return -1;
+    return false;
   fa.atr[0].natr = ia;
   if (!st)
   {
@@ -172,7 +176,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
     mn.draw();
     int key = mn.menu_key2();
     if (key == -1)
-      return -1;
+      return false;
     fa.atr[0].znk = key;
   }
   else
@@ -193,13 +197,13 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
     if (ii == ATRN[ia].ncod)
     {
       displayWarning(2);
-      return -1;
+      return false;
     }
     fa.atr[0].znk = ii;
   }
   ia = getAttributeIndex("BN");
   if (ia < 0)
-    return -1;
+    return false;
   fa.atr[1].natr = ia;
   if (!bl)
   {
@@ -209,7 +213,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
     wnd2.readfloat(&bln, 0, 900, 3);
     wnd2.restore();
     if (!bln)
-      return -1;
+      return false;
     fa.atr[1].znn = bln;
   }
   else
@@ -226,7 +230,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
     F_SPR spr;
     if (model.readspr(&spr, ret) != 1)
       break;
-    if (strncmp(flibrt[spr.numincl].clcod, "44", 2))
+    if (strStartCmp(flibrt[spr.numincl].clcod, "44"))
       continue;
     count++;
     int dx = xwinmap(30) - xwinmap(0);
@@ -249,7 +253,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
       if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
       {
         displayError(0);
-        return -1;
+        return false;
       }
       at = ATR(&tp, ret);
       tp.draw();
@@ -266,7 +270,7 @@ int find_bl(CViewContext const& viewContext, char const *st, int bl)
   if (count == 0)
   {
     displayWarning(2);
-    return -1;
+    return false;
   }
-  return 0;
+  return true;
 }

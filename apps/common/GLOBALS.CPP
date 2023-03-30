@@ -9,7 +9,7 @@ unsigned char SCALES; // степень увеличения
 int XMAXMAPE = 479;
 int YMAXMAPE = 349;
 double _DXM, _DYM;
-int FULL_MAP;
+bool FULL_MAP;
 
 SCRIPT scr;
 fonttype ft;
@@ -18,7 +18,7 @@ float CURRENTSCALE;
 float SCALEMIN, SCALEMAX;
 float SCALEO;
 
-int All_Map;
+bool All_Map;
 
 CRectD otkat[MAX_STORED_VIEWS];
 int otkatn;

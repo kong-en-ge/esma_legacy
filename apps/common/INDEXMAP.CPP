@@ -25,7 +25,7 @@ void CIndexMapImage::freeImageData(void)
   }
 }
 
-int CIndexMapImage::load(char const * filename)
+bool CIndexMapImage::load(char const * filename)
 {
   freeImageData();
   int handle;
@@ -35,16 +35,16 @@ int CIndexMapImage::load(char const * filename)
     if ((imageData = malloc(size)) == NULL)
     {
       displayError(0);
-      return 0;
+      return false;
     }
     read(handle, imageData, size);
 
     close(handle);
   }
   else
-    return 0;
+    return false;
 
-  return 1;
+  return true;
 }
 
 void CIndexMapImage::paintImage(int x, int y) const

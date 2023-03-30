@@ -69,12 +69,12 @@ void CMinskMapApplication::handleCommand(int command)
   case 16:
     if (pMapDataHandler->getDisplayNumbers())
     {
-      pMapDataHandler->setDisplayNumbers(0);
+      pMapDataHandler->setDisplayNumbers(false);
       btnOnOff->text = ston;
     }
     else
     {
-      pMapDataHandler->setDisplayNumbers(1);
+      pMapDataHandler->setDisplayNumbers(true);
       btnOnOff->text = stoff;
     }
     getActiveMenu()->draw();
@@ -99,7 +99,7 @@ void CMinskMapApplication::handleCommand(int command)
   }
 }
 
-int CMinskMapApplication::suppressStartSplash(void) const
+bool CMinskMapApplication::suppressStartSplash(void) const
 {
   return (argc == 3);
 }

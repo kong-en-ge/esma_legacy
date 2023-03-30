@@ -3,6 +3,7 @@
 #include "fatr.hpp"
 #include "globals.hpp"
 #include "flibrt.hpp"
+#include "utils.hpp"
 
 unsigned findobj(FAST_MODEL &mod, FINDatrf &fa)
 {
@@ -52,8 +53,7 @@ unsigned findobj(FAST_MODEL &mod, FINDatrf &fa)
           switch (ATRN[start_c[0]].type)
           {
           case 'T':
-            fa.atr[i].tpr = !strncmpi(start_c + 2, fa.atr[i].zns,
-                                      strlen(fa.atr[i].zns));
+            fa.atr[i].tpr = !strStartCmpI(start_c + 2, fa.atr[i].zns);
             break;
           case 'K':
             fa.atr[i].tpr = start_u[1] == fa.atr[i].znk;

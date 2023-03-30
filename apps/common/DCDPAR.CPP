@@ -7,6 +7,7 @@
 #include "tpedit.hpp"
 #include "dbf.hpp"
 #include "apputils.hpp"
+#include "utils.hpp"
 
 char *DBFCOD;
 int *DBFCODP, DBFSIZE;
@@ -104,7 +105,7 @@ int dcdpar(char *codp, char *znp, int zn)
       {
         if (db.Go(j) == -1)
           return 1;
-        if (!strncmp(znp, db.F_ptr(ret), strlen(znp)))
+        if (!strStartCmp(db.F_ptr(ret), znp))
         {
           strncpyz(znp, db.F_ptr(ret2), db.F_width(ret2));
           delprb(znp);

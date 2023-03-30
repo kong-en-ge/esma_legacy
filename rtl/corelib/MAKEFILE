@@ -1,0 +1,14 @@
+.silent
+
+PROJECT_NAME=corelib
+ROOT_DIR=..\..
+
+!include $(ROOT_DIR)\common\make_lib.inc
+
+PUBLISHED_HEADERS=\
+  $(PH:name=coretype.hpp)\
+  $(PH:name=geometry.hpp)\
+  $(PH:name=transfrm.hpp)
+
+!include $(ROOT_DIR)\common\publish.inc
+

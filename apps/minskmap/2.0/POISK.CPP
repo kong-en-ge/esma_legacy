@@ -11,6 +11,7 @@
 #include "globalda.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
+#include "utils.hpp"
 
 int poisk(CViewContext const& viewContext, int mode, int *x, int *y)
 {
@@ -39,19 +40,20 @@ int poisk(CViewContext const& viewContext, int mode, int *x, int *y)
   while ((ret = next_model(ret, mode)) > 0)
   {
     int nkl = models[ret - 1].numkl;
+    char const* code = flibrt[nkl].clcod;
     if (mode > 0)
     {
-      if ((strncmp(flibrt[nkl].clcod, "651", 3) != 0) &&
-          (strncmp(flibrt[nkl].clcod, "652", 3) != 0) &&
-          (strncmp(flibrt[nkl].clcod, "653", 3) != 0) &&
-          (strncmp(flibrt[nkl].clcod, "62132", 5) != 0))
+      if ((strStartCmp(code, "651") != 0) &&
+          (strStartCmp(code, "652") != 0) &&
+          (strStartCmp(code, "653") != 0) &&
+          (strStartCmp(code, "62132") != 0))
         continue;
     }
     else
     {
-      if ((strncmp(flibrt[nkl].clcod, "451", 3) == 0) ||
-          (strncmp(flibrt[nkl].clcod, "7131", 4) == 0) ||
-          (strncmp(flibrt[nkl].clcod, "71111", 5) == 0))
+      if ((strStartCmp(code, "451") == 0) ||
+          (strStartCmp(code, "7131") == 0) ||
+          (strStartCmp(code, "71111") == 0))
         continue;
     }
 
@@ -122,11 +124,12 @@ int poisk(CViewContext const& viewContext, int mode, int *x, int *y)
         memmove(obstop + j + 1, obstop + j, (nobj - j) * sizeof(OBSTOP));
         obstop[j].d = dp;
         obstop[j].nobj = i;
-        if ((strncmp(flibrt[nkl].clcod, "62132", 5)) == 0)
+        char const* code = flibrt[nkl].clcod;
+        if ((strStartCmp(code, "62132")) == 0)
           obstop[j].vt = 1;
-        else if ((strncmp(flibrt[nkl].clcod, "651", 3)) == 0)
+        else if ((strStartCmp(code, "651")) == 0)
           obstop[j].vt = 2;
-        else if ((strncmp(flibrt[nkl].clcod, "652", 3)) == 0)
+        else if ((strStartCmp(code, "652")) == 0)
           obstop[j].vt = 3;
         else
           obstop[j].vt = 4;

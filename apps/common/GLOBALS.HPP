@@ -40,7 +40,7 @@ extern float CURRENTSCALE;
 extern float SCALEMIN, SCALEMAX; // min/max scale
 extern float SCALEO; // основание степени
 
-extern int All_Map;
+extern bool All_Map;
 
 extern CRectD otkat[];
 extern int otkatn;
@@ -50,7 +50,7 @@ extern PART_MODEL models[]; // части модели
 extern int nmodels;         // число подмоделей модели
 
 extern int _xMK, _yMK;
-extern int FULL_MAP;
+extern bool FULL_MAP;
 
 extern const int colordbf[];
 extern List_base *LBS;

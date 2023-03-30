@@ -5,7 +5,7 @@
 #define min(a, b) (a)<(b)?(a):(b)
 #define max(a, b) (a)>(b)?(a):(b)
 
-template <class T> int CRect<T>::containsPoint(T x, T y) const
+template <class T> bool CRect<T>::containsPoint(T x, T y) const
 {
   return (x >= left) && (x < right) & (y >= top) && (y < bottom);
 }
@@ -38,7 +38,7 @@ template <class T> void CRect<T>::inflate(T dx, T dy)
   bottom += dy;
 }
 
-template <class T> int CRect<T>::intersect(CRect<T> const& src1,
+template <class T> bool CRect<T>::intersect(CRect<T> const& src1,
   CRect<T> const& src2)
 {
   left = max(src1.left, src2.left);
@@ -48,9 +48,15 @@ template <class T> int CRect<T>::intersect(CRect<T> const& src1,
   return left < right && top < bottom;
 }
 
-template <class T> int CRect<T>::isEmpty(void) const
+template <class T> bool CRect<T>::isEmpty(void) const
 {
   return left >= right || top >= bottom;
+}
+
+template <class T> bool CRect<T>::isEqual(CRect<T> const& value) const
+{
+  return left == value.left && top == value.top &&
+    right == value.right && bottom == value.bottom;
 }
 
 template <class T> void CRect<T>::offset(T dx, T dy)

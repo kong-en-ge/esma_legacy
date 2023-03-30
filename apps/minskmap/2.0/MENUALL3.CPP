@@ -25,6 +25,7 @@
 #include "funcs.hpp"
 #include "codesel.hpp"
 #include "graphapp.hpp"
+#include "utils.hpp"
 
 FLIB *findobj(SPR *spr);
 int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst);
@@ -579,7 +580,7 @@ void howstop(CViewContext const& viewContext)
   OBSTOP *obs;
   obs = new OBSTOP[4];
   char str[80];
-  int ob = 0, num, nm1 = 0;
+  int ob = 0, num;
   int ret = poisk(viewContext, 1);
   if (!ret)
   {
@@ -612,9 +613,8 @@ void howstop(CViewContext const& viewContext)
       }
       if (num != -1)
       {
-        obs[nm1] = obstop[num];
+        obs[ob] = obstop[num];
         ob++;
-        nm1++;
       }
     } // for
     TEXT_PACK_MENUS tp(450, 185, 632, 11, "Транспорт", "", 1, 4000, 200, 1, 1);
@@ -655,7 +655,7 @@ int stmetro()
   while ((ret = next_model(ret)) > 0)
   { // who
     int nkl = models[ret - 1].numkl;
-    if (strncmp(flibrt[nkl].clcod, "62132", 5) != 0)
+    if (strStartCmp(flibrt[nkl].clcod, "62132") != 0)
       continue;
     if (flibrt[nkl].loc != 1)
       continue;
@@ -783,7 +783,7 @@ int comuzel()
   while ((ret = next_model(ret, 1)) > 0)
   { // who
     int nkl = models[ret - 1].numkl;
-    if (strncmp(flibrt[nkl].clcod, "655", 3) != 0)
+    if (strStartCmp(flibrt[nkl].clcod, "655") != 0)
       continue;
     if (flibrt[nkl].loc != 1)
       continue;

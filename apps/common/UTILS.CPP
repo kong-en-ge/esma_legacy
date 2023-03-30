@@ -1,6 +1,8 @@
 #include <string.h>
 
-int findCommandLineParam(int argc, char *argv[], char const* param, char* value = NULL)
+#include "coretype.hpp"
+
+bool findCommandLineParam(int argc, char *argv[], char const* param, char* value = NULL)
 {
   char const* arg;
   int paramLen = strlen(param);
@@ -24,8 +26,18 @@ int findCommandLineParam(int argc, char *argv[], char const* param, char* value 
         strcpy(value, arg + paramLen + 2);
     }
 
-    return 1;
+    return true;
   }
 
-  return 0;
+  return false;
+}
+
+int strStartCmp(char const* str, char const* pattern)
+{
+  return strncmp(str, pattern, strlen(pattern));
+}
+
+int strStartCmpI(char const* str, char const* pattern)
+{
+  return strncmpi(str, pattern, strlen(pattern));
 }

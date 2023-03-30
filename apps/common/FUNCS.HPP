@@ -60,20 +60,20 @@ public:
   double maxDistance(void) const;
 };
 
-int selectObjectPoint(double *x, double *y);
+bool selectObjectPoint(double *x, double *y);
 int chooseObject(CViewContext const& viewContext,
   const OBJND *obj, int nobj);
 void whatisit(CViewContext const& viewContext);
 void displayObjectInfo(int objIndex);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
 
-int checkAttributeName(int index, char const* name);
-int checkAttributeDef(int index, char const* name, char type);
+bool checkAttributeName(int index, char const* name);
+bool checkAttributeDef(int index, char const* name, char type);
 int getAttributeIndex(char const* name);
 char const * getLookupAttributeValue(int attrIndex, int valueIndex);
-int findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l);
+bool findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l);
 
-int setviewMAP(CViewContext const * pViewContext);
+bool setviewMAP(CViewContext const * pViewContext);
 void fragment(CViewContext const& viewContext);
 void all(CViewContext const& viewContext);
 void centr(CViewContext const& viewContext);
@@ -86,7 +86,7 @@ void draw_one_d(double x, double y, int color, int type);
 void redraw(CViewContext const& viewContext,
   double x1, double y1, double x2, double y2, int d);
 int drawrazd(CViewContext const& viewContext);
-int obj_enabled(CViewContext const& viewContext, F_SPR const *spr);
+bool obj_enabled(CViewContext const& viewContext, F_SPR const *spr);
 
 int printwnd(int xmin, int ymin, int xmax, int ymax, int mask1, int mask2);
 void slide(void);

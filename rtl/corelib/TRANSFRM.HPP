@@ -21,7 +21,7 @@ private:
   CRectD boundsR;
   CRectL boundsD;
   TransformData drCoeffs, rdCoeffs;
-  int valid;
+  bool valid;
 
   void reCalc(void);
 public:
@@ -29,7 +29,7 @@ public:
 
   void getBounds(CRectL* pOrdBounds, CRectD* pFloatBounds) const;
   void setBounds(CRectL const* pOrdBounds, CRectD const* pFloatBounds);
-  int isCorrect(void) const;
+  bool isCorrect(void) const;
 
   DECLARE_CONVERT_PROC(LtoR)
   DECLARE_CONVERT_PROC(StoR)

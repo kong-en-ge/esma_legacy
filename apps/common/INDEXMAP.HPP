@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 
+#include "coretype.hpp"
+
 class CIndexMapImage
 {
 private:
@@ -12,12 +14,12 @@ public:
   CIndexMapImage(void);
   ~CIndexMapImage(void);
 
-  int hasData(void) const;
-  int load(char const *filename);
+  bool hasData(void) const;
+  bool load(char const *filename);
   void paintImage(int x, int y) const;
 };
 
-inline int CIndexMapImage::hasData(void) const
+inline bool CIndexMapImage::hasData(void) const
 {
   return (imageData != NULL);
 }

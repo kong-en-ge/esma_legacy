@@ -1,6 +1,8 @@
 #ifndef __GEOMETRY_HPP__
 #define __GEOMETRY_HPP__
 
+#include "coretype.hpp"
+
 template <class T> struct CPoint
 {
 public:
@@ -59,7 +61,7 @@ public:
 
   T getHeight(void) const;
   T getWidth(void) const;
-  int containsPoint(T x, T y) const;
+  bool containsPoint(T x, T y) const;
   void getCenter(CPoint<T> *center) const;
   void getCenter(T *x, T *y) const;
   void getSize(CPoint<T> *size) const;
@@ -67,9 +69,10 @@ public:
   void inflate(T dx, T dy);
   void initByPoint(CPoint<T> const& value);
   void initByPoint(T x, T y);
-  int intersect(CRect<T> const& src1, CRect<T> const& src2);
-  int intersect(CRect<T> const& src);
-  int isEmpty(void) const;
+  bool intersect(CRect<T> const& src1, CRect<T> const& src2);
+  bool intersect(CRect<T> const& src);
+  bool isEmpty(void) const;
+  bool isEqual(CRect<T> const& value) const;
   void offset(T x, T y);
   void offset(CPoint<T> const& value);
   void putPointInside(T *x, T *y) const;
@@ -104,7 +107,7 @@ template <class T> inline void CRect<T>::initByPoint(T x, T y)
   setValues(x, y, x, y);
 }
 
-template <class T> inline int CRect<T>::intersect(CRect<T> const& src)
+template <class T> inline bool CRect<T>::intersect(CRect<T> const& src)
 {
   return intersect(*this, src);
 }

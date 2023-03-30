@@ -5,14 +5,15 @@
 #include "drawpl.hpp"
 #include "fatr.hpp"
 #include "funcs.hpp"
+#include "utils.hpp"
 
 void dr_pn_n(F_SPR *spr, char *clcod, int color, int en, int cod)
 {
   if (!en)
   {
-    if ((CURRENTSCALE >= 12.0 * SCALEMIN) && (!strncmp(clcod, "412", 3)))
+    if ((CURRENTSCALE >= 12.0 * SCALEMIN) && (!strStartCmp(clcod, "412")))
       return;
-    if ((CURRENTSCALE >= 5.0 * SCALEMIN) && (!strncmp(clcod, "42", 2)))
+    if ((CURRENTSCALE >= 5.0 * SCALEMIN) && (!strStartCmp(clcod, "42")))
       return;
     if ((CURRENTSCALE >= 10.0 * SCALEMIN) && (cod))
       return;
@@ -35,15 +36,15 @@ void dr_pn_n(F_SPR *spr, char *clcod, int color, int en, int cod)
   if (!cod)
   {
     strcpy(namstd, namst);
-    if (!strncmp(clcod, "41", 2))
+    if (!strStartCmp(clcod, "41"))
       strupr(namstd);
   }
   else
   {
     if (cod == 1)
-      strcpy(namstd, "îç. ");
+      strcpy(namstd, "®§. ");
     else
-      strcpy(namstd, "âäõð. ");
+      strcpy(namstd, "¢¤åà. ");
     strcat(namstd, namst);
   }
   if (color == 12)
@@ -66,14 +67,14 @@ void dr_pn_n(F_SPR *spr, char *clcod, int color, int en, int cod)
  * CRbMapDataHandler *
  *********************/
 
-int CRbMapDataHandler::draw_one_obj(CViewContext const& viewContext, unsigned obj, 
+bool CRbMapDataHandler::draw_one_obj(CViewContext const& viewContext, unsigned obj, 
   int color, int drawDisabled)
 {
   F_SPR spr;
   if (model.readspr(&spr, obj) == -1)
-    return -1;
+    return false;
   if ((!drawDisabled) && (!obj_enabled(viewContext, &spr)))
-    return 0;
+    return true;
   FLIB *flib = flibrt + spr.numincl;
   int loc = flib->loc;
   if (color == -1)
@@ -88,7 +89,7 @@ int CRbMapDataHandler::draw_one_obj(CViewContext const& viewContext, unsigned ob
   }
   else if ((loc >= 2) && (loc <= 4))
   {
-    // ïëîùàäè è ëèíèè è ïîäïèñè
+    // ¯«®é ¤¨ ¨ «¨­¨¨ ¨ ¯®¤¯¨á¨
     int *metr;
     int j;
     if (model.readmets(&metr, &spr) == -1)
@@ -119,10 +120,10 @@ int CRbMapDataHandler::draw_one_obj(CViewContext const& viewContext, unsigned ob
     }
     if ((flib->clcod[0] == '4') && (loc == 3))
       dr_pn_n(&spr, flib->clcod, color, drawDisabled, 0);
-    if (!strncmp(flib->clcod, "31120000", 8))
+    if (!strStartCmp(flib->clcod, "31120000"))
       dr_pn_n(&spr, flib->clcod, color, drawDisabled, 1);
-    if (!strncmp(flib->clcod, "31131000", 8))
+    if (!strStartCmp(flib->clcod, "31131000"))
       dr_pn_n(&spr, flib->clcod, color, drawDisabled, 2);
   }
-  return 0;
+  return true;
 }

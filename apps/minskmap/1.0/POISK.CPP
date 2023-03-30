@@ -8,6 +8,7 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 #include "button.hpp"
+#include "utils.hpp"
 
 int poisk(CViewContext const& viewContext, int /*mode*/, int *x, int *y)
 {
@@ -24,9 +25,10 @@ int poisk(CViewContext const& viewContext, int /*mode*/, int *x, int *y)
   while ((ret = next_model(ret)) > 0)
   {
     int nkl = models[ret - 1].numkl;
-    if (!(strncmp(flibrt[nkl].clcod, "451", 3)) ||
-        !(strncmp(flibrt[nkl].clcod, "7131", 4)) ||
-        !(strncmp(flibrt[nkl].clcod, "71111", 5)))
+    char const* code = flibrt[nkl].clcod;
+    if (!(strStartCmp(code, "451")) ||
+        !(strStartCmp(code, "7131")) ||
+        !(strStartCmp(code, "71111")))
       continue;
     if (flibrt[nkl].loc > 3)
       continue;

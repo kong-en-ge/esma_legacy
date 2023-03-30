@@ -12,6 +12,7 @@
 #include "menuall2.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
+#include "utils.hpp"
 
 int dcdpar(char *codp, char *znp, int zn);
 
@@ -174,8 +175,8 @@ void pnt_dbf()
   db.Go(db.R_count());
   for (int keydb = 1; keydb <= db.F_count(); keydb++)
   {
-    if ((!strncmpi(db.F_name(keydb), "XCOORD", 6)) ||
-        (!strncmpi(db.F_name(keydb), "YCOORD", 6)))
+    if ((!strStartCmpI(db.F_name(keydb), "XCOORD")) ||
+        (!strStartCmpI(db.F_name(keydb), "YCOORD")))
       continue;
     strcpy(rdbf.name, db.F_name(keydb));
     dcdpar(rdbf.name, rdbf.name, 1);
@@ -216,11 +217,11 @@ void pnt_dbf()
     k = 1;
     for (keydb = 1; keydb <= db.F_count(); keydb++)
     {
-      if (!strncmpi(db.F_name(keydb), "XCOORD", 6))
+      if (!strStartCmpI(db.F_name(keydb), "XCOORD"))
       {
         dtoa(x2, db.F_ptr(keydb), db.F_width(keydb), db.F_decim(keydb));
       }
-      else if (!strncmpi(db.F_name(keydb), "YCOORD", 6))
+      else if (!strStartCmpI(db.F_name(keydb), "YCOORD"))
       {
         dtoa(y2, db.F_ptr(keydb), db.F_width(keydb), db.F_decim(keydb));
       }
@@ -562,8 +563,8 @@ void red_rec()
   Wnd_dbf wdbf(db.F_count());
   for (int keydb = 1; keydb <= db.F_count(); keydb++)
   {
-    if ((!strncmpi(db.F_name(keydb), "XCOORD", 6)) ||
-        (!strncmpi(db.F_name(keydb), "YCOORD", 6)))
+    if ((!strStartCmpI(db.F_name(keydb), "XCOORD")) ||
+        (!strStartCmpI(db.F_name(keydb), "YCOORD")))
       continue;
     strcpy(rdbf.name, db.F_name(keydb));
     dcdpar(rdbf.name, rdbf.name, 1);
@@ -606,9 +607,9 @@ void red_rec()
     k = 1;
     for (keydb = 1; keydb <= db.F_count(); keydb++)
     {
-      if (!strncmpi(db.F_name(keydb), "XCOORD", 6))
+      if (!strStartCmpI(db.F_name(keydb), "XCOORD"))
         continue;
-      if (!strncmpi(db.F_name(keydb), "YCOORD", 6))
+      if (!strStartCmpI(db.F_name(keydb), "YCOORD"))
         continue;
       pdb = (REC_dbf *)wdbf.nitem(k - 1);
       if (pdb->type != 'N')

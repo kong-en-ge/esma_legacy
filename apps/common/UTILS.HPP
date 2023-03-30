@@ -3,6 +3,10 @@
 
 #include <stdlib.h>
 
-int findCommandLineParam(int argc, char *argv[], char const* param, char* value = NULL);
+#include "coretype.hpp"
+
+bool findCommandLineParam(int argc, char *argv[], char const* param, char* value = NULL);
+int strStartCmp(char const* str, char const* pattern);
+int strStartCmpI(char const* str, char const* pattern);
 
 #endif
