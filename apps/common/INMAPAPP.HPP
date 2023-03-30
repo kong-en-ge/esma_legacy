@@ -4,6 +4,7 @@
 #include "graphapp.hpp"
 #include "button.hpp"
 #include "viewctx.hpp"
+#include "maphand.hpp"
 
 #define STATE_SUCCESS 0
 #define STATE_LOW_MEMORY 1
@@ -22,6 +23,7 @@ private:
 protected:
   button* btnOnOff;
 
+  virtual CMapDataHandler* createMapDataHandler(void) = 0;
   void displayHelp(void) const;
   virtual void executeApp(void) = 0;
   Menu_but* getActiveMenu(void) const;
@@ -41,6 +43,7 @@ protected:
   virtual int suppressStartSplash(void) const;
 public:
   CInfoMapApplication(int argc, char *argv[]);
+  virtual ~CInfoMapApplication(void);
 };
 
 int state2error(int state);

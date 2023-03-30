@@ -2,8 +2,6 @@
 #define GLOBDATA
 #include "globals.hpp"
 
-extern int N_on;
-
 struct OBSTOP
 {
   int nobj;

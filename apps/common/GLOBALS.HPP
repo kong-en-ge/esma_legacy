@@ -7,6 +7,7 @@
 #include "flibrt.hpp"
 #include "indexmap.hpp"
 #include "geometry.hpp"
+#include "maphand.hpp"
 
 #define WHITE 0
 #define BLACK 15
@@ -73,5 +74,7 @@ extern char KLSK[];        // строки класс
 extern far char ATCD[];
 extern far unsigned ATCDP[];
 extern int ATRsize; // число возможных атрибутов
+
+extern CMapDataHandler *gMapDataHandler;
 
 #endif

@@ -7,6 +7,7 @@
 #include "mouse.hpp"
 #include "funcs.hpp"
 #include "menuall2.hpp"
+#include "rbmaphn.hpp"
 
 /*********************
  * CRbMapApplication *
@@ -18,6 +19,11 @@ CRbMapApplication::CRbMapApplication(int argc, char *argv[]) :
   LBSFilename = "BELARUS.LBS";
   SCALEMIN = 50000;
   SCALEMAX = 10000000;
+}
+
+CMapDataHandler* CRbMapApplication::createMapDataHandler(void)
+{
+  return new CRbMapDataHandler();
 }
 
 void CRbMapApplication::executeApp(void)

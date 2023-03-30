@@ -487,28 +487,6 @@ void centr(CViewContext const& viewContext)
   drawrazd(viewContext);
 }
 
-int drawmap(CViewContext const& viewContext)
-{
-  int exp = 0;
-  F_SPR spr;
-  for (unsigned i = model.pm.start; i <= model.pm.end; i++)
-  {
-    int key;
-#ifndef DEMO
-    if ((mouse_key_status(&key, &key)) == -1)
-    {
-      while (mouse_key_status(&key, &key))
-        ;
-      exp = -1;
-      break;
-    }
-#endif
-    draw_one_obj(viewContext, i, -1, 0 /* drawDisabled */);
-  }
-drawex:
-  return exp;
-}
-
 void drawingline(int *metr, int num)
 {
   setlinesstyle(fliblin + num);
@@ -747,7 +725,7 @@ void whatisit(CViewContext const& viewContext)
   {
     displayObjectInfo(objIndex);
     nottwink();
-    draw_one_obj(viewContext, objIndex, -1);
+    gMapDataHandler->draw_one_obj(viewContext, objIndex, -1);
   }
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
 }
@@ -807,7 +785,7 @@ int drawrazd(CViewContext const& viewContext)
   store_otkat();
   while (((pos = next_model(pos)) > 0) && (!ret2))
   {
-    ret2 = drawmap(viewContext);
+    ret2 = gMapDataHandler->drawMap(viewContext);
   }
   setviewport(0, 0, XMAXMAPE, YMAXMAPE, 1);
   if (ret2)
@@ -849,7 +827,7 @@ int chooseObject(CViewContext const& viewContext, const OBJND *obj, int nobj)
     viewContext.updateViewPort();
     for (int i = 0; i < nobj; i++)
     {
-      draw_one_obj(viewContext, obj[i].nobj, 12);
+      gMapDataHandler->draw_one_obj(viewContext, obj[i].nobj, 12);
       settwink(12, obj[i].color);
       GRwnd wndHelper(487, 252, 632, 302, "Поиск объекта", LIGHTBLUE, 1, 1);
       wndHelper.text("Этот объект ?");
@@ -862,7 +840,7 @@ int chooseObject(CViewContext const& viewContext, const OBJND *obj, int nobj)
       if (k == -1)
       {
         nottwink();
-        draw_one_obj(viewContext, obj[i].nobj, -1);
+        gMapDataHandler->draw_one_obj(viewContext, obj[i].nobj, -1);
         continue;
       }
       retValue = obj[i].nobj;

@@ -95,7 +95,7 @@ void find_punct(CViewContext const& viewContext)
     double yd = YDISRAZ(punct[ret].x);
     redraw(viewContext, xd, yd, xd, yd, 18);
     viewContext.updateViewPort();
-    draw_one_obj(viewContext, punct[ret].nob, 12, 1);
+    gMapDataHandler->draw_one_obj(viewContext, punct[ret].nob, 12, 1);
     settwink(12, 10);
     int at;
     TEXT_PACK_MENUS tp(450, 185, 632, 7, "Нас.пункт", "", 1, 4000, 200, 1, 1);
@@ -110,7 +110,7 @@ void find_punct(CViewContext const& viewContext)
     at = tp.menu_key2();
     tp.restore();
     nottwink();
-    draw_one_obj(viewContext, punct[ret].nob, -1, 1);
+    gMapDataHandler->draw_one_obj(viewContext, punct[ret].nob, -1, 1);
     tp.del();
     if (at == -1)
       break;
@@ -154,7 +154,7 @@ void find_rg(CViewContext const& viewContext)
            XDISRAZ(spr.ymin), YDISRAZ(spr.xmin), XDISRAZ(spr.ymax),
            YDISRAZ(spr.xmax), 120);
     viewContext.updateViewPort();
-    draw_one_obj(viewContext, ret, 12, 1);
+    gMapDataHandler->draw_one_obj(viewContext, ret, 12, 1);
     settwink(12, 4);
     {
       int at;
@@ -171,7 +171,7 @@ void find_rg(CViewContext const& viewContext)
       at = tp.menu_key2();
       tp.restore();
       nottwink();
-      draw_one_obj(viewContext, ret, -1, 1);
+      gMapDataHandler->draw_one_obj(viewContext, ret, -1, 1);
       setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
       tp.del();
       ret = at;

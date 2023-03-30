@@ -53,6 +53,11 @@ CInfoMapApplication::CInfoMapApplication(int argc, char *argv[]) :
 {
 }
 
+CInfoMapApplication::~CInfoMapApplication(void)
+{
+  delete gMapDataHandler;
+}
+
 void CInfoMapApplication::displayHelp(void) const
 {
   help(getHelpFilename());
@@ -193,6 +198,7 @@ int CInfoMapApplication::initializeApplication(void)
   if (!openMapData())
     return STATE_NO_MAP;
 
+  gMapDataHandler = createMapDataHandler();
 
   return STATE_SUCCESS;
 }

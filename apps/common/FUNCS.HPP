@@ -80,7 +80,6 @@ void centr(CViewContext const& viewContext);
 void rasst(void);
 void plmash(CViewContext const& viewContext);
 void minmash(CViewContext const& viewContext);
-int drawmap(CViewContext const& viewContext);
 void drawingline(int *metr, int num);
 void draw_one_d(int x, int y, int color, int type);
 void draw_one_d(double x, double y, int color, int type);
@@ -98,8 +97,6 @@ int M_K_R_status(DrawCursorFunc drawCursor = NULL, int (*keyhandler)(int) = NULL
   const void *drawContext = NULL);
 
 // the following functions are to be implemented within the project
-int draw_one_obj(CViewContext const& viewContext,
-  unsigned obj, int color, int drawDisabled = 0);
 void drawcram(void);
 int poisk(CViewContext const& viewContext, int mode, int *x = NULL, int *y = NULL);
 
