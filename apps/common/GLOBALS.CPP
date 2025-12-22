@@ -20,8 +20,7 @@ float SCALEO;
 
 bool All_Map;
 
-CRectD otkat[MAX_STORED_VIEWS];
-int otkatn;
+BI_DequeAsVector<CRectD> viewHistory(MAX_STORED_VIEWS);
 
 FST_MODEL model;
 

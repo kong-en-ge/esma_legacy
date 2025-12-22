@@ -26,6 +26,7 @@
 #include "codesel.hpp"
 #include "graphapp.hpp"
 #include "utils.hpp"
+#include "transp.hpp"
 
 FLIB *findobj(SPR *spr);
 int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst);
@@ -574,55 +575,57 @@ int ATRFR(TEXT_PACK_MENUS *tp, int j1)
   }
 } // ATRFR
 
+int find_nearest_stops(OBSTOP const* src, int src_size, OBSTOP* dst)
+{
+  int num, ob = 0;
+
+  for (int k = 1; k <= 4; k++)
+  { // for
+    int i = 0;
+    while ((src[i].vt != k) && (i < src_size))
+      i++;
+    if (i >= src_size)
+      num = -1;
+    else
+    {
+      float dd = src[i].d;
+      num = i;
+      while (i < src_size)
+      {
+        if (src[i].vt == k)
+          if (src[i].d < dd)
+          {
+            dd = src[i].d;
+            num = i;
+          }
+        i++;
+      }
+    }
+    if (num != -1)
+      dst[ob++] = src[num];
+  } // for
+
+  return ob;
+}
+
 void howstop(CViewContext const& viewContext)
 {
   obstop = new OBSTOP[20];
-  OBSTOP *obs;
-  obs = new OBSTOP[4];
-  char str[80];
-  int ob = 0, num;
-  int ret = poisk(viewContext, 1);
+  OBSTOP obs[4];
+  CPointS pos;
+  int ret = find_transport_stops(viewContext, pos);
   if (!ret)
   {
     delete[] obstop;
-    delete[] obs;
     return;
   }
   {
-    for (int k = 1; k <= 4; k++)
-    { // for
-      int ii = 0;
-      while ((obstop[ii].vt != k) && (ii < ret))
-        ii++;
-      if (ii >= ret)
-        num = -1;
-      else
-      {
-        float dd = obstop[ii].d;
-        num = ii;
-        while (ii < ret)
-        {
-          if (obstop[ii].vt == k)
-            if (obstop[ii].d < dd)
-            {
-              dd = obstop[ii].d;
-              num = ii;
-            }
-          ii++;
-        }
-      }
-      if (num != -1)
-      {
-        obs[ob] = obstop[num];
-        ob++;
-      }
-    } // for
+    int ob = find_nearest_stops(obstop, ret, obs);
     TEXT_PACK_MENUS tp(450, 185, 632, 11, "Транспорт", "", 1, 4000, 200, 1, 1);
     if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
     {
       displayError(0);
       delete[] obstop;
-      delete[] obs;
       goto ex;
     }
     viewContext.updateViewPort();
@@ -640,7 +643,6 @@ void howstop(CViewContext const& viewContext)
       gMapDataHandler->draw_one_obj(viewContext, obs[ii].nobj, -1, 1);
     viewContext.updateViewPort();
     delete[] obstop;
-    delete[] obs;
   }
 ex:
 }
@@ -744,8 +746,8 @@ int stuzel(int kh)
 
     if (strlen(nstot) || strlen(nmu0))
     { //
-      float dou = sqrt(pow((uzly[i].x - xco), 2) + pow((uzly[i].y - yco), 2));
-      float dku = sqrt(pow((uzly[i].x - xck), 2) + pow((uzly[i].y - yck), 2));
+      float dou = sqrt(pow((uzly[i].x - transportFrom.x), 2) + pow((uzly[i].y - transportFrom.y), 2));
+      float dku = sqrt(pow((uzly[i].x - transportTo.x), 2) + pow((uzly[i].y - transportTo.y), 2));
       float sd = dou + dku;
       int js = 0;
       for (js = 0; js < klm; js++)
@@ -804,7 +806,7 @@ int comuzel()
 void where_from(CViewContext const& viewContext)
 {
   obstop = new OBSTOP[21];
-  retot = poisk(viewContext, 1, &xo, &yo);
+  retot = find_transport_stops(viewContext, transportFrom);
   if (pr == 1)
     delete[] otkuda;
   if (!retot)
@@ -818,8 +820,6 @@ void where_from(CViewContext const& viewContext)
     delete[] obstop;
     return;
   }
-  xco = xo;
-  yco = yo;
   otkuda = new OBSTOP[21];
   int at = 0, key, kl = 0;
   while ((obstop[at].vt != 1) && (at < retot))
@@ -869,7 +869,7 @@ void where(CViewContext const& viewContext)
   OBSTOP *kuda;
   obstop = new OBSTOP[21];
   int key, at, ob, ob3, ob4, flag = 0;
-  int retkd = poisk(viewContext, 1, &xo, &yo);
+  int retkd = find_transport_stops(viewContext, transportTo);
   int j1 = 0, j2 = 0, j3 = 0, j4 = 0, j5 = 0;
   if (!retkd)
   {
@@ -877,10 +877,8 @@ void where(CViewContext const& viewContext)
     setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
     return;
   }
-  xck = xo;
-  yck = yo;
   int gogo = 0;
-  if (length(xco - xck, yco - yck) <= 600)
+  if (length(transportFrom.x - transportTo.x, transportFrom.y - transportTo.y) <= 600)
     gogo = 1;
   if (gogo == 0)
   { // пешком не дойдешь

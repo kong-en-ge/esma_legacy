@@ -7,6 +7,7 @@
 #include "globalda.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
+#include "transp.hpp"
 
 int otk_met_kuda(CViewContext const& viewContext,
   PERES *pss, OBSTOP *otkd, int retkdot, int nn)
@@ -76,9 +77,8 @@ int otk_met_kuda(CViewContext const& viewContext,
   { // on metro
     while (iv < kolmet)
     { //
-      xmt = metro[iv].x;
-      ymt = metro[iv].y;
-      int retmt = poisk(viewContext, 2, &xmt, &ymt);
+      CPointS mt(metro[iv].x, metro[iv].y);
+      int retmt = find_transport_stops_at_pos(viewContext, mt);
       if (!retmt)
       {
         iv++;

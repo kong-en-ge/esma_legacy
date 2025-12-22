@@ -5,6 +5,7 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 #include "codesel.hpp"
+#include "utils.hpp"
 
 #define MAX_CITY_SEARCH 200
 #define MAX_CITYNAME_SIZE 50
@@ -147,7 +148,7 @@ void find_rg(CViewContext const& viewContext)
     F_SPR spr;
     if (model.readspr(&spr, ret) != 1)
       break;
-    if (strncmp(flibrt[spr.numincl].clcod, "8115", 4))
+    if (strStartCmp(flibrt[spr.numincl].clcod, "8115"))
       continue;
     count++;
     redraw(viewContext,

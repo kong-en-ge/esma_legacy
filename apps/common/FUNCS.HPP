@@ -7,8 +7,9 @@
 #include "fastmod.hpp"
 #include "viewctx.hpp"
 
-void store_otkat(void);
-void restore_otkat(CViewContext const& viewContext);
+void pushViewHistory(void);
+void popViewHistory(CViewContext const& viewContext);
+
 int upcase(int symb);
 void rasst(CViewContext const& viewContext);
 void help(const char* help_file);
@@ -96,8 +97,9 @@ typedef void (*DrawCursorFunc)(const void *drawContext);
 int M_K_R_status(DrawCursorFunc drawCursor = NULL, int (*keyhandler)(int) = NULL,
   const void *drawContext = NULL);
 
+int find_object_simple(CViewContext const& viewContext);
+
 // the following functions are to be implemented within the project
 void drawcram(void);
-int poisk(CViewContext const& viewContext, int mode, int *x = NULL, int *y = NULL);
 
 #endif

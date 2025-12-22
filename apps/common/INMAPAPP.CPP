@@ -100,7 +100,7 @@ void CInfoMapApplication::handleCommand(int command)
     break;
 
   case 4:
-    restore_otkat(getViewContext());
+    popViewHistory(getViewContext());
     break;
 
   case 5:

@@ -25,8 +25,8 @@ void drawcram()
   {
     int xy, yx;
     double xd, yd;
-    xd = XDISRAZ(yo);
-    yd = YDISRAZ(xo);
+    xd = XDISRAZ(transportFrom.y);
+    yd = YDISRAZ(transportFrom.x);
     xy = XMINEC + (yd - YMINVC) * (XMAXEC - XMINEC) / (YMAXVC - YMINVC);
     yx = YMINEC + (XMAXVC - xd) * (YMAXEC - YMINEC) / (XMAXVC - XMINVC);
     //   setcolor(GREEN);

@@ -21,6 +21,8 @@
 #include "dbffunc.hpp"
 #include "graphapp.hpp"
 #include "transfrm.hpp"
+#include "utils.hpp"
+#include "findobj.hpp"
 
 const unsigned mscur[] = {
     0xffff, 0xffff, 0xffff, 0xfc1f, 0xf3e7, 0xf777, 0xee3b, 0xec9b,
@@ -99,27 +101,24 @@ int next_model(int index, int ignoreScaleFilter)
   return 0;
 }
 
-
-void store_otkat(void)
+void pushViewHistory(void)
 {
-  if (otkatn && boundsV.isEqual(otkat[otkatn - 1]))
+  if (!viewHistory.isEmpty() && boundsV.isEqual(viewHistory.peekLeft()))
     return;
 
-  if (otkatn >= MAX_STORED_VIEWS)
-  {
-    memmove(otkat, otkat + 1, sizeof(CRectD) * (MAX_STORED_VIEWS - 1));
-    otkatn = MAX_STORED_VIEWS - 1;
-  }
-  otkat[otkatn] = boundsV;
-  otkatn++;
+  if (viewHistory.isFull())
+    viewHistory.getRight();
+
+  viewHistory.putLeft(boundsV);
 }
 
-void restore_otkat(CViewContext const& viewContext)
+void popViewHistory(CViewContext const& viewContext)
 {
-  if (otkatn <= 1)
+  if (viewHistory.getItemsInContainer() < 2)
     return;
-  otkatn -= 4;
-  boundsV = otkat[otkatn];
+
+  viewHistory.getLeft(); // remove current view             
+  boundsV = viewHistory.getLeft();
   drawrazd(viewContext);
 }
 
@@ -720,8 +719,7 @@ void displayObjectInfo(int objIndex)
 
 void whatisit(CViewContext const& viewContext)
 {
-  int x, y;
-  int objIndex = poisk(viewContext, 0 /*mode*/);
+  int objIndex = find_object_simple(viewContext);
   if (objIndex >= 0)
   {
     displayObjectInfo(objIndex);
@@ -784,7 +782,7 @@ int drawrazd(CViewContext const& viewContext)
   boundsM = totalBounds;
   setviewMAP(&viewContext);
   pos = 0;
-  store_otkat();
+  pushViewHistory();
 
   terminated = false;
   while (((pos = next_model(pos)) > 0) && !terminated)
@@ -992,15 +990,15 @@ bool CSearchResultCollector::addObject(int index, double distance, int color)
   if (i >= _maxCount)
     return false;
 
+  if (_count < _maxCount)
+    _count++;
+
   if (_count > i)
-    memmove(obj + i + 1, obj + i, (_count - i) * sizeof(OBJND));
+    memmove(obj + i + 1, obj + i, (_count - i - 1) * sizeof(OBJND));
 
   obj[i].d = distance;
   obj[i].nobj = index;
   obj[i].color = color;
-
-  if (_count < _maxCount)
-    _count++;
 
   return true;
 }
@@ -1018,3 +1016,78 @@ double CSearchResultCollector::maxDistance(void) const
     return 0;
 }
 
+int common_filter(const char* code, char loc)
+{
+  return loc < 4 &&
+         strStartCmp(code, "451") &&
+         strStartCmp(code, "7131") &&
+         strStartCmp(code, "71111");
+}
+
+class CSimpleFindObjectQuery: public CCustomFindObjectQuery
+{
+private:
+  CSearchResultCollector* resultCollector;
+protected:
+  virtual int addObject(int index, double distance, FLIB const* fl, int* deltaCommon, int* deltaPoints);
+public:
+  CSimpleFindObjectQuery();
+  virtual ~CSimpleFindObjectQuery();
+
+  CSearchResultCollector const* getResultCollector(void) const;
+};
+
+/* CSimpleFindObjectQuery */
+
+CSimpleFindObjectQuery::CSimpleFindObjectQuery()
+{
+  resultCollector = new CSearchResultCollector(5);
+}
+
+CSimpleFindObjectQuery::~CSimpleFindObjectQuery()
+{
+  delete resultCollector;
+}
+
+int CSimpleFindObjectQuery::addObject(int index, double distance, FLIB const* fl, int* deltaCommon, int* deltaPoints)
+{
+  if (resultCollector->addObject(index, distance, fl->color) && resultCollector->isFull())
+    updateThreshold(resultCollector->maxDistance(), deltaCommon, deltaPoints);
+
+  return resultCollector->getCount();
+}
+
+CSearchResultCollector const* CSimpleFindObjectQuery::getResultCollector(void) const
+{
+  return resultCollector;
+}
+
+int find_object_simple(CViewContext const& viewContext)
+{
+  CSimpleFindObjectQuery query;
+
+  if (!fillQueryPosition(query.pos))
+    return -1;
+
+  query.mode = 0;
+  query.viewContext = &viewContext;
+  query.ignoreScaleFilter = 0;
+  query.checkEnabled = 1;
+  query.filter_proc = common_filter;
+  query.threshold = CURRENTSCALE > 2000 ? 20 : 40;
+
+  int findObjectResult = find_objects(query);
+
+  if (findObjectResult <= 0)
+  {
+    if (!findObjectResult)
+      displayWarning(0);
+    return -1;
+  }
+
+  CSearchResultCollector const* resultCollector = query.getResultCollector();
+  int retValue = chooseObject(*query.viewContext,
+    resultCollector->getObj(), resultCollector->getCount());
+
+  return retValue;
+}

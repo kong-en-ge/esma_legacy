@@ -1,7 +1,8 @@
 #include "globalda.hpp"
 //#include "test.hpp"
 
-int pr = 0, xo, yo, retot, kolmet, koluz, comuz, xco, yco, xck, yck, prmt, uzl;
+CPointS transportFrom, transportTo;
+int pr = 0, retot, kolmet, koluz, comuz, prmt, uzl;
 char stt[40], nmot1[90], ost[40];
 OBSTOP *obstop, *otkuda;
 METRO *metro;

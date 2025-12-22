@@ -1,6 +1,8 @@
 #ifndef __GLOBALS_HPP__
 #define __GLOBALS_HPP__
 
+#include <deque.h>
+
 #include "graphics.h"
 #include "fstmod.hpp"
 #include "font.hpp"
@@ -42,8 +44,7 @@ extern float SCALEO; // основание степени
 
 extern bool All_Map;
 
-extern CRectD otkat[];
-extern int otkatn;
+extern BI_DequeAsVector<CRectD> viewHistory;
 
 extern FST_MODEL model;
 extern PART_MODEL models[]; // части модели
