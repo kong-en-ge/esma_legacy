@@ -6,6 +6,7 @@
 class CMinskMap20Application : public CMinskMapApplication
 {
 protected:
+  virtual void drawIndexMapOverlay(void) const;
   virtual char const * getVersion(void) const;
   virtual char const ** getWarningMessages(void) const;
   virtual int getWarningMessageCount(void) const;

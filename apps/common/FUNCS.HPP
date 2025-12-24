@@ -99,7 +99,4 @@ int M_K_R_status(DrawCursorFunc drawCursor = NULL, int (*keyhandler)(int) = NULL
 
 int find_object_simple(CViewContext const& viewContext);
 
-// the following functions are to be implemented within the project
-void drawcram(void);
-
 #endif

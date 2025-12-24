@@ -27,6 +27,7 @@
 #include "graphapp.hpp"
 #include "utils.hpp"
 #include "transp.hpp"
+#include "inmapapp.hpp"
 
 FLIB *findobj(SPR *spr);
 int ATRTR(TEXT_PACK_MENUS *tp, int obj, OBSTOP *obst);
@@ -807,15 +808,15 @@ void where_from(CViewContext const& viewContext)
 {
   obstop = new OBSTOP[21];
   retot = find_transport_stops(viewContext, transportFrom);
-  if (pr == 1)
+  if (transportFromMarkerVisible)
     delete[] otkuda;
   if (!retot)
   {
     setviewport(0, 0, getmaxx(), getmaxy(), 1);
-    if (pr == 1)
+    if (transportFromMarkerVisible)
     {
-      pr = 0;
-      drawcram();
+      transportFromMarkerVisible = false;
+      CInfoMapApplication::getInstance()->drawIndexMap();
     }
     delete[] obstop;
     return;
@@ -852,10 +853,8 @@ void where_from(CViewContext const& viewContext)
     at++;
   } while (at < retot);
   retot = kl;
-  pr = 1;
-  setviewport(0, 0, getmaxx(), getmaxy(), 1);
-  if (!CGraphicApplication::getInstance()->isModeEGA())
-    drawcram();
+  transportFromMarkerVisible = true;
+  CInfoMapApplication::getInstance()->drawIndexMap();
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
 
   delete[] obstop;
@@ -1350,11 +1349,7 @@ void where(CViewContext const& viewContext)
     viewContext.updateViewPort();
   } // вывод
 ex:
-  pr = 0;
-  setviewport(0, 0, getmaxx(), getmaxy(), 1);
-  if (!CGraphicApplication::getInstance()->isModeEGA())
-    drawcram();
-  setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
+  transportFromMarkerVisible = false;
   delete[] kuda;
   delete[] otkuda;
   delete[] obstop;

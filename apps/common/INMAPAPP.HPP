@@ -14,6 +14,7 @@
 class CInfoMapApplication : public CGraphicApplication
 {
 private:
+  static CInfoMapApplication* _instance;
   Menu_but* activeMenu;
   CViewContext viewContext;
 
@@ -25,6 +26,7 @@ protected:
 
   virtual CMapDataHandler* createMapDataHandler(void) = 0;
   void displayHelp(void) const;
+  virtual void drawIndexMapOverlay(void) const;
   virtual void executeApp(void) = 0;
   Menu_but* getActiveMenu(void) const;
   virtual char const ** getErrorMessages(void) const;
@@ -44,6 +46,10 @@ protected:
 public:
   CInfoMapApplication(int argc, char *argv[]);
   virtual ~CInfoMapApplication(void);
+
+  void drawIndexMap(void) const;
+
+  static CInfoMapApplication* getInstance(void);
 };
 
 int state2error(int state);
@@ -56,6 +62,11 @@ inline Menu_but* CInfoMapApplication::getActiveMenu(void) const
 inline CViewContext const& CInfoMapApplication::getViewContext(void) const
 {
   return viewContext;
+}
+
+inline static CInfoMapApplication* CInfoMapApplication::getInstance(void)
+{
+  return CInfoMapApplication::_instance;
 }
 
 #endif

@@ -6,6 +6,8 @@
 #include "apputils.hpp"
 #include "globalda.hpp"
 
+bool transportFromMarkerVisible = false;
+
 const struct
 {
   int type;
@@ -75,7 +77,6 @@ int find_transport_stops(CViewContext const& viewContext, CPointS& pos)
     return -1;
 
   CTransportFindObjectQuery query;
-  query.mode = 1;
   query.viewContext = &viewContext;
   query.ignoreScaleFilter = 1;
   query.checkEnabled = 0;
@@ -92,9 +93,8 @@ int find_transport_stops(CViewContext const& viewContext, CPointS& pos)
 }
 
 int find_transport_stops_at_pos(CViewContext const& viewContext, CPointS const& pos)
-{                                                                                
+{
   CTransportFindObjectQuery query;
-  query.mode = 2;
   query.viewContext = &viewContext;
   query.ignoreScaleFilter = 1;
   query.checkEnabled = 0;

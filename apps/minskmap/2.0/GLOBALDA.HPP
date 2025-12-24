@@ -62,7 +62,7 @@ struct UZLY
 };
 extern UZLY *uzly;
 extern CPointS transportFrom, transportTo;
-extern int pr, retot, kolmet, koluz, comuz, prmt, uzl;
+extern int retot, kolmet, koluz, comuz, prmt, uzl;
 extern char stt[40], nmot1[90], ost[40];
 
 #endif

@@ -23,6 +23,7 @@
 #include "transfrm.hpp"
 #include "utils.hpp"
 #include "findobj.hpp"
+#include "inmapapp.hpp"
 
 const unsigned mscur[] = {
     0xffff, 0xffff, 0xffff, 0xfc1f, 0xf3e7, 0xf777, 0xee3b, 0xec9b,
@@ -795,8 +796,9 @@ int drawrazd(CViewContext const& viewContext)
 l1:
   mouse_show(ON);
   setviewport(0, 0, getmaxx(), getmaxy(), 1);
-  if (!CGraphicApplication::getInstance()->isModeEGA())
-    drawcram();
+
+  CInfoMapApplication::getInstance()->drawIndexMap();
+
   FULL_MAP = false;
 #ifdef DEMO
   STARTTIME();
@@ -1069,7 +1071,6 @@ int find_object_simple(CViewContext const& viewContext)
   if (!fillQueryPosition(query.pos))
     return -1;
 
-  query.mode = 0;
   query.viewContext = &viewContext;
   query.ignoreScaleFilter = 0;
   query.checkEnabled = 1;

@@ -44,6 +44,9 @@ int state2error(int state)
   return -1;
 }
 
+// static member definition
+CInfoMapApplication* CInfoMapApplication::_instance = NULL;
+
 /***********************
  * CInfoMapApplication *
 ************************/
@@ -51,6 +54,7 @@ int state2error(int state)
 CInfoMapApplication::CInfoMapApplication(int argc, char *argv[]) :
   CGraphicApplication(argc, argv)
 {
+  _instance = this;
 }
 
 CInfoMapApplication::~CInfoMapApplication(void)
@@ -61,6 +65,39 @@ CInfoMapApplication::~CInfoMapApplication(void)
 void CInfoMapApplication::displayHelp(void) const
 {
   help(getHelpFilename());
+}
+
+void CInfoMapApplication::drawIndexMap(void) const
+{
+  if (isModeEGA())
+    return;
+
+  if (!indexMapImage.hasData())
+    return;
+
+  setviewport(0, 0, getmaxx(), getmaxy(), 1);
+  indexMapImage.paintImage(XMINEC, YMINEC);
+
+  int xminec, yminec, xmaxec, ymaxec;
+  xminec = XMINEC + (boundsV.top - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);
+  yminec = YMAXEC - (boundsV.right - XMINVC) / (XMAXVC - XMINVC) * (YMAXEC - YMINEC);
+  xmaxec = XMINEC + (boundsV.bottom - YMINVC) / (YMAXVC - YMINVC) * (XMAXEC - XMINEC);
+  ymaxec = YMAXEC - (boundsV.left - XMINVC) / (XMAXVC - XMINVC) * (YMAXEC - YMINEC);
+  int d = -1;
+  if ((xmaxec - xminec) < 64)
+    d = 0;
+  if ((xmaxec - xminec) <= 16)
+    d = (16 - (xmaxec - xminec)) / 2;
+  setcolor(BLACK);
+  setlinestyle(0, 0, 3);
+  rectangle(xminec - d, yminec - d, xmaxec + d, ymaxec + d);
+  setlinestyle(0, 0, 1);
+
+  drawIndexMapOverlay();
+}
+
+void CInfoMapApplication::drawIndexMapOverlay(void) const
+{
 }
 
 char const ** CInfoMapApplication::getErrorMessages(void) const

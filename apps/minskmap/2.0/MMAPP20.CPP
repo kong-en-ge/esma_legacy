@@ -10,6 +10,7 @@
 #include "menuall2.hpp"
 #include "dbffunc.hpp"
 #include "globalda.hpp"
+#include "transp.hpp"
 
 const char * warningMessages[] =
 {
@@ -27,6 +28,26 @@ const char * warningMessages[] =
 CMinskMap20Application::CMinskMap20Application(int argc, char *argv[]) :
   CMinskMapApplication(argc, argv)
 {
+}
+
+void CMinskMap20Application::drawIndexMapOverlay(void) const
+{
+  if (!transportFromMarkerVisible)
+    return;
+  
+  setlinestyle(0, 0, 3);
+  setcolor(BLACK);
+
+  int xy, yx;
+  double xd, yd;
+  xd = XDISRAZ(transportFrom.y);
+  yd = YDISRAZ(transportFrom.x);
+  xy = XMINEC + (yd - YMINVC) * (XMAXEC - XMINEC) / (YMAXVC - YMINVC);
+  yx = YMINEC + (XMAXVC - xd) * (YMAXEC - YMINEC) / (XMAXVC - XMINVC);
+  //   setcolor(GREEN);
+  line(xy - 2, yx, xy + 2, yx);
+  line(xy, yx - 2, xy, yx + 2);
+  setlinestyle(0, 0, 1);
 }
 
 char const *CMinskMap20Application::getVersion(void) const
@@ -57,7 +78,7 @@ void CMinskMap20Application::handleCommand(int command)
     break;
 
   case 28:
-    if (pr)
+    if (transportFromMarkerVisible)
       where(getViewContext());
     break;
 
