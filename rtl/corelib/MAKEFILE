@@ -7,6 +7,7 @@ ROOT_DIR=..\..
 
 PUBLISHED_HEADERS=\
   $(PH:name=coretype.hpp)\
+  $(PH:name=custarry.hpp)\
   $(PH:name=geometry.hpp)\
   $(PH:name=transfrm.hpp)
 
