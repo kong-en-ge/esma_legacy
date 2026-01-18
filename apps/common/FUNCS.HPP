@@ -3,9 +3,11 @@
 
 #include <stdlib.h>
 
+#include "coretype.hpp"
 #include "txtpacks.hpp"
 #include "fastmod.hpp"
 #include "viewctx.hpp"
+#include "fatr.hpp"
 
 void pushViewHistory(void);
 void popViewHistory(CViewContext const& viewContext);
@@ -33,10 +35,6 @@ struct OBJND
   float d;
   int color;
 };
-
-typedef int bool;
-#define false 0
-#define true  1
 
 class CSearchResultCollector
 {
@@ -98,5 +96,7 @@ int M_K_R_status(DrawCursorFunc drawCursor = NULL, int (*keyhandler)(int) = NULL
   const void *drawContext = NULL);
 
 int find_object_simple(CViewContext const& viewContext);
+
+bool loadAttributes(int obj, mk_atrf& attributes, F_SPR *spr = NULL);
 
 #endif

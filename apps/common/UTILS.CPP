@@ -1,8 +1,8 @@
 #include <string.h>
 
-#include "coretype.hpp"
+#include "utils.hpp"
 
-bool findCommandLineParam(int argc, char *argv[], char const* param, char* value = NULL)
+bool findCommandLineParam(int argc, char *argv[], char const* param, char* value)
 {
   char const* arg;
   int paramLen = strlen(param);

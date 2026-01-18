@@ -965,6 +965,25 @@ bool findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
   return true;
 }
 
+bool loadAttributes(int obj, mk_atrf& attributes, F_SPR *spr)
+{
+  F_SPR tempSpr;
+  if (!spr)
+    spr = &tempSpr;
+
+  if (model.readspr(spr, obj) != 1)
+    return false;
+
+  if (!spr->lnh)
+    return false;
+
+  if (model.readhars((int **)&attributes.har, spr) == -1)
+    return false;
+
+  attributes.har += 4;
+  return true;
+}
+
 /**************************
  * CSearchResultCollector *
  **************************/

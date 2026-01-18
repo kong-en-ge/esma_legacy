@@ -40,8 +40,8 @@ void CMinskMap20Application::drawIndexMapOverlay(void) const
 
   int xy, yx;
   double xd, yd;
-  xd = XDISRAZ(transportFrom.y);
-  yd = YDISRAZ(transportFrom.x);
+  xd = XDISRAZ(transportModule.getSourcePos().y);
+  yd = YDISRAZ(transportModule.getSourcePos().x);
   xy = XMINEC + (yd - YMINVC) * (XMAXEC - XMINEC) / (YMAXVC - YMINVC);
   yx = YMINEC + (XMAXVC - xd) * (YMAXEC - YMINEC) / (XMAXVC - XMINVC);
   //   setcolor(GREEN);
@@ -87,10 +87,17 @@ void CMinskMap20Application::handleCommand(int command)
   }
 }
 
+int CMinskMap20Application::initializeApplication(void)
+{
+  int result = CMinskMapApplication::initializeApplication();
+  if (result == STATE_SUCCESS)
+    transportModule.initialize();
+
+  return result;
+}
+
 void CMinskMap20Application::runMainMenu(void)
 {
-  prmt = 0;
-  uzl = 0;
   setcolor(BLACK);
   mouse_show(OFF);
   line(480, 39, 480, 196);
@@ -137,8 +144,4 @@ void CMinskMap20Application::runMainMenu(void)
     if (!find_bl(getViewContext(), parst, parbl))
       all(getViewContext());
   runMenu(&menm);
-  if (prmt == 1)
-    delete metro;
-  if (uzl == 1)
-    delete uzly;
 }

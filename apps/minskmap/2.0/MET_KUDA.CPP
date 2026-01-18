@@ -8,265 +8,108 @@
 #include "apputils.hpp"
 #include "funcs.hpp"
 #include "transp.hpp"
+#include "utils.hpp"
 
-int otk_met_kuda(CViewContext const& viewContext,
-  PERES *pss, CStopArray const& srcStops, int nn)
+bool calcSubwayTransfer(CViewContext const& viewContext,
+  CRouteDefArray &routeDefs, CStopArray const& dstStops, int subwayObj,
+  CSubwayStationArray const& subwayStations, bool fromSubway)
 {
-  CStopArray stops;
-  OBSTOP *kudan, *peres;
-  int r, ckot, ckkd, j2 = 0;
-  mk_atrf maot, makd;
-  F_SPR sprot, sprkd;
-  char ss[55], ss1[55];
-  char mrot[55], mrkd[55], nstot[40], nstkd[40];
-  int ret, xmt, ymt, at, kl;
+  ROUTE_DEF routeDef;
 
-  peres = new OBSTOP[21];
-  if (peres == NULL)
-  {
-    displayError(0);
-    return 0;
-  }
-  kudan = new OBSTOP[21];
-  if (kudan == NULL)
-  {
-    displayError(0);
-    delete[] peres;
-    return 0;
-  }
-  if (model.readspr(&sprot, nn) == -1)
+  CStopArray stops, transferStops, targetStops;
+  CPointS dstStopPos;
+  int ckot, ckkd, num, stopIndex;
+  char srcRoutes[55], dstRoutes[55];
+
+
+  int subwayIndex = -1;
+
+  for (int i = 0; i < subwayStations.getCount(); i++)
+    if (subwayStations[i].obj == subwayObj)
+    {
+      subwayIndex = i;
+      break;
+    }
+
+  if (subwayIndex < 0)
   {
     displayError(1);
-    delete[] peres;
-    delete[] kudan;
-    return 0;
+    return false;
   }
-  int xn = sprot.xmin, yn = sprot.ymin;
-  int num, nm1 = 0, ob = 0;
-  int stopIndex;
+  CPointS const &pos = subwayStations[subwayIndex].pos;
 
-  for (int k = 1; k <= 4; k++)
+  memset(&routeDef, 0, sizeof(routeDef));
+  routeDef.stageCount = 4;
+  strcpy(routeDef.stages[0].stopTitle, subwayStations[subwayIndex].title);
+
+  for (int k = 2/*1*/; k <= 4; k++)
   {
-    stopIndex = findNearestStop(srcStops, k);
+    stopIndex = findNearestStop(dstStops, k);
     if (stopIndex != -1)
+      targetStops.add(dstStops[stopIndex]);
+  }
+
+  for (int iv = 0; iv < subwayStations.getCount(); iv++)
+  { //
+    find_transport_stops_at_pos(viewContext, subwayStations[iv].pos, stops);
+
+    for (int i = 0; i < stops.getCount(); i++)
+      if (stops[i].vt != 1) // subway2subway case already covered earlier
+        transferStops.add(stops[i]);
+
+    for (ckot = 0; ckot < transferStops.getCount(); ckot++)
     {
-      kudan[nm1] = srcStops[stopIndex];
-      ob++;
-      nm1++;
+      int type = transferStops[ckot].vt;
+
+      if (!fetchStopData(type, transferStops[ckot].nobj, routeDef.stages[2].stopTitle, srcRoutes))
+        continue;
+
+      if (!routeDef.stages[2].stopTitle)
+        continue;
+
+      for (ckkd = 0; ckkd < targetStops.getCount(); ckkd++)
+      {
+        if (targetStops[ckkd].vt != type)
+          continue;
+
+        if (!fetchStopData(type, targetStops[ckkd].nobj, routeDef.stages[3].stopTitle,
+          dstRoutes, &dstStopPos))
+          continue;
+
+        routeDef.stages[3].routes[0] = 0;
+        if (!composeCommonRoutes(type, srcRoutes, dstRoutes, routeDef.stages[3].routes, NULL, NULL))
+          continue;
+
+        routeDef.distance = length(subwayStations[iv].pos, dstStopPos) +
+          length(subwayStations[iv].pos, pos);
+
+        int js;
+        for (js = 0; js < routeDefs.getCount(); js++)
+        {
+          ROUTE_DEF const &item = routeDefs[js];
+
+          if (!strcmp(item.stages[3].stopTitle, routeDef.stages[3].stopTitle) &&
+              !strcmp(item.stages[3].routes, routeDef.stages[3].routes) &&
+              routeDef.distance > item.distance)
+            break;
+        }
+
+        if (js < routeDefs.getCount())
+          continue;
+
+        strcpy(routeDef.stages[1].stopTitle, subwayStations[iv].title);
+        routeDef.type = type;
+
+/*        if (!fromSubway)
+        {
+          ROUTE_STAGE temp = routeDef.stages[0];
+          routeDef.stages[0] = routeDef.stages[2];
+          routeDef.stages[2] = temp;
+        }*/
+        routeDefs.insertOrdered(routeDef, MAX_ROUTE_DEFS);
+      }
     }
   }
 
-  int iv = 0;
-  if (kolmet != 0)
-  { // on metro
-    while (iv < kolmet)
-    { //
-      CPointS mt(metro[iv].x, metro[iv].y);
-      int retmt = find_transport_stops_at_pos(viewContext, mt, stops);
-      if (!retmt)
-      {
-        iv++;
-        continue;
-      }
-      at = 0;
-      kl = 0;
-      do
-      {
-        if (stops[at].vt != 1)
-        {
-          peres[kl] = stops[at];
-          kl++;
-        }
-        at++;
-      } while (at < retmt);
-      retmt = kl;
-      for (int k = 1; k <= 4; k++)
-      { // for2
-        int iot, ikd;
-        iot = 0;
-        ikd = 0;
-        while ((kudan[ikd].vt != k) && (ikd < ob))
-          ikd++;
-        while ((peres[iot].vt != k) && (iot < retmt))
-          iot++;
-        if ((iot < retmt) && (ikd < ob))
-        {
-          ckot = iot;
-          ckkd = ikd;
-          while (ckot < retmt)
-          { // wh
-            mrot[0] = 0;
-            nstot[0] = 0;
-            if (peres[ckot].vt == k)
-            { // on transport
-              int ret2 = model.readspr(&sprot, peres[ckot].nobj);
-              if (ret2 != 1)
-              {
-                ckot++;
-                continue;
-              }
-              else
-              { // rdot
-                if (sprot.lnh == 0)
-                {
-                  ckot++;
-                  continue;
-                }
-                else if (model.readhars((int **)&maot.har, &sprot) == -1)
-                {
-                  ckot++;
-                  continue;
-                }
-                else
-                { // atribute ot
-                  at = 1;
-                  maot.har += 4;
-                  do
-                  {
-                    r = make_atr(&maot);
-                    if (k != 1)
-                      if (checkAttributeDef(maot.natr, "NM", 'T'))
-                        sprintf(mrot, "%s", maot.zns);
-                    if (checkAttributeDef(maot.natr, "09", 'T'))
-                      sprintf(nstot, "%s", maot.zns);
-                  } while (r == 0);
-                  if ((strlen(nstot) != 0) && (((strlen(mrot) != 0) && (k != 1)) ||
-                                               ((strlen(mrot) == 0) && (k == 1))))
-                  { // on stop where
-                    ckkd = ikd;
-                    ss[0] = 0;
-                    while (ckkd < ob)
-                    { // wh kuda
-                      mrkd[0] = 0;
-                      nstkd[0] = 0;
-                      if (kudan[ckkd].vt == k)
-                      { // on tr
-                        int ret2 = model.readspr(&sprkd, kudan[ckkd].nobj);
-                        if (ret2 != 1)
-                        {
-                          ckkd++;
-                          continue;
-                        }
-                        else
-                        { // rd kd
-                          if (sprkd.lnh == 0)
-                          {
-                            ckkd++;
-                            continue;
-                          }
-                          else if (model.readhars((int **)&makd.har, &sprkd) == -1)
-                          {
-                            ckkd++;
-                            continue;
-                          }
-                          else
-                          { // atribute kd
-                            at = 1;
-                            makd.har += 4;
-                            ss[0] = 0;
-                            do
-                            {
-                              r = make_atr(&makd);
-                              if (k != 1)
-                                if (checkAttributeDef(makd.natr, "NM", 'T'))
-                                  sprintf(mrkd, "%s", makd.zns);
-                              if (checkAttributeDef(makd.natr, "09", 'T'))
-                                sprintf(nstkd, "%s", makd.zns);
-                            } while (r == 0);
-                          } // atribute  kd
-                        }   // rd kd
-                        if ((strlen(mrkd) != 0) && (strlen(nstkd) != 0) && (k != 1))
-                        { // compare
-                          int ik = 0, ik1, iv2, iv1;
-                          char str[5], strkd[5];
-                          while (ik < strlen(mrot))
-                          {
-                            ik1 = 0;
-                            while ((mrot[ik] != ',') && (ik < strlen(mrot)))
-                            {
-                              str[ik1] = mrot[ik];
-                              ik++;
-                              ik1++;
-                            }
-                            str[ik1] = 0;
-                            if (mrot[ik] == ',')
-                              ik++;
-                            iv2 = 0;
-                            while (iv2 < strlen(mrkd))
-                            {
-                              iv1 = 0;
-                              while ((mrkd[iv2] != ',') && (iv2 < strlen(mrkd)))
-                              {
-                                strkd[iv1] = mrkd[iv2];
-                                iv2++;
-                                iv1++;
-                              }
-                              strkd[iv1] = 0;
-                              if (mrkd[iv2] == ',')
-                                iv2++;
-                              if ((strcmp(str, strkd)) == 0)
-                              {
-                                if (ss[0] != 0)
-                                  strcat(ss, ",");
-                                strcat(ss, str);
-                              }
-                            }
-                          }
-                        } // compare
-                        float dw = sqrt(pow((metro[iv].x - sprkd.xmin), 2) + pow((metro[iv].y - sprkd.ymin), 2)) + sqrt(pow((metro[iv].x - xn), 2) + pow((metro[iv].y - yn), 2));
-                        if (strlen(ss) != 0)
-                        {
-                          int js = 0;
-                          while (js < j2)
-                          {
-                            if ((strcmp(pss[js].ot_kd, nstkd) == 0) &&
-                                (strcmp(pss[js].nm, ss) == 0) && (dw > pss[js].d))
-                              break;
-                            js++;
-                          }
-                          if (js < j2)
-                          {
-                            ckkd++;
-                            continue;
-                          }
-                          js = 0;
-                          {
-                            for (js = 0; js < j2; js++)
-                            {
-                              if (dw < pss[js].d)
-                                break;
-                            }
-                            if (js >= 10)
-                            {
-                              ckkd++;
-                              continue;
-                            }
-                            memmove(pss + js + 1, pss + js, (j2 - js) * sizeof(PERES));
-                            strcpy(pss[js].stperes, metro[iv].smetro);
-                            strcpy(pss[js].ot_kd, nstkd);
-                            strcpy(pss[js].nm, ss);
-                            pss[js].d = dw;
-                            pss[js].vt = k;
-                            if (j2 < 10)
-                              j2++;
-                          }
-                        }
-                      } // on tr
-                      ckkd++;
-                    } // wh kuda
-                  }   // on stop where
-                }     // atribute ot
-              }       // rd  ot
-            }         // on transport
-            ckot++;
-          } // wh
-        }
-      } // for2
-      iv++;
-    } //
-  }   // on metro
-  delete[] peres;
-  delete[] kudan;
-
-  return j2;
+  return true;
 }

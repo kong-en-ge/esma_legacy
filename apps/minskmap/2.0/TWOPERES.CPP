@@ -2,482 +2,58 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "flibrt.hpp"
-#include "fatr.hpp"
-#include "menuall2.hpp"
-#include "globals.hpp"
-#include "apputils.hpp"
 #include "funcs.hpp"
 #include "transp.hpp"
+#include "utils.hpp"
 
-int twoperes(CStopArray const& srcStops, TWOPERES *ps, CStopArray const& dstStops)
+int twoperes(CTransferStopArray const &transferStops,
+  CStopArray const& srcStops, CRouteDefArray &routeDefs,
+  CStopArray const& dstStops)
 {
-  OBSTOP *kudan, *otkudan;
-  char ss[90], sss[90], ssss[90];
-  int r, ckot, ckkd, ckuz, j2 = 0, xot, yot, xkd, ykd;
-  mk_atrf maot, makd, mauz;
-  F_SPR sprot, sprkd, spruz;
-  char mrot[55], mrkd[55], mruz1[55], mruz2[55];
-  char nstot[40], nstkd[40], nstuz[40];
-  int ret, kl;
+  CPointS fromPos, toPos;
+  char const *mruz1, *mruz2;
 
-  kudan = new OBSTOP[21];
-  if (kudan == NULL)
-  {
-    displayError(0);
-    return 0;
-  }
-  otkudan = new OBSTOP[21];
-  if (otkudan == NULL)
-  {
-    displayError(0);
-    delete[] kudan;
-    return 0;
-  }
-  int num, num1, nm1 = 0, ob = 0, nm2 = 0, obo = 0;
-  ss[0] = 0;
-  sss[0] = 0;
-  ssss[0] = 0;
-  for (int k = 1; k <= 4; k++)
-  { // for
-    int ii = 0, ii1 = 0;
-    while (ii < dstStops.getCount() && dstStops[ii].vt != k)
-      ii++;
-    while (ii1 < srcStops.getCount() && srcStops[ii1].vt != k)
-      ii1++;
-    if (ii >= dstStops.getCount())
-      num = -1;
-    else
-    {
-      float dot = dstStops[ii].d;
-      num = ii;
-      while (ii < dstStops.getCount())
-      {
-        if (dstStops[ii].vt == k)
-          if (dstStops[ii].d < dot)
-          {
-            dot = dstStops[ii].d;
-            num = ii;
-          }
-        ii++;
-      }
-    }
-    if (ii1 >= srcStops.getCount())
-      num1 = -1;
-    else
-    {
-      float dot = srcStops[ii1].d;
-      num1 = ii1;
-      while (ii1 < srcStops.getCount())
-      {
-        if (srcStops[ii].vt == k)
-          if (srcStops[ii].d < dot)
-          {
-            dot = srcStops[ii1].d;
-            num1 = ii1;
-          }
-        ii1++;
-      }
-    }
-    if (num != -1)
-    {
-      kudan[nm1] = dstStops[num];
-      ob++;
-      nm1++;
-    }
-    if (num1 != -1)
-    {
-      otkudan[nm2] = srcStops[num1];
-      obo++;
-      nm2++;
-    }
-  } // for
-  int iv = 0, hh, ivk;
-  nstot[0] = 0;
-  if (koluz != 0)
-  { // on uzel
-    while (iv < koluz)
-    { //
-      ss[0] = 0;
-      xot = yot = xkd = ykd = 0;
-      hh = 0;
-      for (int k = 1; k <= 4; k++)
-      { // for2
-        int iot;
-        iot = 0;
-        mruz1[0] = 0;
-        while ((otkudan[iot].vt != k) && (iot < obo))
-          iot++;
-        if (iot < obo)
+  ROUTE_DEF routeDef;
+  memset(&routeDef, 0, sizeof(routeDef));
+  routeDef.distance = 1e20;
+  routeDef.stageCount = 4;
+
+  for (int iv = 0; iv < transferStops.getCount(); iv++)
+  { //
+    if (!calcCommonRoutes(transferStops[iv], srcStops, routeDef.stages[0], fromPos))
+      continue;
+
+    float distanceFrom =  length(transferStops[iv].pos, fromPos);
+
+    for (int ivk = 0; ivk < transferStops.getCount(); ivk++)
+    { // two
+     if (!calcCommonRoutes(transferStops[ivk], dstStops, routeDef.stages[3], toPos))
+       continue;
+
+      float distanceTo = length(transferStops[ivk].pos, toPos);
+      routeDef.stages[1].routes[0] = 0;
+      for (int kk = 1; kk <= 4; kk++)
+      { // for4
+        mruz1 = routesByType(transferStops[iv], kk);
+        mruz2 = routesByType(transferStops[ivk], kk);
+        if (kk == 1)
         {
-          ckot = iot;
-          if (k == 1)
-            strcpy(mruz1, uzel[iv].nmu0);
-          else if (k == 2)
-            strcpy(mruz1, uzel[iv].nmu1);
-          else if (k == 3)
-            strcpy(mruz1, uzel[iv].nmu2);
-          else if (k == 4)
-            strcpy(mruz1, uzel[iv].nmu3);
-          ckot = iot;
-          char nstot1[40];
-          while (ckot < obo)
-          { // wh otkuda
-            mrot[0] = 0;
-            nstot1[0] = 0;
-            if (otkudan[ckot].vt == k)
-            { // on tr
-              int ret2 = model.readspr(&sprot, otkudan[ckot].nobj);
-              if (ret2 != 1)
-              {
-                ckot++;
-                continue;
-              }
-              else
-              { // rd ot
-                if (sprot.lnh == 0)
-                {
-                  ckot++;
-                  continue;
-                }
-                else if (model.readhars((int **)&maot.har, &sprot) == -1)
-                {
-                  ckot++;
-                  continue;
-                }
-                else
-                { // atribute ot
-                  maot.har += 4;
-                  do
-                  {
-                    r = make_atr(&maot);
-                    if (k != 1)
-                      if (checkAttributeDef(maot.natr, "NM", 'T'))
-                        sprintf(mrot, "%s", maot.zns);
-                    if (checkAttributeDef(maot.natr, "09", 'T'))
-                      sprintf(nstot1, "%s", maot.zns);
-                  } while (r == 0);
-                } // atribute  ot
-              }   // rd ot
-
-              if ((strlen(mrot) != 0) && (strlen(nstot1) != 0) && (k != 1))
-              { // compare
-                int ik = 0, ik1, iv2, iv1, fl = 0;
-                char str[5], strot[5];
-                while (ik < strlen(mruz1))
-                {
-                  ik1 = 0;
-                  while ((mruz1[ik] != ',') && (mruz1[ik] != '.') && (ik < strlen(mruz1)))
-                  {
-                    str[ik1] = mruz1[ik];
-                    ik++;
-                    ik1++;
-                  }
-                  str[ik1] = 0;
-                  if ((mruz1[ik] == ',') || (mruz1[ik] == '.'))
-                    ik++;
-                  iv2 = 0;
-                  while (iv2 < strlen(mrot))
-                  {
-                    iv1 = 0;
-                    while ((mrot[iv2] != ',') && (mrot[iv2] != '.') && (iv2 < strlen(mrot)))
-                    {
-                      strot[iv1] = mrot[iv2];
-                      iv2++;
-                      iv1++;
-                    }
-                    strot[iv1] = 0;
-                    if ((mrot[iv2] == ',') || (mrot[iv2] == '.'))
-                      iv2++;
-                    if ((strcmp(str, strot)) == 0)
-                    {
-                      if (fl == 0)
-                      {
-                        if (k == 2)
-                          strcat(ss, "%");
-                        else if (k == 3)
-                          strcat(ss, "@");
-                        else if (k == 4)
-                          strcat(ss, "&");
-                        fl = 1;
-                      }
-                      else
-                        strcat(ss, ",");
-                      strcat(ss, str);
-                      if (strlen(nstot1) != 0)
-                        strcpy(nstot, nstot1);
-                      if (hh == 0)
-                      {
-                        xot = sprot.xmin;
-                        yot = sprot.ymin;
-                        hh = 1;
-                      }
-                      else
-                      {
-                        xot = xot / 2 + sprot.xmin / 2;
-                        yot = yot / 2 + sprot.ymin / 2;
-                      }
-                    }
-                  }
-                }
-              } // compare
-            }   // on tr
-            ckot++;
-          } // wh otkuda
+          if (*mruz1 && *mruz2)
+            strcat(routeDef.stages[1].routes, "*");
         }
-      } // for2
+        if (kk != 1)
+          composeCommonRoutes(kk, mruz1, mruz2, routeDef.stages[1].routes, NULL, NULL);
+      } // for4
 
-      if (strlen(ss) != 0)
-      { // откуда есть в узле
-        hh = 0;
-        nstkd[0] = 0;
-        int ivk = 0;
-        while (ivk < koluz)
-        { // two
-          sss[0] = 0;
-          for (int k = 1; k <= 4; k++)
-          { // for3
-            int ikd;
-            ikd = 0;
-            mruz2[0] = 0;
-            while ((kudan[ikd].vt != k) && (ikd < ob))
-              ikd++;
-            if (ikd < ob)
-            {
-              ckkd = ikd;
-              if (k == 1)
-                strcpy(mruz2, uzel[ivk].nmu0);
-              else if (k == 2)
-                strcpy(mruz2, uzel[ivk].nmu1);
-              else if (k == 3)
-                strcpy(mruz2, uzel[ivk].nmu2);
-              else if (k == 4)
-                strcpy(mruz2, uzel[ivk].nmu3);
-              char nstkd1[40];
-              while (ckkd < ob)
-              { // whkd
-                mrkd[0] = 0;
-                nstkd1[0] = 0;
-                if (kudan[ckkd].vt == k)
-                { // on tr
-                  int ret2 = model.readspr(&sprkd, kudan[ckkd].nobj);
-                  if (ret2 != 1)
-                  {
-                    ckkd++;
-                    continue;
-                  }
-                  else
-                  { // rd kd
-                    if (sprkd.lnh == 0)
-                    {
-                      ckkd++;
-                      continue;
-                    }
-                    else if (model.readhars((int **)&makd.har, &sprkd) == -1)
-                    {
-                      ckkd++;
-                      continue;
-                    }
-                    else
-                    { // atribute kd
-                      makd.har += 4;
-                      do
-                      {
-                        r = make_atr(&makd);
-                        if (k != 1)
-                          if (checkAttributeDef(makd.natr, "NM", 'T'))
-                            sprintf(mrkd, "%s", makd.zns);
-                        if (checkAttributeDef(makd.natr, "09", 'T'))
-                          sprintf(nstkd1, "%s", makd.zns);
-                      } while (r == 0);
-                    } // atribute  kd
-                  }   // rd kd
-                }     // on tr
+      if (!routeDef.stages[1].routes[0])
+        continue;
 
-                if ((strlen(mrkd) != 0) && (strlen(nstkd1) != 0))
-                { // compare
-                  int ik = 0, ik1, iv2, iv1, fl = 0;
-                  char str[5], strot[5];
-                  while (ik < strlen(mruz2))
-                  {
-                    ik1 = 0;
-                    while ((mruz2[ik] != ',') && (mruz2[ik] != '.') && (ik < strlen(mruz2)))
-                    {
-                      str[ik1] = mruz2[ik];
-                      ik++;
-                      ik1++;
-                    }
-                    str[ik1] = 0;
-                    if ((mruz2[ik] == ',') || (mruz2[ik] == '.'))
-                      ik++;
-                    iv2 = 0;
-                    while (iv2 < strlen(mrkd))
-                    {
-                      iv1 = 0;
-                      while ((mrkd[iv2] != ',') && (mrkd[iv2] != '.') && (iv2 < strlen(mrkd)))
-                      {
-                        strot[iv1] = mrkd[iv2];
-                        iv2++;
-                        iv1++;
-                      }
-                      strot[iv1] = 0;
-                      if ((mrkd[iv2] == ',') || (mrkd[iv2] == '.'))
-                        iv2++;
-                      if ((strcmp(str, strot)) == 0)
-                      {
-                        if (fl == 0)
-                        {
-                          if (k == 2)
-                            strcat(sss, "%");
-                          else if (k == 3)
-                            strcat(sss, "@");
-                          else if (k == 4)
-                            strcat(sss, "&");
-                          fl = 1;
-                        }
-                        else
-                          strcat(sss, ",");
-                        strcat(sss, str);
-                        if (strlen(nstkd1) != 0)
-                          strcpy(nstkd, nstkd1);
-                        if (hh == 0)
-                        {
-                          xkd = sprkd.xmin;
-                          ykd = sprkd.ymin;
-                          hh = 1;
-                        }
-                        else
-                        {
-                          xkd = xkd / 2 + sprkd.xmin / 2;
-                          ykd = ykd / 2 + sprkd.ymin / 2;
-                        }
-                      }
-                    }
-                  }
-                } // compare
-                ckkd++;
-              } // whkd
-            }
-          } // for3
-
-          if (strlen(sss) == 0)
-          {
-            ivk++;
-            continue;
-          }
-          int ik, fl1 = 0, ik1, iv1, iv2;
-          char str[5], strot[5];
-          ssss[0] = 0;
-          for (int kk = 1; kk <= 4; kk++)
-          { // for4
-            mruz1[0] = 0;
-            mruz2[0] = 0;
-            if (kk == 1)
-            {
-              strcpy(mruz1, uzel[iv].nmu0);
-              strcpy(mruz2, uzel[ivk].nmu0);
-              if ((strlen(mruz1) != 0) && (strlen(mruz2) != 0))
-                strcat(ssss, "*");
-            }
-            else if (kk == 2)
-            {
-              strcpy(mruz1, uzel[iv].nmu1);
-              strcpy(mruz2, uzel[ivk].nmu1);
-            }
-            else if (kk == 3)
-            {
-              strcpy(mruz1, uzel[iv].nmu2);
-              strcpy(mruz2, uzel[ivk].nmu2);
-            }
-            else if (kk == 4)
-            {
-              strcpy(mruz1, uzel[iv].nmu3);
-              strcpy(mruz2, uzel[ivk].nmu3);
-            }
-            ik = 0;
-            if (kk != 1)
-            {
-              while (ik < strlen(mruz1))
-              {
-                ik1 = 0;
-                while ((mruz1[ik] != ',') && (mruz1[ik] != '.') && (ik < strlen(mruz1)))
-                {
-                  str[ik1] = mruz1[ik];
-                  ik++;
-                  ik1++;
-                }
-                str[ik1] = 0;
-                if ((mruz1[ik] == ',') || (mruz1[ik] == '.'))
-                  ik++;                                                                                 
-                iv2 = 0;
-                while (iv2 < strlen(mruz2))
-                {
-                  iv1 = 0;
-                  while ((mruz2[iv2] != ',') && (mruz2[iv2] != '.') && (iv2 < strlen(mruz2)))
-                  {
-                    strot[iv1] = mruz2[iv2];
-                    iv2++;
-                    iv1++;
-                  }
-                  strot[iv1] = 0;
-                  if ((mruz2[iv2] == ',') || (mruz2[iv2] == '.'))
-                    iv2++;
-                  if ((strcmp(str, strot)) == 0)
-                  {
-                    if (fl1 == 0)
-                    {
-                      if (kk == 2)
-                        strcat(ssss, "%");
-                      else if (kk == 3)
-                        strcat(ssss, "@");
-                      else if (kk == 4)
-                        strcat(ssss, "&");
-                      fl1 = 1;
-                    }
-                    else
-                      strcat(ssss, ",");
-                    strcat(ssss, str);
-                  }
-                }
-              }
-            }
-          } // for4
-
-          if ((strlen(sss) != 0) && (strlen(ss) != 0) && (strlen(ssss) != 0))
-          { // данные в структуру
-            float dw = sqrt(pow((uzel[iv].x - xot), 2) + pow((uzel[iv].y - yot), 2)) + 
-              sqrt(pow((uzel[ivk].x - xkd), 2) + pow((uzel[ivk].y - ykd), 2)) + 
-              sqrt(pow(uzel[iv].x - uzel[ivk].x, 2) + pow(uzel[iv].y - uzel[ivk].y, 2));
-            int js = 0;
-            for (js = 0; js < j2; js++)
-            {
-              if (dw < ps[js].d)
-                break;
-            }
-            if (js >= 10)
-            {
-              ivk++;
-              continue;
-            }
-            memmove(ps + js + 1, ps + js, (j2 - js) * sizeof(TWOPERES));
-            strcpy(ps[js].stperes1, uzel[iv].suzel);
-            strcpy(ps[js].stperes2, uzel[ivk].suzel);
-            strcpy(ps[js].kd, nstkd);
-            strcpy(ps[js].ot, nstot);
-            strcpy(ps[js].nmot, ss);
-            strcpy(ps[js].nmkd, sss);
-            strcpy(ps[js].nmuz, ssss);
-            ps[js].d = dw;
-            if (j2 < 10)
-              j2++;
-          } // данные в структуру
-          ivk++;
-        } // two
-      }   // откуда есть в узле
-      iv++;
-    } //
-  }   // on uzel
-  delete[] kudan;
-  delete[] otkudan;
-  return j2;
+      routeDef.distance = distanceFrom + distanceTo +
+        length(transferStops[iv].pos, transferStops[ivk].pos);
+      strcpy(routeDef.stages[1].stopTitle, transferStops[iv].title);
+      strcpy(routeDef.stages[2].stopTitle, transferStops[ivk].title);
+      routeDefs.insertOrdered(routeDef, MAX_ROUTE_DEFS);
+    }
+  }
+  return !routeDefs.isEmpty();
 }
