@@ -5,8 +5,9 @@
 #include <assert.h>
 
 #include "coretype.hpp"
+#include "softasrt.hpp"
 
-#define PRECONDITION(p)   ((p) ? (void)0 : (void) __assertfail(      \
+#define PRECONDITION(p)   ((p) ? (void)0 : (void) __trap(      \
                     "Precondition violated: %s, file %s, line %d\n", \
                     #p, __FILE__, __LINE__ ) )
 

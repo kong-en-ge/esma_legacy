@@ -10,6 +10,7 @@ PUBLISHED_HEADERS=\
   $(PH:name=custarry.hpp)\
   $(PH:name=extmath.hpp)\
   $(PH:name=geometry.hpp)\
+  $(PH:name=softasrt.hpp)\
   $(PH:name=transfrm.hpp)
 
 !include $(ROOT_DIR)\common\publish.inc
