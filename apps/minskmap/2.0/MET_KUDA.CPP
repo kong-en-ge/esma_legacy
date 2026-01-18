@@ -12,6 +12,7 @@
 int otk_met_kuda(CViewContext const& viewContext,
   PERES *pss, OBSTOP *otkd, int retkdot, int nn)
 {
+  CStopArray stops;
   OBSTOP *kudan, *peres;
   int r, ckot, ckkd, j2 = 0;
   mk_atrf maot, makd;
@@ -78,7 +79,7 @@ int otk_met_kuda(CViewContext const& viewContext,
     while (iv < kolmet)
     { //
       CPointS mt(metro[iv].x, metro[iv].y);
-      int retmt = find_transport_stops_at_pos(viewContext, mt);
+      int retmt = find_transport_stops_at_pos(viewContext, mt, stops);
       if (!retmt)
       {
         iv++;
@@ -88,9 +89,9 @@ int otk_met_kuda(CViewContext const& viewContext,
       kl = 0;
       do
       {
-        if (obstop[at].vt != 1)
+        if (stops[at].vt != 1)
         {
-          peres[kl] = obstop[at];
+          peres[kl] = stops[at];
           kl++;
         }
         at++;

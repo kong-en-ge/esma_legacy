@@ -104,22 +104,22 @@ int next_model(int index, int ignoreScaleFilter)
 
 void pushViewHistory(void)
 {
-  if (!viewHistory.isEmpty() && boundsV.isEqual(viewHistory.peekLeft()))
+  if (!viewHistory.isEmpty() && boundsV.isEqual(viewHistory.getLast()))
     return;
 
-  if (viewHistory.isFull())
-    viewHistory.getRight();
+  if (viewHistory.getCount() == MAX_STORED_VIEWS)
+    viewHistory.remove(0);
 
-  viewHistory.putLeft(boundsV);
+  viewHistory.add(boundsV);
 }
 
 void popViewHistory(CViewContext const& viewContext)
 {
-  if (viewHistory.getItemsInContainer() < 2)
+  if (viewHistory.getCount() < 2)
     return;
 
-  viewHistory.getLeft(); // remove current view             
-  boundsV = viewHistory.getLeft();
+  viewHistory.removeLast(); // remove current view
+  boundsV = viewHistory.popLast();
   drawrazd(viewContext);
 }
 

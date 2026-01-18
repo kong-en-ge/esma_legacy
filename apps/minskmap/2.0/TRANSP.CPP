@@ -32,38 +32,39 @@ int code2transportType(const char* code)
 class CTransportFindObjectQuery: public CCustomFindObjectQuery
 {
 private:
-  int _count;
+  CStopArray& stops;
 protected:
   virtual int addObject(int index, double distance, FLIB const* fl, int* deltaCommon, int* deltaPoints);
 public:
-  CTransportFindObjectQuery();
+  CTransportFindObjectQuery(CStopArray& _stops);
 };
 
-CTransportFindObjectQuery::CTransportFindObjectQuery()
+CTransportFindObjectQuery::CTransportFindObjectQuery(CStopArray& _stops) :
+  stops(_stops)
 {
-  _count = 0;
 }
 
 int CTransportFindObjectQuery::addObject(int index, double distance, FLIB const* fl, int* deltaCommon, int* deltaPoints)
 {
-  for (int i = 0; i < _count; i++)
+  for (int i = 0; i < stops.getCount(); i++)
   {
-    if (distance < obstop[i].d)
+    if (distance < stops[i].d)
       break;
   }
   if (i < MAX_TRANSPORT_STOPS)
   {
-    memmove(obstop + i + 1, obstop + i, (_count - i) * sizeof(OBSTOP));
-    obstop[i].d = distance;
-    obstop[i].nobj = index;
-    obstop[i].vt = code2transportType(fl->clcod);
-    if (_count < MAX_TRANSPORT_STOPS)
-      _count++;
-    if (_count == MAX_TRANSPORT_STOPS)
-      updateThreshold(obstop[MAX_TRANSPORT_STOPS - 1].d, deltaCommon, deltaPoints);
+    OBSTOP stop;
+    stop.d = distance;
+    stop.nobj = index;
+    stop.vt = code2transportType(fl->clcod);
+    while (stops.getCount() >= MAX_TRANSPORT_STOPS)
+      stops.removeLast();
+    stops.insert(i, stop);
+    if (stops.getCount() >= MAX_TRANSPORT_STOPS)
+      updateThreshold(stops.getLast().d, deltaCommon, deltaPoints);
   }
 
-  return _count;
+  return stops.getCount();
 }
 
 int transport_filter(const char* code, char loc)
@@ -71,12 +72,12 @@ int transport_filter(const char* code, char loc)
   return loc < 4 && code2transportType(code) > 0;
 }
 
-int find_transport_stops(CViewContext const& viewContext, CPointS& pos)
+int find_transport_stops(CViewContext const& viewContext, CStopArray& stops, CPointS& pos)
 {
   if (!fillQueryPosition(pos))
     return -1;
 
-  CTransportFindObjectQuery query;
+  CTransportFindObjectQuery query(stops);
   query.viewContext = &viewContext;
   query.ignoreScaleFilter = 1;
   query.checkEnabled = 0;
@@ -92,9 +93,9 @@ int find_transport_stops(CViewContext const& viewContext, CPointS& pos)
   return findObjectResult > 0 ? findObjectResult : 0;
 }
 
-int find_transport_stops_at_pos(CViewContext const& viewContext, CPointS const& pos)
+int find_transport_stops_at_pos(CViewContext const& viewContext, CPointS const& pos, CStopArray& stops)
 {
-  CTransportFindObjectQuery query;
+  CTransportFindObjectQuery query(stops);
   query.viewContext = &viewContext;
   query.ignoreScaleFilter = 1;
   query.checkEnabled = 0;

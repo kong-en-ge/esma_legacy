@@ -576,34 +576,34 @@ int ATRFR(TEXT_PACK_MENUS *tp, int j1)
   }
 } // ATRFR
 
-int find_nearest_stops(OBSTOP const* src, int src_size, OBSTOP* dst)
+int find_nearest_stops(CStopArray const& stops, OBSTOP* dst)
 {
   int num, ob = 0;
 
   for (int k = 1; k <= 4; k++)
   { // for
     int i = 0;
-    while ((src[i].vt != k) && (i < src_size))
+    while (i < stops.getCount() && stops[i].vt != k)
       i++;
-    if (i >= src_size)
+    if (i >= stops.getCount())
       num = -1;
     else
     {
-      float dd = src[i].d;
+      float dd = stops[i].d;
       num = i;
-      while (i < src_size)
+      while (i < stops.getCount())
       {
-        if (src[i].vt == k)
-          if (src[i].d < dd)
+        if (stops[i].vt == k)
+          if (stops[i].d < dd)
           {
-            dd = src[i].d;
+            dd = stops[i].d;
             num = i;
           }
         i++;
       }
     }
     if (num != -1)
-      dst[ob++] = src[num];
+      dst[ob++] = stops[num];
   } // for
 
   return ob;
@@ -611,22 +611,18 @@ int find_nearest_stops(OBSTOP const* src, int src_size, OBSTOP* dst)
 
 void howstop(CViewContext const& viewContext)
 {
-  obstop = new OBSTOP[20];
+  CStopArray stops;
   OBSTOP obs[4];
   CPointS pos;
-  int ret = find_transport_stops(viewContext, pos);
+  int ret = find_transport_stops(viewContext, stops, pos);
   if (!ret)
-  {
-    delete[] obstop;
     return;
-  }
   {
-    int ob = find_nearest_stops(obstop, ret, obs);
+    int ob = find_nearest_stops(stops, obs);
     TEXT_PACK_MENUS tp(450, 185, 632, 11, "Транспорт", "", 1, 4000, 200, 1, 1);
     if ((tp.TEXT_PACK::text == NULL) || (tp.sm == NULL))
     {
       displayError(0);
-      delete[] obstop;
       goto ex;
     }
     viewContext.updateViewPort();
@@ -643,7 +639,6 @@ void howstop(CViewContext const& viewContext)
     for (int ii = 0; ii < ob; ii++)
       gMapDataHandler->draw_one_obj(viewContext, obs[ii].nobj, -1, 1);
     viewContext.updateViewPort();
-    delete[] obstop;
   }
 ex:
 }
@@ -806,8 +801,8 @@ int comuzel()
 
 void where_from(CViewContext const& viewContext)
 {
-  obstop = new OBSTOP[21];
-  retot = find_transport_stops(viewContext, transportFrom);
+  CStopArray stops;
+  retot = find_transport_stops(viewContext, stops, transportFrom);
   if (transportFromMarkerVisible)
     delete[] otkuda;
   if (!retot)
@@ -818,12 +813,11 @@ void where_from(CViewContext const& viewContext)
       transportFromMarkerVisible = false;
       CInfoMapApplication::getInstance()->drawIndexMap();
     }
-    delete[] obstop;
     return;
   }
   otkuda = new OBSTOP[21];
   int at = 0, key, kl = 0;
-  while ((obstop[at].vt != 1) && (at < retot))
+  while (at < retot && stops[at].vt != 1)
     at++;
   float ds = 20000.0;
   if (at < retot)
@@ -831,23 +825,23 @@ void where_from(CViewContext const& viewContext)
     key = at;
     while (at < retot)
     {
-      if (obstop[at].vt == 1)
-        if (obstop[at].d < ds)
+      if (stops[at].vt == 1)
+        if (stops[at].d < ds)
         {
-          ds = obstop[at].d;
+          ds = stops[at].d;
           key = at;
         }
       at++;
     }
-    memmove(&otkuda[kl], &obstop[key], sizeof(OBSTOP));
+    otkuda[kl] = stops[key];
     kl++;
   }
   at = 0;
   do
   {
-    if (obstop[at].vt != 1)
+    if (stops[at].vt != 1)
     {
-      memmove(&otkuda[kl], &obstop[at], sizeof(OBSTOP));
+      otkuda[kl] = stops[at];
       kl++;
     }
     at++;
@@ -856,23 +850,20 @@ void where_from(CViewContext const& viewContext)
   transportFromMarkerVisible = true;
   CInfoMapApplication::getInstance()->drawIndexMap();
   setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
-
-  delete[] obstop;
 }
 
 void where(CViewContext const& viewContext)
 {
+  CStopArray stops;
   if (retot == 0)
     return;
   F_SPR spr;
   OBSTOP *kuda;
-  obstop = new OBSTOP[21];
   int key, at, ob, ob3, ob4, flag = 0;
-  int retkd = find_transport_stops(viewContext, transportTo);
+  int retkd = find_transport_stops(viewContext, stops, transportTo);
   int j1 = 0, j2 = 0, j3 = 0, j4 = 0, j5 = 0;
   if (!retkd)
   {
-    delete[] obstop;
     setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
     return;
   }
@@ -883,7 +874,7 @@ void where(CViewContext const& viewContext)
   { // пешком не дойдешь
     kuda = new OBSTOP[21];
     at = 0;
-    while ((obstop[at].vt != 1) && (at < retkd))
+    while (at < retkd && stops[at].vt != 1)
       at++;
     float ds = 20000.0;
     int kl = 0;
@@ -892,23 +883,23 @@ void where(CViewContext const& viewContext)
       key = at;
       while (at < retkd)
       {
-        if (obstop[at].vt == 1)
-          if (obstop[at].d < ds)
+        if (stops[at].vt == 1)
+          if (stops[at].d < ds)
           {
-            ds = obstop[at].d;
+            ds = stops[at].d;
             key = at;
           }
         at++;
       }
-      memmove(&kuda[kl], &obstop[key], sizeof(OBSTOP));
+      kuda[kl] = stops[key];
       kl++;
     }
     at = 0;
     do
     {
-      if (obstop[at].vt != 1)
+      if (stops[at].vt != 1)
       {
-        memmove(&kuda[kl], &obstop[at], sizeof(OBSTOP));
+        kuda[kl] = stops[at];
         kl++;
       }
       at++;
@@ -924,9 +915,9 @@ void where(CViewContext const& viewContext)
       int iot, ikd;
       iot = 0;
       ikd = 0;
-      while ((kuda[ikd].vt != k) && (ikd < retkd))
+      while ((ikd < retkd) && kuda[ikd].vt != k)
         ikd++;
-      while ((otkuda[iot].vt != k) && (iot < retot))
+      while (iot < retot && otkuda[iot].vt != k)
         iot++;
       if ((iot < retot) && (ikd < retkd))
       {
@@ -1352,5 +1343,4 @@ ex:
   transportFromMarkerVisible = false;
   delete[] kuda;
   delete[] otkuda;
-  delete[] obstop;
 }

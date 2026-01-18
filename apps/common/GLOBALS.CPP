@@ -20,7 +20,7 @@ float SCALEO;
 
 bool All_Map;
 
-BI_DequeAsVector<CRectD> viewHistory(MAX_STORED_VIEWS);
+CCustomArray<CRectD> viewHistory;
 
 FST_MODEL model;
 

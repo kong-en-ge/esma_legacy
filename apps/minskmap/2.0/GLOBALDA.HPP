@@ -1,13 +1,8 @@
 #ifndef GLOBDATA
 #define GLOBDATA
 #include "globals.hpp"
+#include "transp.hpp"
 
-struct OBSTOP
-{
-  int nobj;
-  float d;
-  char vt;
-};
 struct PERES
 {
   char stperes[40];
@@ -42,7 +37,7 @@ struct TWOPERES
   char nmuz[90];
   float d;
 };
-extern OBSTOP *obstop, *otkuda;
+extern OBSTOP *otkuda;
 struct METRO
 {
   char smetro[40];
