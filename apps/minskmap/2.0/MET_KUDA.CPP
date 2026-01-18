@@ -4,13 +4,13 @@
 
 #include "flibrt.hpp"
 #include "fatr.hpp"
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
 #include "transp.hpp"
 
 int otk_met_kuda(CViewContext const& viewContext,
-  PERES *pss, OBSTOP *otkd, int retkdot, int nn)
+  PERES *pss, CStopArray const& srcStops, int nn)
 {
   CStopArray stops;
   OBSTOP *kudan, *peres;
@@ -43,35 +43,18 @@ int otk_met_kuda(CViewContext const& viewContext,
   }
   int xn = sprot.xmin, yn = sprot.ymin;
   int num, nm1 = 0, ob = 0;
+  int stopIndex;
+
   for (int k = 1; k <= 4; k++)
-  { // for
-    int ii = 0;
-    while ((otkd[ii].vt != k) && (ii < retkdot))
-      ii++;
-    if (ii >= retkdot)
-      num = -1;
-    else
+  {
+    stopIndex = findNearestStop(srcStops, k);
+    if (stopIndex != -1)
     {
-      float dot = otkd[ii].d;
-      num = ii;
-      while (ii < retkdot)
-      {
-        if (otkd[ii].vt == k)
-          if (otkd[ii].d < dot)
-          {
-            dot = otkd[ii].d;
-            num = ii;
-          }
-        ii++;
-      }
-    }
-    if (num != -1)
-    {
-      kudan[nm1] = otkd[num];
+      kudan[nm1] = srcStops[stopIndex];
       ob++;
       nm1++;
     }
-  } // for
+  }
 
   int iv = 0;
   if (kolmet != 0)

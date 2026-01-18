@@ -2,9 +2,12 @@
 #define __MMAPP20_HPP__
 
 #include "mmmapapp.hpp"
+#include "transp.hpp"
 
 class CMinskMap20Application : public CMinskMapApplication
 {
+private:
+  CTransportModule transportModule;
 protected:
   virtual void drawIndexMapOverlay(void) const;
   virtual char const * getVersion(void) const;

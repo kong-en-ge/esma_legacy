@@ -9,7 +9,7 @@
 #include "funcs.hpp"
 #include "menuall2.hpp"
 #include "dbffunc.hpp"
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "transp.hpp"
 
 const char * warningMessages[] =
@@ -32,7 +32,7 @@ CMinskMap20Application::CMinskMap20Application(int argc, char *argv[]) :
 
 void CMinskMap20Application::drawIndexMapOverlay(void) const
 {
-  if (!transportFromMarkerVisible)
+  if (!transportModule.getHasSourcePos())
     return;
   
   setlinestyle(0, 0, 3);
@@ -70,16 +70,16 @@ void CMinskMap20Application::handleCommand(int command)
   switch (command)
   {
   case 26:
-    howstop(getViewContext());
+    transportModule.findStopsAtPos(getViewContext());
     break;
 
   case 27:
-    where_from(getViewContext());
+    transportModule.putSourcePos(getViewContext());
     break;
 
   case 28:
-    if (transportFromMarkerVisible)
-      where(getViewContext());
+    if (transportModule.getHasSourcePos())
+      transportModule.putTargetPos(getViewContext());
     break;
 
   default:

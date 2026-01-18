@@ -2,17 +2,17 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "globalda.hpp"
 #include "flibrt.hpp"
 #include "fatr.hpp"
 #include "menuall2.hpp"
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
+#include "transp.hpp"
 
-int twoperes(TWOPERES *ps, OBSTOP *kuda, int retkd)
+int twoperes(CStopArray const& srcStops, TWOPERES *ps, CStopArray const& dstStops)
 {
-  OBSTOP *kudan, *peres, *otkudan;
+  OBSTOP *kudan, *otkudan;
   char ss[90], sss[90], ssss[90];
   int r, ckot, ckkd, ckuz, j2 = 0, xot, yot, xkd, ykd;
   mk_atrf maot, makd, mauz;
@@ -21,24 +21,16 @@ int twoperes(TWOPERES *ps, OBSTOP *kuda, int retkd)
   char nstot[40], nstkd[40], nstuz[40];
   int ret, kl;
 
-  peres = new OBSTOP[21];
-  if (peres == NULL)
-  {
-    displayError(0);
-    return 0;
-  }
   kudan = new OBSTOP[21];
   if (kudan == NULL)
   {
     displayError(0);
-    delete[] peres;
     return 0;
   }
   otkudan = new OBSTOP[21];
   if (otkudan == NULL)
   {
     displayError(0);
-    delete[] peres;
     delete[] kudan;
     return 0;
   }
@@ -49,39 +41,39 @@ int twoperes(TWOPERES *ps, OBSTOP *kuda, int retkd)
   for (int k = 1; k <= 4; k++)
   { // for
     int ii = 0, ii1 = 0;
-    while ((kuda[ii].vt != k) && (ii < retkd))
+    while (ii < dstStops.getCount() && dstStops[ii].vt != k)
       ii++;
-    while ((otkuda[ii1].vt != k) && (ii1 < retot))
+    while (ii1 < srcStops.getCount() && srcStops[ii1].vt != k)
       ii1++;
-    if (ii >= retkd)
+    if (ii >= dstStops.getCount())
       num = -1;
     else
     {
-      float dot = kuda[ii].d;
+      float dot = dstStops[ii].d;
       num = ii;
-      while (ii < retkd)
+      while (ii < dstStops.getCount())
       {
-        if (kuda[ii].vt == k)
-          if (kuda[ii].d < dot)
+        if (dstStops[ii].vt == k)
+          if (dstStops[ii].d < dot)
           {
-            dot = kuda[ii].d;
+            dot = dstStops[ii].d;
             num = ii;
           }
         ii++;
       }
     }
-    if (ii1 >= retot)
+    if (ii1 >= srcStops.getCount())
       num1 = -1;
     else
     {
-      float dot = otkuda[ii1].d;
+      float dot = srcStops[ii1].d;
       num1 = ii1;
-      while (ii1 < retot)
+      while (ii1 < srcStops.getCount())
       {
-        if (otkuda[ii].vt == k)
-          if (otkuda[ii].d < dot)
+        if (srcStops[ii].vt == k)
+          if (srcStops[ii].d < dot)
           {
-            dot = otkuda[ii1].d;
+            dot = srcStops[ii1].d;
             num1 = ii1;
           }
         ii1++;
@@ -89,13 +81,13 @@ int twoperes(TWOPERES *ps, OBSTOP *kuda, int retkd)
     }
     if (num != -1)
     {
-      kudan[nm1] = kuda[num];
+      kudan[nm1] = dstStops[num];
       ob++;
       nm1++;
     }
     if (num1 != -1)
     {
-      otkudan[nm2] = otkuda[num1];
+      otkudan[nm2] = srcStops[num1];
       obo++;
       nm2++;
     }
@@ -416,7 +408,7 @@ int twoperes(TWOPERES *ps, OBSTOP *kuda, int retkd)
                 }
                 str[ik1] = 0;
                 if ((mruz1[ik] == ',') || (mruz1[ik] == '.'))
-                  ik++;
+                  ik++;                                                                                 
                 iv2 = 0;
                 while (iv2 < strlen(mruz2))
                 {
@@ -485,7 +477,6 @@ int twoperes(TWOPERES *ps, OBSTOP *kuda, int retkd)
       iv++;
     } //
   }   // on uzel
-  delete[] peres;
   delete[] kudan;
   delete[] otkudan;
   return j2;

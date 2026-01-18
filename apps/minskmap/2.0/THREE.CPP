@@ -3,15 +3,15 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "globalda.hpp"
 #include "flibrt.hpp"
 #include "fatr.hpp"
 #include "menuall2.hpp"
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
+#include "transp.hpp"
 
-int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
+int three(CStopArray const& srcStops, TWOPERES *ps, CStopArray const& dstStops)
 {
   OBSTOP *kudan, *peres, *otkudan;
   char ss[90], sss[90], ssss[90], sssss[90];
@@ -50,54 +50,17 @@ int three(TWOPERES *ps, OBSTOP *kuda, int retkd)
   ps[0].d = MAXFLOAT;
   for (int k = 1; k <= 4; k++)
   { // for
-    int ii = 0, ii1 = 0;
-    while ((kuda[ii].vt != k) && (ii < retkd))
-      ii++;
-    while ((otkuda[ii1].vt != k) && (ii1 < retot))
-      ii1++;
-    if (ii >= retkd)
-      num = -1;
-    else
+    num = findNearestStop(dstStops, k);
+    num1 = findNearestStop(srcStops, k);
+    if (num >= 0)
     {
-      float dot = kuda[ii].d;
-      num = ii;
-      while (ii < retkd)
-      {
-        if (kuda[ii].vt == k)
-          if (kuda[ii].d < dot)
-          {
-            dot = kuda[ii].d;
-            num = ii;
-          }
-        ii++;
-      }
-    }
-    if (ii1 >= retot)
-      num1 = -1;
-    else
-    {
-      float dot = otkuda[ii1].d;
-      num1 = ii1;
-      while (ii1 < retot)
-      {
-        if (otkuda[ii].vt == k)
-          if (otkuda[ii].d < dot)
-          {
-            dot = otkuda[ii1].d;
-            num1 = ii1;
-          }
-        ii1++;
-      }
-    }
-    if (num != -1)
-    {
-      kudan[nm1] = kuda[num];
+      kudan[nm1] = dstStops[num];
       ob++;
       nm1++;
     }
-    if (num1 != -1)
+    if (num1 >= 0)
     {
-      otkudan[nm2] = otkuda[num1];
+      otkudan[nm2] = srcStops[num1];
       obo++;
       nm2++;
     }

@@ -2,17 +2,17 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "globalda.hpp"
 #include "flibrt.hpp"
 #include "fatr.hpp"
 #include "menuall2.hpp"
-#include "globalda.hpp"
+#include "globals.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
+#include "transp.hpp"
 
-int peresad(PERESU *ps, OBSTOP *kuda, int retkd)
+int peresad(CStopArray const& srcStops, PERESU *ps, CStopArray const& dstStops)
 {
-  OBSTOP *kudan, *peres, *otkudan;
+  OBSTOP *kudan, *otkudan;
   char ss[90], sss[90];
   int r, ckot, ckkd, ckuz, j2 = 0, xot, yot, xkd, ykd;
   mk_atrf maot, makd, mauz;
@@ -21,24 +21,16 @@ int peresad(PERESU *ps, OBSTOP *kuda, int retkd)
   char nstot[40], nstkd[40], nstuz[40];
   int ret, kl;
 
-  peres = new OBSTOP[21];
-  if (peres == NULL)
-  {
-    displayError(0);
-    return 0;
-  }
   kudan = new OBSTOP[21];
   if (kudan == NULL)
   {
     displayError(0);
-    delete[] peres;
     return 0;
   }
   otkudan = new OBSTOP[21];
   if (otkudan == NULL)
   {
     displayError(0);
-    delete[] peres;
     delete[] kudan;
     return 0;
   }
@@ -47,54 +39,17 @@ int peresad(PERESU *ps, OBSTOP *kuda, int retkd)
   sss[0] = 0;
   for (int k = 1; k <= 4; k++)
   { // for
-    int ii = 0, ii1 = 0;
-    while ((kuda[ii].vt != k) && (ii < retkd))
-      ii++;
-    while ((otkuda[ii1].vt != k) && (ii1 < retot))
-      ii1++;
-    if (ii >= retkd)
-      num = -1;
-    else
+    num = findNearestStop(dstStops, k);
+    num1 = findNearestStop(srcStops, k);
+    if (num >= 0)
     {
-      float dot = kuda[ii].d;
-      num = ii;
-      while (ii < retkd)
-      {
-        if (kuda[ii].vt == k)
-          if (kuda[ii].d < dot)
-          {
-            dot = kuda[ii].d;
-            num = ii;
-          }
-        ii++;
-      }
-    }
-    if (ii1 >= retot)
-      num1 = -1;
-    else
-    {
-      float dot = otkuda[ii1].d;
-      num1 = ii1;
-      while (ii1 < retot)
-      {
-        if (otkuda[ii].vt == k)
-          if (otkuda[ii].d < dot)
-          {
-            dot = otkuda[ii1].d;
-            num1 = ii1;
-          }
-        ii1++;
-      }
-    }
-    if (num != -1)
-    {
-      kudan[nm1] = kuda[num];
+      kudan[nm1] = dstStops[num];
       ob++;
       nm1++;
     }
-    if (num1 != -1)
+    if (num1 >= 0)
     {
-      otkudan[nm2] = otkuda[num1];
+      otkudan[nm2] = srcStops[num1];
       obo++;
       nm2++;
     }
@@ -386,7 +341,6 @@ int peresad(PERESU *ps, OBSTOP *kuda, int retkd)
       iv++;
     } //
   }   // on uzel
-  delete[] peres;
   delete[] kudan;
   delete[] otkudan;
   return j2;
