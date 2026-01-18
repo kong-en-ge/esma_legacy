@@ -1,9 +1,7 @@
 #include <stdlib.h>
 
 #include "geometry.hpp"
-
-#define min(a, b) (a)<(b)?(a):(b)
-#define max(a, b) (a)>(b)?(a):(b)
+#include "extmath.hpp"
 
 template <class T> bool CRect<T>::containsPoint(T x, T y) const
 {

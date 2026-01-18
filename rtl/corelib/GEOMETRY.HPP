@@ -2,6 +2,7 @@
 #define __GEOMETRY_HPP__
 
 #include "coretype.hpp"
+#include "extmath.hpp"
 
 template <class T> struct CPoint
 {
@@ -124,5 +125,11 @@ typedef CRect<short int> CRectS;
 typedef CRect<long int> CRectL;
 typedef CRect<float> CRectF;
 typedef CRect<double> CRectD;
+
+//template <class T>
+inline double length(CPointS const& point1, CPointS const& point2)
+{
+  return length(point1.x - point2.x, point1.y - point2.y);
+}
 
 #endif

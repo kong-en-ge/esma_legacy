@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "extmath.hpp"
 #include "files.hpp"
 
 int Files::seek(unsigned no)

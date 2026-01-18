@@ -55,10 +55,4 @@ inline int Files::write_end(unsigned _len, const void *buf)
   return write(filelen, _len, buf);
 }
 
-int intdiv(long, int);
-long longmul(int, int);
-unsigned long ulongmul(unsigned, unsigned);
-double length(int dx, int dy);
-double length(double dx, double dy);
-
 #endif
