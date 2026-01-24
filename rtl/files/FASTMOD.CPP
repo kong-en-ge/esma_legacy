@@ -2,7 +2,7 @@
 #include <string.h>
 #include "fastmod.hpp"
 
-int FAST_MODEL::open(const char far *name, const char far *model)
+int FAST_MODEL::open(PCSTR name, PCSTR model)
 {
   char patht[80];
   sprintf(patht, "%s.c%s", name, model);
@@ -46,7 +46,7 @@ int FAST_MODEL::readhars(int **harp, F_SPR *spr)
 {
   int *m, s = spr->sbh;
   int e = s + ((spr->lnh + spr->ssh - 2) / 256);
-  int ret = hh.read(s, e, (void **)&m);
+  int ret = hh.read(s, e, (PVOID*)&m);
   *harp = m + spr->ssh;
   return ret;
 }

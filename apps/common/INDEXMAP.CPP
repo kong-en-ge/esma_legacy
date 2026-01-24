@@ -25,7 +25,7 @@ void CIndexMapImage::freeImageData(void)
   }
 }
 
-bool CIndexMapImage::load(char const * filename)
+bool CIndexMapImage::load(PCSTR filename)
 {
   freeImageData();
   int handle;

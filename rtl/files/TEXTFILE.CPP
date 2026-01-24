@@ -18,7 +18,7 @@ TEXTFILE::~TEXTFILE()
     delete buf;
 }
 
-int TEXTFILE::open(const char *name, int bufs)
+int TEXTFILE::open(PCSTR name, int bufs)
 {
   if ((handle = ::open(name, O_RDONLY | O_TEXT)) != -1)
   {
@@ -84,7 +84,7 @@ l01:
   return 0;
 }
 
-int TEXTFILE::readstr(char *str, int maxlen)
+int TEXTFILE::readstr(PSTR str, int maxlen)
 {
   int ret;
   if (start + maxlen >= end)
@@ -102,7 +102,7 @@ int TEXTFILE::readstr(char *str, int maxlen)
   return 0;
 }
 
-int TEXTFILE::readfromstr(char *str, int maxlen, char *razd)
+int TEXTFILE::readfromstr(PSTR str, int maxlen, PSTR razd)
 {
   int ret;
   if (start + maxlen >= end)

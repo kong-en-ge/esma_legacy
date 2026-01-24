@@ -1,7 +1,7 @@
 #include "button.hpp"
 #include "apputils.hpp"
 
-bool displaySplashBox(const char * version)
+bool displaySplashBox(PCSTR version)
 {
   GRwnd wnd2(170, 40, 470, 180, version, LIGHTBLUE, 0, 1);
   Menu_but mn;

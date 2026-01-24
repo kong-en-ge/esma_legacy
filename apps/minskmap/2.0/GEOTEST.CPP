@@ -1,9 +1,9 @@
 #include "mmapp20.hpp"
 #include "softasrt.hpp"
 
-void __localTrap(char const *msg, char const *cond, char const *file, int line)
+void __localTrap(PCSTR msg, PCSTR cond, PCSTR file, int line)
 {
-  __assertfail((char*)msg, (char*)cond, (char*)file, line);
+  __assertfail((PSTR)msg, (PSTR)cond, (PSTR)file, line);
   return;
 }
 

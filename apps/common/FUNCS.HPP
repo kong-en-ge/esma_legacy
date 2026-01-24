@@ -14,7 +14,7 @@ void popViewHistory(CViewContext const& viewContext);
 
 int upcase(int symb);
 void rasst(CViewContext const& viewContext);
-void help(const char* help_file);
+void help(PCSTR help_file);
 
 int next_model(int index, int ignoreScaleFilter = 0);
 
@@ -66,10 +66,10 @@ void whatisit(CViewContext const& viewContext);
 void displayObjectInfo(int objIndex);
 int ATR(TEXT_PACK_MENUS *tp, int obj);
 
-bool checkAttributeName(int index, char const* name);
-bool checkAttributeDef(int index, char const* name, char type);
-int getAttributeIndex(char const* name);
-char const * getLookupAttributeValue(int attrIndex, int valueIndex);
+bool checkAttributeName(int index, PCSTR name);
+bool checkAttributeDef(int index, PCSTR name, char type);
+int getAttributeIndex(PCSTR name);
+PCSTR getLookupAttributeValue(int attrIndex, int valueIndex);
 bool findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l);
 
 bool setviewMAP(CViewContext const * pViewContext);

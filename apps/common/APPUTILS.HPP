@@ -3,13 +3,13 @@
 
 #include "coretype.hpp"
 
-void setWarningMessages(char const *texts[], int count);
-void setErrorMessages(char const *texts[], int count);
+void setWarningMessages(PCSTR texts[], int count);
+void setErrorMessages(PCSTR texts[], int count);
 
-void displayError(int code, char const *text = NULL);
-void displayWarning(int code, char const *text = NULL);
+void displayError(int code, PCSTR text = NULL);
+void displayWarning(int code, PCSTR text = NULL);
 
-bool displaySplashBox(const char * version);
+bool displaySplashBox(PCSTR version);
 bool confirmExit(void);
 
 #endif

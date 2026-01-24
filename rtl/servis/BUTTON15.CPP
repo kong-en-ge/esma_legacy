@@ -18,7 +18,7 @@ TEXT_PACK::~TEXT_PACK()
   del();
 }
 
-int TEXT_PACK::add(char *item)
+int TEXT_PACK::add(PCSTR item)
 {
   if ((text == NULL) || (sm == NULL))
     return -1;

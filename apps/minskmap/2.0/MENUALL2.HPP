@@ -7,6 +7,6 @@
 
 void find_rg(CViewContext const& viewContext);
 void find_st(CViewContext const& viewContext);
-bool find_bl(CViewContext const& viewContext, char const *parst = NULL, int parbl = 0);
+bool find_bl(CViewContext const& viewContext, PCSTR parst = NULL, int parbl = 0);
 
 #endif

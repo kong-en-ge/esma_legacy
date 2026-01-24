@@ -136,7 +136,7 @@ l1:
   }
 }
 
-int pcx_d_f(char *filename, int xleft, int ytop, int xright, int ybot)
+int pcx_d_f(PCSTR filename, int xleft, int ytop, int xright, int ybot)
 {
   unsigned int bufsize;
   if (coreleft() > 65520)

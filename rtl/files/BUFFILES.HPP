@@ -1,6 +1,8 @@
 #ifndef BUFFILESHPP
 #define BUFFILESHPP
 
+#include "coretype.hpp"
+
 class BufFiles
 {
 public:
@@ -19,9 +21,9 @@ public:
   void flush();
   int readtobuf(unsigned long _start, unsigned long _end, void far *buf);
   int read(unsigned long _start, unsigned long _end, void far *far *buf);
-  int open(const char far *path);
+  int open(PCSTR path);
   int close();
-  int readhead(void far *buf);
+  int readhead(PVOID buf);
   virtual int makebuf(unsigned long _start, unsigned len, void far *buf);
 };
 
@@ -35,10 +37,10 @@ public:
   XMSFiles();
   ~XMSFiles();
 
-  int open(const char *path);
+  int open(PCSTR path);
   int close();
   virtual int makebuf(unsigned long _start, unsigned len, void far *buf);
-  int readhead(void *buf);
+  int readhead(PVOID buf);
 };
 
 inline int BufFiles::getHandle() const

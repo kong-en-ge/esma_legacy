@@ -15,7 +15,7 @@ public:
   ~CIndexMapImage(void);
 
   bool hasData(void) const;
-  bool load(char const *filename);
+  bool load(PCSTR filename);
   void paintImage(int x, int y) const;
 };
 

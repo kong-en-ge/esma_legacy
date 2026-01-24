@@ -11,14 +11,14 @@
 #include "geomodel.hpp"
 #include "tpedit.hpp"
 
-int sortbaza(void const *s1, void const *s2)
+int sortbaza(PCVOID s1, PCVOID s2)
 {
-  return strncmp((const char *)s1, (const char *)s2, 12);
+  return strncmp((PCSTR)s1, (PCSTR)s2, 12);
 }
 
 Big_Menu_baza::Big_Menu_baza(int xl, int yt, int xr, int _sizep,
-                             char const *titl, int rem, char const *  bazap) :
-                             Big_Menu_fadd(xl, yt, xr, _sizep, 4000, 12, titl, "", rem)
+                             PCSTR title, int rem, PCSTR bazap) :
+                             Big_Menu_fadd(xl, yt, xr, _sizep, 4000, 12, title, "", rem)
 {
   strcpy(bazapath, bazap);
   struct ffblk f;

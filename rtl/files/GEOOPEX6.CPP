@@ -4,7 +4,7 @@
 #include <string.h>
 #include "geomodel.hpp"
 
-unsigned size_methar(const void *buf)
+unsigned size_methar(PCVOID buf)
 {
 	asm les di,buf
 	asm mov ax,0xC018
@@ -20,7 +20,7 @@ s00:
 return -1;
 }
 
-int isexistmodel(const char *path, char *mod)
+int isexistmodel(PCSTR path, PCSTR mod)
 {
   char patht[80];
   struct ffblk ffblk;

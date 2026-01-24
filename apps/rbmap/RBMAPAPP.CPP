@@ -13,7 +13,7 @@
  * CRbMapApplication *
  *********************/
 
-CRbMapApplication::CRbMapApplication(int argc, char *argv[]) :
+CRbMapApplication::CRbMapApplication(int argc, PSTR argv[]) :
   CInfoMapApplication(argc, argv)
 {
   LBSFilename = "BELARUS.LBS";
@@ -37,22 +37,22 @@ void CRbMapApplication::executeApp(void)
   while (!confirmExit());
 }
 
-char const *CRbMapApplication::getIndexMapFilename(void) const
+PCSTR CRbMapApplication::getIndexMapFilename(void) const
 {
   return "BELARUS.CWN";
 }
 
-char const *CRbMapApplication::getHelpFilename(void) const
+PCSTR CRbMapApplication::getHelpFilename(void) const
 {
   return "R_B.hlp";
 }
 
-char const *CRbMapApplication::getMainMapFilename(void) const
+PCSTR CRbMapApplication::getMainMapFilename(void) const
 {
   return "belarus";
 }
 
-char const *CRbMapApplication::getVersion(void) const
+PCSTR CRbMapApplication::getVersion(void) const
 {
   return "RB_MAP 1.0";
 }

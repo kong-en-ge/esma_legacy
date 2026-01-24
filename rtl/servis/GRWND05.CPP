@@ -1,7 +1,7 @@
 #include <string.h>
 #include "grwnd.hpp"
 
-void GRwnd::text(char const *string, int center)
+void GRwnd::text(PCSTR string, int center)
 {
   SVS svs;
   savesettings(&svs);

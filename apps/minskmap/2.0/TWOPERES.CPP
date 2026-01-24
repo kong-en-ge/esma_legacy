@@ -11,7 +11,7 @@ int twoperes(CTransferStopArray const &transferStops,
   CStopArray const& dstStops)
 {
   CPointS fromPos, toPos;
-  char const *mruz1, *mruz2;
+  PCSTR mruz1, mruz2;
 
   ROUTE_DEF routeDef;
   memset(&routeDef, 0, sizeof(routeDef));
@@ -23,14 +23,14 @@ int twoperes(CTransferStopArray const &transferStops,
     if (!calcCommonRoutes(transferStops[iv], srcStops, routeDef.stages[0], fromPos))
       continue;
 
-    float distanceFrom =  length(transferStops[iv].pos, fromPos);
+    float distanceFrom =  hypot(transferStops[iv].pos, fromPos);
 
     for (int ivk = 0; ivk < transferStops.getCount(); ivk++)
     { // two
      if (!calcCommonRoutes(transferStops[ivk], dstStops, routeDef.stages[3], toPos))
        continue;
 
-      float distanceTo = length(transferStops[ivk].pos, toPos);
+      float distanceTo = hypot(transferStops[ivk].pos, toPos);
       routeDef.stages[1].routes[0] = 0;
       for (int kk = 1; kk <= 4; kk++)
       { // for4
@@ -49,7 +49,7 @@ int twoperes(CTransferStopArray const &transferStops,
         continue;
 
       routeDef.distance = distanceFrom + distanceTo +
-        length(transferStops[iv].pos, transferStops[ivk].pos);
+        hypot(transferStops[iv].pos, transferStops[ivk].pos);
       strcpy(routeDef.stages[1].stopTitle, transferStops[iv].title);
       strcpy(routeDef.stages[2].stopTitle, transferStops[ivk].title);
       routeDefs.insertOrdered(routeDef, MAX_ROUTE_DEFS);

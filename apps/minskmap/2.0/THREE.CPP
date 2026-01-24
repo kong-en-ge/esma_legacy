@@ -13,8 +13,7 @@ bool three(CTransferStopArray const& transferStops,
   CStopArray const& dstStops)
 {
   CPointS fromPos, toPos;
-  char const *mruz1, *mruz2, *mruz3;
-  int ivk, ivs, iv3;
+  PCSTR mruz1, mruz2, mruz3;
 
   ROUTE_DEF routeDef;
   memset(&routeDef, 0, sizeof(routeDef));
@@ -31,12 +30,12 @@ bool three(CTransferStopArray const& transferStops,
      if (!calcCommonRoutes(transferStops[ivk], dstStops, routeDef.stages[4], toPos))
        continue;
 
-      float distanceFrom = length(transferStops[iv].pos, fromPos);
+      float distanceFrom = hypot(transferStops[iv].pos, fromPos);
 
-      char const* srcRoutes, *srcRoutes2;
-      for (ivs = 0; ivs < transferStops.getCount(); ivs++)
+      PCSTR srcRoutes, srcRoutes2;
+      for (int ivs = 0; ivs < transferStops.getCount(); ivs++)
       { // for5
-        float distanceTo = length(transferStops[ivk].pos, toPos);
+        float distanceTo = hypot(transferStops[ivk].pos, toPos);
 
         routeDef.stages[1].routes[0] = 0;
         routeDef.stages[3].routes[0] = 0;
@@ -63,8 +62,8 @@ bool three(CTransferStopArray const& transferStops,
             continue;
 
           routeDef.distance = distanceFrom + distanceTo +
-            length(transferStops[iv].pos, transferStops[ivs].pos) +
-            length(transferStops[ivs].pos, transferStops[ivk].pos);
+            hypot(transferStops[iv].pos, transferStops[ivs].pos) +
+            hypot(transferStops[ivs].pos, transferStops[ivk].pos);
 
           strcpy(routeDef.stages[1].stopTitle, transferStops[iv].title);
           strcpy(routeDef.stages[2].stopTitle, transferStops[ivs].title);

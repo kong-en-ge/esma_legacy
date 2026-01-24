@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
+#include "coretype.hpp"
 #include "tpedit.hpp"
 #include "mouse.hpp"
 #include "button.hpp"
@@ -9,7 +11,7 @@
 Menu_St::Menu_St(int xl, int yt, Menu_Item *items_, int rem) : Sreg(xl, yt, 0, 0, rem)
 {
   int len, numb;
-  char *txt;
+  PCSTR txt;
   items = items_;
   numb = maxlen = 0;
   while (1)

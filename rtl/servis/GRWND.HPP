@@ -1,6 +1,9 @@
 #ifndef GRWND
 #define GRWND
-#include <memory.h>
+
+#include <stdlib.h>
+
+#include "coretype.hpp"
 #include "graphics.h"
 
 #define BORD_S 6
@@ -43,13 +46,13 @@ struct Sreg : public REGION
 struct GRwnd : public Sreg
 {
   int nst, titlec; //номер строки,цвет фона заголовка
-  char const *title; //заголовок
+  PCSTR title; //заголовок
 
-  GRwnd(int xl, int yt, int xr, int yb, char const *,
+  GRwnd(int xl, int yt, int xr, int yb, PCSTR,
         int titlec_ = LIGHTBLUE, int rm = 0, int drw = 0);
   void draw(void);
-  void text(const char *string, int center = 0);
-  void textxy(int x, int y, char const *string, int color = BLACK);
+  void text(PCSTR string, int center = 0);
+  void textxy(int x, int y, PCSTR string, int color = BLACK);
   int readst(char *, int Maxs, char *firststr = NULL, int Maxs2 = 0,
              int atrib = BLACK | (LIGHTGRAY << 4), int x_posit = 0);
   int readfloat(float *fl, float minfl, float maxfl, int MAXL,

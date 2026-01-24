@@ -33,7 +33,7 @@ void BufFiles::Init(unsigned _headsize, unsigned _recsize, unsigned _bufsize)
     buf = new char[bufsize * _recsize + 10];
 };
 
-int BufFiles::open(const char far *path)
+int BufFiles::open(PCSTR path)
 {
   if (handle != -1)
     close();

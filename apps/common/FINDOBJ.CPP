@@ -34,7 +34,7 @@ int find_objects(CCustomFindObjectQuery& query)
       if (fl->loc == 1)
       {
 
-        if ((D = length(query.pos.x - spr.xmin, query.pos.y - spr.ymin)) < deltaPoints)
+        if ((D = hypot(query.pos.x - spr.xmin, query.pos.y - spr.ymin)) < deltaPoints)
           l = D / 4;
         else
           continue;

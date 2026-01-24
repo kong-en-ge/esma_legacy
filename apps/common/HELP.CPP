@@ -4,7 +4,7 @@
 #include "textfile.hpp"
 #include "mouse.hpp"
 
-void help(const char * help_file)
+void help(PCSTR help_file)
 {
   TEXTFILE fhlp;
   fhlp.open(help_file, 4000);

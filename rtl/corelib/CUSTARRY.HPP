@@ -1,7 +1,7 @@
 #ifndef __CUSTARRY_HPP__
 #define __CUSTARRY_HPP__
 
-#include <stdlib.h>
+#include <memory.h>
 #include <assert.h>
 
 #include "coretype.hpp"

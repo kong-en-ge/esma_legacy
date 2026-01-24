@@ -5,8 +5,8 @@
 
 #include "coretype.hpp"
 
-bool findCommandLineParam(int argc, char *argv[], char const* param, char* value = NULL);
-int strStartCmp(char const* str, char const* pattern);
-int strStartCmpI(char const* str, char const* pattern);
+bool findCommandLineParam(int argc, char *argv[], PCSTR param, PSTR value = NULL);
+int strStartCmp(PCSTR str, PCSTR pattern);
+int strStartCmpI(PCSTR str, PCSTR pattern);
 
 #endif

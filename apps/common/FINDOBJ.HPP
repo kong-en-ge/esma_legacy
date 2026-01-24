@@ -5,7 +5,7 @@
 #include "flibrt.hpp"
 #include "viewctx.hpp"
 
-typedef int (*FIND_OBJECT_CLASS_FILTER)(const char* code, char loc);
+typedef int (*FIND_OBJECT_CLASS_FILTER)(PCSTR code, char loc);
 
 class CCustomFindObjectQuery
 {

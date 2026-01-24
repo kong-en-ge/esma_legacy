@@ -10,7 +10,7 @@
 #include "textfile.hpp"
 #include "dbffunc.hpp"
 
-static const char *errorMessages[] =
+static PCSTR errorMessages[] =
 {
   "Нет памяти для работы программы",                         // 0
   "Ошибка чтения карты",                                     // 1
@@ -18,7 +18,7 @@ static const char *errorMessages[] =
   "Ошибка записи слайда"                                     // 3
 };
 
-static const char * warningMessages[] =
+static PCSTR warningMessages[] =
 {
   "Не найден объект в указанной точке",         // 0
   "Достигнут максимальный масштаб отображения", // 1
@@ -100,7 +100,7 @@ void CInfoMapApplication::drawIndexMapOverlay(void) const
 {
 }
 
-char const ** CInfoMapApplication::getErrorMessages(void) const
+PCSTR* CInfoMapApplication::getErrorMessages(void) const
 {
   return errorMessages;
 }
@@ -110,7 +110,7 @@ int CInfoMapApplication::getErrorMessageCount(void) const
   return sizeof(errorMessages) / sizeof(errorMessages[0]);
 }
 
-char const ** CInfoMapApplication::getWarningMessages(void) const
+PCSTR* CInfoMapApplication::getWarningMessages(void) const
 {
   return warningMessages;
 }

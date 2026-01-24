@@ -12,8 +12,8 @@ int Inserting = 1, CursorToEnd = 1, ForceUpper = 0;
 int NCOL, COL1, COL2;
 extern pascal char ISCOL1;
 void write_cursor();
-void DrawString(char *St);
-void Insert(char ch, char *St);
+void DrawString(PSTR St);
+void Insert(char ch, PSTR St);
 #define beep() \
   sound(200);  \
   delay(50);   \
@@ -133,7 +133,7 @@ int pascal CallRScommand(int *Chword)
   }
 }
 
-void Insert(char ch, char *St)
+void Insert(char ch, PSTR St)
 {
   int strl = strlen(St);
   char *S = St + strl;
@@ -142,12 +142,13 @@ void Insert(char ch, char *St)
   *(St + Sp + Offs) = ch;
 }
 
-void DrawString(char *St)
+void DrawString(PSTR St)
 {
   mouse_show(OFF);
   Cursor = 0;
   int len = strlen(St + Offs);
-  char *s = St + Offs + MaxStr + 1, s2 = *s;
+  PSTR s = St + Offs + MaxStr + 1;
+  char s2 = *s;
   *s = 0;
   char lef = St[Offs];
   if (Offs)
@@ -164,7 +165,7 @@ void DrawString(char *St)
   mouse_show(ON);
 };
 
-int ReadString(int Row, int Col, int MaxLen, int StringAttr, char *Str, int MaxLenEk)
+int ReadString(int Row, int Col, int MaxLen, int StringAttr, PSTR Str, int MaxLenEk)
 {
   mouse_show(OFF);
   if (!MaxLenEk)
@@ -360,11 +361,11 @@ int ReadString(int Row, int Col, int MaxLen, int StringAttr, char *Str, int MaxL
   return Escap;
 } // ReadString
 
-char *strncpyz(char *dest, const char *sours, int maxlen)
+PSTR strncpyz(PSTR dst, PCSTR src, int maxlen)
 {
   asm push ds
-  asm les di, dest
-  asm lds si, sours
+  asm les di, dst
+  asm lds si, src
   asm mov cx, maxlen
   asm cld
 l0:
@@ -378,10 +379,10 @@ l1:
   asm stosb
   asm pop ds
 
-  return dest;
+  return dst;
 }
 
-char *delprb(char *str)
+PSTR delprb(PSTR str)
 {
   int len = strlen(str);
   for (int i = 0; i < len; i++)

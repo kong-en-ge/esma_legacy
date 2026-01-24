@@ -87,7 +87,7 @@ extern "C" double pascal square_metr(void const *);
 extern "C" int pascal orient_metr(void const *);
 
 //возврат -1 - нет справки,-2 - нет метрики,-3 - нет характерист
-int isexistmodel(const char *path, char *mod);
+int isexistmodel(PCSTR path, PCSTR mod);
 
 struct FINDHAR
 {
@@ -114,21 +114,21 @@ public:
 
   GEO_MODEL(void);
   ~GEO_MODEL(void);
-  int openexist(const char *name, const char *model, int spbsize = 320,
+  int openexist(PCSTR name, PCSTR model, int spbsize = 320,
                 int mtsize = 80, int hrsize = 20, int readonly = 0);
   int close(void);
-  int readform(void *buff);
-  int writeform(const void *buff);
-  int readsprb(void **sprp, unsigned no); //Читает из буфера файла
-  int readspr(void *spr, unsigned no);    //Читает в буфер пользоват
-  int readmet(void **metp, unsigned no);  //Читает из буфера файла
-  int readhar(void **harp, unsigned no);  //Читает из буфера файла
-  int readmets(void **metp, SPR *spr);    //Читает из буфера файла
-  int readhars(void **harp, SPR *spr);    //Читает из буфера файла
-  int readhars(void **harp, SPR *spr, char *attr);
-  int readhars(SPR *spr, char *attr, char *str, int n);
+  int readform(PVOID buff);
+  int writeform(PCVOID buff);
+  int readsprb(PVOID *sprp, unsigned no); //Читает из буфера файла
+  int readspr(PVOID spr, unsigned no);    //Читает в буфер пользоват
+  int readmet(PVOID *metp, unsigned no);  //Читает из буфера файла
+  int readhar(PVOID *harp, unsigned no);  //Читает из буфера файла
+  int readmets(PVOID *metp, SPR *spr);    //Читает из буфера файла
+  int readhars(PVOID *harp, SPR *spr);    //Читает из буфера файла
+  int readhars(PVOID *harp, SPR *spr, PSTR attr);
+  int readhars(SPR *spr, PSTR attr, PSTR str, int n);
   //помещает атрибут в строку str не более n символов
-  int readdoublehars(SPR *spr, char *attr, double *at);
+  int readdoublehars(SPR *spr, PSTR attr, double *at);
   int findhar(FINDHAR *f);
   //Возвращает -1 - ошибка ; 0 - не найден объект ; иначе номер объекта
 
@@ -136,10 +136,10 @@ public:
   int writemetbuff(SPR *spr);
   int writeharbuff(SPR *spr);
   int writespr(const SPR *spr);
-  int writemets(const void *metr, SPR *spr);
-  int writehars(const void *har, SPR *spr);
+  int writemets(PCVOID metr, SPR *spr);
+  int writehars(PCVOID har, SPR *spr);
   //с построением габаритной рамки
-  int writemetsgb(const void *metr, SPR *spr);
+  int writemetsgb(PCVOID metr, SPR *spr);
 };
 
 #endif

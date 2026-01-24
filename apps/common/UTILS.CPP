@@ -2,9 +2,9 @@
 
 #include "utils.hpp"
 
-bool findCommandLineParam(int argc, char *argv[], char const* param, char* value)
+bool findCommandLineParam(int argc, char *argv[], PCSTR param, PSTR value)
 {
-  char const* arg;
+  PCSTR arg;
   int paramLen = strlen(param);
 
   for (int i = 1; i < argc; i++)
@@ -32,12 +32,12 @@ bool findCommandLineParam(int argc, char *argv[], char const* param, char* value
   return false;
 }
 
-int strStartCmp(char const* str, char const* pattern)
+int strStartCmp(PCSTR str, PCSTR pattern)
 {
   return strncmp(str, pattern, strlen(pattern));
 }
 
-int strStartCmpI(char const* str, char const* pattern)
+int strStartCmpI(PCSTR str, PCSTR pattern)
 {
   return strncmpi(str, pattern, strlen(pattern));
 }

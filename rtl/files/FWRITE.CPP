@@ -12,7 +12,7 @@ FWRITE::~FWRITE()
     delete buff;
 }
 
-int FWRITE::open(char const *path, int h_size, int r_size, int b_size)
+int FWRITE::open(PCSTR path, int h_size, int r_size, int b_size)
 {
   buff = NULL;
   current = 0;
@@ -27,7 +27,7 @@ int FWRITE::open(char const *path, int h_size, int r_size, int b_size)
   return 0;
 }
 
-int FWRITE::w_head(void const *ptr)
+int FWRITE::w_head(PCVOID ptr)
 {
   if (lseek(handle, 0, SEEK_SET) == -1)
     return -1;
@@ -38,7 +38,7 @@ int FWRITE::w_head(void const *ptr)
   return 0;
 }
 
-int FWRITE::add(void *ptr)
+int FWRITE::add(PVOID ptr)
 {
   memmove(buff + current * rec_size, ptr, rec_size);
   if (++current >= buff_size)

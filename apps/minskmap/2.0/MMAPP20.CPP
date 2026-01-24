@@ -12,7 +12,7 @@
 #include "globals.hpp"
 #include "transp.hpp"
 
-const char * warningMessages[] =
+static PCSTR warningMessages[] =
 {
   "Не найден объект в указанной точке",         // 0
   "Достигнут максимальный масштаб отображения", // 1
@@ -25,7 +25,7 @@ const char * warningMessages[] =
  * CMinskMap20Application *
  **************************/
 
-CMinskMap20Application::CMinskMap20Application(int argc, char *argv[]) :
+CMinskMap20Application::CMinskMap20Application(int argc, PSTR argv[]) :
   CMinskMapApplication(argc, argv)
 {
 }
@@ -50,12 +50,12 @@ void CMinskMap20Application::drawIndexMapOverlay(void) const
   setlinestyle(0, 0, 1);
 }
 
-char const *CMinskMap20Application::getVersion(void) const
+PCSTR CMinskMap20Application::getVersion(void) const
 {
   return "MINSK_MAP 2.0";
 }
 
-char const ** CMinskMap20Application::getWarningMessages(void) const
+PCSTR* CMinskMap20Application::getWarningMessages(void) const
 {
   return warningMessages;
 }

@@ -1,12 +1,13 @@
 #ifndef buttonhpp
 #define buttonhpp
 
+#include "coretype.hpp"
 #include "GRWND.HPP"
 #include "SET.HPP"
 
 struct Menu_Item
 {
-  char *text;
+  PCSTR text;
   int key;
   char fastkey, numfastkey;
 };
@@ -20,11 +21,11 @@ class button : public REGION
 {
 public:
   int key;
-  char const *text;
+  PCSTR text;
   button *next;
 
-  button(int left, int top, int right, int bot, int key, char const *);
-  button(int key, char const *text);
+  button(int left, int top, int right, int bot, int key, PCSTR);
+  button(int key, PCSTR text);
 
   virtual void draw(int);
 };
@@ -32,8 +33,8 @@ public:
 struct but_mark : public button
 {
 public:
-  but_mark(int left, int top, int right, int bot, int key, char const *text);
-  but_mark(int key, char *text);
+  but_mark(int left, int top, int right, int bot, int key, PCSTR text);
+  but_mark(int key, PCSTR text);
 
   virtual void draw(int);
 };
@@ -64,7 +65,7 @@ public:
 class Menu_but_vrt : public Sreg, public Menu_but
 {
 public:
-  Menu_but_vrt(int xl, int yt, int xr, char const *text[],
+  Menu_but_vrt(int xl, int yt, int xr, PCSTR text[],
                int key[], int num, int rm = 0);
   ~Menu_but_vrt();
 
@@ -73,7 +74,7 @@ public:
 
 struct Menu_but_gor : public Sreg, public Menu_but
 {
-  Menu_but_gor(int xl, int yt, int xr, char const *text[],
+  Menu_but_gor(int xl, int yt, int xr, PCSTR text[],
                int key[], int num, int rm = 0);
   ~Menu_but_gor();
 
@@ -116,7 +117,7 @@ class VPR_menu : public REGION, public SET
 protected:
   virtual void draw_one(int num);
   void draw_page(void);
-  void draw_one_str(char const *str, int num);
+  void draw_one_str(PCSTR str, int num);
   void draw_elevator(void);
   virtual int one_enable(int);      //Возвращает 1 если возможна выборка пункта
   virtual int key_handler(int key); //возвращает 0 если обработано или key
@@ -142,13 +143,13 @@ public:
 class Big_Menu : public VPR_menu, public GRwnd
 {
 protected:
-  char const *first_str;
+  PCSTR first_str;
 
 public:
   int fstr;
 
-  Big_Menu(int xl, int yt, int xr, int sizep_, char const *titl,
-           char const *first, int rem, int first_str = 1, int end_str = 0);
+  Big_Menu(int xl, int yt, int xr, int sizep_, PCSTR title,
+           PCSTR first, int rem, int first_str = 1, int end_str = 0);
 
   int menu_key(void);
 };
@@ -159,8 +160,8 @@ class Big_Menu_St : public Big_Menu
   void draw_one(int num);
 
 public:
-  Big_Menu_St(int xl, int yt, int xr, int sizep_, void **items_,
-              char const *titl, char const *first_str, int rem, int frst_str = 1, int end_str = 0);
+  Big_Menu_St(int xl, int yt, int xr, int sizep_, PVOID *items_,
+              PCSTR title, PCSTR first_str, int rem, int frst_str = 1, int end_str = 0);
 };
 
 class Big_Menu_XY : public Big_Menu
@@ -170,7 +171,7 @@ class Big_Menu_XY : public Big_Menu
 
 public:
   Big_Menu_XY(int xl, int yt, int xr, int sizep_, float *X, float *Y,
-              int Maxn, char const *titl, char const *first_str, int rem, int frst_str = 1, int end_str = 0);
+              int Maxn, PCSTR title, PCSTR first_str, int rem, int frst_str = 1, int end_str = 0);
 };
 
 class Big_Menu_file : public Big_Menu
@@ -178,8 +179,8 @@ class Big_Menu_file : public Big_Menu
 public:
   char *items;
 
-  Big_Menu_file(int xl, int yt, int xr, int sizep_, void *items_, int Maxn,
-                int Maxlen, char const *titl, char const *first_str, int rem, int frst_str = 1, int end_str = 0);
+  Big_Menu_file(int xl, int yt, int xr, int sizep_, PVOID items_, int Maxn,
+                int Maxlen, PCSTR title, PCSTR first_str, int rem, int frst_str = 1, int end_str = 0);
 
   void draw_one(int num);
 };
@@ -191,11 +192,11 @@ public:
   char *items;
 
   Big_Menu_fadd(int xl, int yt, int xr, int sizep_, int Maxn,
-                int Maxlen, char const *titl, char const *first_str, int rem, int frst_str = 1, int end_str = 0);
+                int Maxlen, PCSTR title, PCSTR first_str, int rem, int frst_str = 1, int end_str = 0);
   ~Big_Menu_fadd();
 
   void draw_one(int num);
-  int add(char *item);
+  int add(PCSTR item);
   void del(int item);
 
   char *nitem(int n);

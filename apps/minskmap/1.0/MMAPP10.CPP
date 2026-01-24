@@ -19,7 +19,7 @@ CMinskMap10Application::CMinskMap10Application(int argc, char *argv[]) :
 {
 }
 
-char const *CMinskMap10Application::getVersion(void) const
+PCSTR CMinskMap10Application::getVersion(void) const
 {
   return "MINSK_MAP 1.3";
 }

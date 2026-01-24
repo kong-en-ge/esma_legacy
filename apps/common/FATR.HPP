@@ -1,5 +1,7 @@
 #ifndef FATRHPP
 #define FATRHPP
+
+#include "coretype.hpp"
 #include "atribut.hpp"
 #include "fastmod.hpp"
 
@@ -16,7 +18,7 @@ struct atrib_f
 
 struct mk_atrf : public atrib_f
 {
-  char *har; //указатель в файле атрибутов
+  PCSTR har; //указатель в файле атрибутов
              //указывает на текущий атрибут
 };
 

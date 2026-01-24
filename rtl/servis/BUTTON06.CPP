@@ -119,7 +119,7 @@ void VPR_menu::go(int num)
   }
 }
 
-void VPR_menu::draw_one_str(char const *str, int num)
+void VPR_menu::draw_one_str(PCSTR str, int num)
 {
   SVS svs;
   savesettings(&svs);
@@ -375,9 +375,9 @@ escexit:
   return excod;
 }
 
-Big_Menu::Big_Menu(int xl, int yt, int xr, int sizep_, char const *titl,
-                   char const *first, int rem, int _fstr, int endstr) : VPR_menu(xl + 2 * BORD_S, yt + 12 + _fstr * 12 - 1, xr - 2 * BORD_S, sizep_),
-                                                                  GRwnd(xl, yt, xr, yt + BORD_S - 3 + 12 * (_fstr + sizep_ + endstr + 1), titl, LIGHTBLUE, rem)
+Big_Menu::Big_Menu(int xl, int yt, int xr, int sizep_, PCSTR title,
+                   PCSTR first, int rem, int _fstr, int endstr) : VPR_menu(xl + 2 * BORD_S, yt + 12 + _fstr * 12 - 1, xr - 2 * BORD_S, sizep_),
+                                                                  GRwnd(xl, yt, xr, yt + BORD_S - 3 + 12 * (_fstr + sizep_ + endstr + 1), title, LIGHTBLUE, rem)
 {
   first_str = first;
   fstr = _fstr;

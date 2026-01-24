@@ -33,7 +33,7 @@ void Files::Init(int _headsize, int _recsize, int _bufsize)
     buf = new char[bufsize * _recsize + 10];
 }
 
-int Files::open(const char *path, int read_only)
+int Files::open(PCSTR path, int read_only)
 {
   if (handle != -1)
     close();

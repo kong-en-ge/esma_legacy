@@ -1,6 +1,7 @@
 #ifndef FONTHPP
 #define FONTHPP
 
+#include "coretype.hpp"
 #include "grwnd.hpp"
 
 #define LITT_F 0
@@ -97,18 +98,18 @@ public:
   int symbolfullheight(void);
   int symbolwidth(unsigned char c);
   void perevodmetr(const int *, long *); //из базы в экран
-  int stringlength(const char *s);
+  int stringlength(PCSTR s);
   void outsymbol(unsigned char c);
-  void outstring(const char *s, void *metr, fonttype *);
-  void outstring(const char *s, int x1, int x2, int y1, int y2);
-  void outstring(const char *s, int x1, int y1, int x2, int y2, fonttype *f);
+  void outstring(PCSTR title, PCVOID metr, fonttype *);
+  void outstring(PCSTR title, int x1, int x2, int y1, int y2);
+  void outstring(PCSTR title, int x1, int y1, int x2, int y2, fonttype *f);
   void setfontptrs(void);
   void setparameters(float, float, int = 0);
   int checkfont(void);
   int assign(int x1, int y1, int x2, int y2);
   int assign_map(int x1, int y1, int x2, int y2);
   void set_angle(void);
-  void textxy(const char *s, int x, int y, int dir);
+  void textxy(PCSTR s, int x, int y, int dir);
 };
 
 struct SCRIPT
@@ -118,10 +119,10 @@ struct SCRIPT
   SCRIPT(void);
   ~SCRIPT(void);
 
-  void outstring(const char *s, int x1, int x2, int y1, int y2, int _font = LITT_F);
-  void textxy(const char *s, int x, int y, int dir, int font);
-  void outstring(const char *s, void *metr, fonttype *ft);
-  void outstring(const char *s, int x1, int y1, int x2, int y2, fonttype *f);
+  void outstring(PCSTR text, int x1, int x2, int y1, int y2, int _font = LITT_F);
+  void textxy(PCSTR text, int x, int y, int dir, int font);
+  void outstring(PCSTR text, PVOID metr, fonttype *ft);
+  void outstring(PCSTR text, int x1, int y1, int x2, int y2, fonttype *f);
   int assign(int x1, int y1, int x2, int y2);
   int assign_map(int x1, int y1, int x2, int y2);
   void setparameters(float, float, int = 0);

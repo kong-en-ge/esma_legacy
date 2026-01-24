@@ -18,7 +18,7 @@ void near s()
 }
 
 Big_Menu_path::Big_Menu_path(int xl, int yt, int xr, int _sizep,
-                             char const *titl, char const *path, int rem) : Big_Menu_fadd(xl, yt, xr, _sizep, 4000, 13, titl, "", rem)
+                             PCSTR title, PCSTR path, int rem) : Big_Menu_fadd(xl, yt, xr, _sizep, 4000, 13, title, "", rem)
 {
   tt = 0;
   char ext[5];
@@ -37,9 +37,9 @@ Big_Menu_path::Big_Menu_path(int xl, int yt, int xr, int _sizep,
   strcat(maskfile, ext);
 }
 
-int sorting(void const *s1, void const *s2)
+int sorting(PCVOID *s1, PCVOID *s2)
 {
-  return strncmp((const char *)s1, (const char *)s2, 12);
+  return strncmp((PCSTR)s1, (PCSTR)s2, 12);
 }
 
 int addisk(Big_Menu_path *mn)

@@ -41,7 +41,7 @@ bool findCommonRoutes(TRANSFER_STOP const & transferStop,
     CStopArray nearestStops;
     getNearestStopsByType(nearestStops, srcStops);
 
-    char const *transerStopRoutes = routesByType(transferStop, type);
+    PCSTR transerStopRoutes = routesByType(transferStop, type);
 
     for (int i = 0; i < nearestStops.getCount(); i++)
     {
@@ -84,7 +84,7 @@ bool calcCommonTransfer(CTransferStopArray const& transferStops,
       continue;
 
 
-    float distance = length(stop.pos, fromPos) + length(stop.pos, toPos);
+    float distance = hypot(stop.pos, fromPos) + hypot(stop.pos, toPos);
     for (j = 0; j < routeDefs.getCount(); j++)
       if (distance < routeDefs[j].distance)
         break;
@@ -107,9 +107,9 @@ typedef struct
 } ROUTES;
 
 
-void parseRouteData(char const* src, ROUTES& routes)
+void parseRouteData(PCSTR src, ROUTES& routes)
 {
-  char* dst;
+  PSTR dst;
 
   memset(&routes, 0, sizeof(ROUTES));
   if (*src == '*')
@@ -169,20 +169,20 @@ void putRouteData(TEXT_PACK_MENUS *tp, ROUTES const& routes)
   }
 }
 
-void processRouteData(TEXT_PACK_MENUS *tp, char const* src)
+void processRouteData(TEXT_PACK_MENUS *tp, PCSTR src)
 {
   ROUTES routes;
   parseRouteData(src, routes);
   putRouteData(tp, routes);
 }
 
-void copyAttributeValue(mk_atrf& attributes, const char* attrName, char* dst)
+void copyAttributeValue(mk_atrf& attributes, PCSTR attrName, PSTR dst)
 {
   if (checkAttributeDef(attributes.natr, attrName, 'T'))
     strcpy(dst, attributes.zns);
 }
 
-bool fetchStopData(int type, int obj, char *title, char *routes,
+bool fetchStopData(int type, int obj, PSTR title, PSTR routes,
   CPointS *pos)
 {
   F_SPR spr;
@@ -239,7 +239,7 @@ void getNearestStopsByType(CStopArray &dstStops, CStopArray const& srcStops)
   }
 }
 
-const char* copyRouteStr(char* dst, char const* src)
+PCSTR copyRouteStr(PSTR dst, PCSTR src)
 {
   while (*src && *src != ',' && *src != '.')
     *dst++ = *src++;
@@ -251,9 +251,9 @@ const char* copyRouteStr(char* dst, char const* src)
   return src;
 }
 
-bool getCommonRoutes(char* dst, char const* src1, char const* src2)
+bool getCommonRoutes(PSTR dst, PCSTR src1, PCSTR src2)
 {
-  char const* src2Data;
+  PCSTR src2Data;
   char item1[10], item2[10];
 
   *dst = 0;
@@ -278,15 +278,15 @@ bool getCommonRoutes(char* dst, char const* src1, char const* src2)
   return *dst;
 }
 
-bool composeCommonRoutes(int type, char const *src1, char const *src2,
-  char *dst, CPointS *dstPos, CPointS const *srcPos)
+bool composeCommonRoutes(int type, PCSTR src1, PCSTR src2,
+  PSTR dst, CPointS *dstPos, CPointS const *srcPos)
 {
   if (!(*src1 && *src2))
     return false;
 
   bool isFirst = true;
   char str1[5], str2[5];
-  char const *routes1, *routes2;
+  PCSTR routes1, routes2;
 
   routes1 = src1;
   while (*routes1)
@@ -335,7 +335,7 @@ bool composeCommonRoutes(int type, char const *src1, char const *src2,
 bool calcCommonRoutes(TRANSFER_STOP const& transferStop,
   CStopArray const &stops, ROUTE_STAGE &routeStage, CPointS &pos)
 {
-  char const *transferRoutes;
+  PCSTR transferRoutes;
   char stopRoutes[55];
   char stopTitle[55];
   CPointS stopPos;

@@ -15,7 +15,7 @@
 void convertClassifier(char const *);
 int loadClassifier(char const *, CErrorHandler*);
 
-const char *errorMessages[] =
+PCSTR errorMessages[] =
 {
   "Ошибка открытия исходной геобазы",     // 0
   "Ошибка чтения исходной геобазы",       // 1
@@ -30,12 +30,12 @@ const char *errorMessages[] =
   "Числовой атрибут не число"
 };
 
-void errorHandler(void* /*context*/, int code, char const* message)
+void errorHandler(PVOID /*context*/, int code, PCSTR message)
 {
   displayError(code, message);
 }
 
-void errorHandlerC(void* /*context*/, int code, char const* message)
+void errorHandlerC(PVOID /*context*/, int code, PCSTR message)
 {
   cout << "ERR" << code << ":" << errorMessages[code];
   if (message)
@@ -72,7 +72,7 @@ int Init(CErrorHandler* onError)
  * CConverterApplication *
  *************************/
 
-CConverterApplication::CConverterApplication(int argc, char *argv[]) :
+CConverterApplication::CConverterApplication(int argc, PSTR argv[]) :
   CGraphicApplication(argc, argv)
 {
   onError = new CErrorHandler(errorHandler);
@@ -119,7 +119,7 @@ int CConverterApplication::runUI(void)
   if (ret)
     return -1;
 
-  char const *ch[] = {"Кодирование", "ASM-file классификатора", "Выход"};
+  PCSTR ch[] = {"Кодирование", "ASM-file классификатора", "Выход"};
   int key[] = {0, 1, -1};
   Menu_but_vrt mn(220, 100, 420, ch, key, 3, 0);
   do

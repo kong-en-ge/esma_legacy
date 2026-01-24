@@ -10,21 +10,21 @@ private:
   CMinskMapDataHandler* pMapDataHandler;
 protected:
   int argc;
-  char ** argv;
-  char const* parst;
+  PSTR *argv;
+  PCSTR parst;
   int parbl;
-  static char const *ston;
-  static char const *stoff;
+  static PCSTR ston;
+  static PCSTR stoff;
 
   virtual CMapDataHandler* createMapDataHandler(void);
   virtual void executeApp(void);
-  virtual char const * getIndexMapFilename(void) const;
-  virtual char const * getHelpFilename(void) const;
-  virtual char const * getMainMapFilename(void) const;
+  virtual PCSTR getIndexMapFilename(void) const;
+  virtual PCSTR getHelpFilename(void) const;
+  virtual PCSTR getMainMapFilename(void) const;
   virtual void handleCommand(int command);
   virtual bool suppressStartSplash(void) const;
 public:
-  CMinskMapApplication(int argc, char *argv[]);
+  CMinskMapApplication(int argc, PSTR argv[]);
 };
 
 #endif

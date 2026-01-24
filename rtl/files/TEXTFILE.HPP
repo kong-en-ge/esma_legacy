@@ -1,6 +1,8 @@
 #ifndef TEXTFILEHPP
 #define TEXTFILEHPP
 
+#include "coretype.hpp"
+
 #define T_ERR -1
 #define T_EOF -2
 #define T_EOL -3
@@ -13,19 +15,19 @@ private:
 
 public:
   int handle;
-  char *buf;
+  PSTR buf;
   unsigned int start, end, bufsize;
 
   TEXTFILE();
   ~TEXTFILE();
 
   int status();
-  int open(const char *name, int bufsize);
+  int open(PCSTR name, int bufsize);
   void close();
   int read();
-  int readstr(char *str, int maxlen);
+  int readstr(PSTR str, int maxlen);
   // readfromstr moves internal pointer
-  int readfromstr(char *str, int maxlen, char *razd);
+  int readfromstr(PSTR str, int maxlen, PSTR razd);
   int gostart();
   int goendstr();
 };

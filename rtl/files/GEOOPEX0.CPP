@@ -17,7 +17,7 @@ int GEO_MODEL::close(void)
   return hsp.close() & hmt.close() & hhr.close();
 }
 
-int GEO_MODEL::openexist(const char *name, const char *model,
+int GEO_MODEL::openexist(PCSTR name, PCSTR model,
                          int spbsize, int mtbsize, int hrbsize, int readonly)
 {
 

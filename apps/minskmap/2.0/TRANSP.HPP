@@ -30,40 +30,6 @@ public:
   bool insertOrdered(ROUTE_DEF const &routeDef, unsigned maxCount);
 };
 
-/*
-typedef struct
-{
-  char const *subwayTitle;
-  char stopTitle[40];
-  char routes[55];
-  char type;
-  float distance;
-} SUBWAY_TRANSFER;
-typedef CCustomArray<SUBWAY_TRANSFER> CSubwayTransferArray;
-
-typedef struct
-{
-  ROUTE_STAGE src;
-  ROUTE_STAGE dst;
-  char transferStop[40];
-  float distance;
-} COMMON_TRANSFER;
-typedef CCustomArray<COMMON_TRANSFER> CCommonTransferArray;
-
-struct TWOPERES
-{
-  ROUTE_STAGE src;
-  ROUTE_STAGE dst;
-
-  char stperes1[40], stperes2[40];
-  char srcTitle[40];
-  char dstTitle[40];
-  char srcRoutes[90];
-  char dstRoutes[90];
-  char routesBetween[90];
-  float distance;
-};
-*/
 typedef struct
 {
   char title[40];
@@ -181,23 +147,23 @@ void ATRTR(TEXT_PACK_MENUS *tp, CStopArray const &stops);
 
 #define UNDEFINED -32768
 
-void processRouteData(TEXT_PACK_MENUS *tp, char const* src);
+void processRouteData(TEXT_PACK_MENUS *tp, PCSTR src);
 //void extractStopAttributes(int type, mk_atrf& attributes,
 //  char* title, char* routes);
-bool fetchStopData(int type, int obj, char *title, char *routes = NULL,
+bool fetchStopData(int type, int obj, PSTR title, PSTR routes = NULL,
   CPointS *pos = NULL);
-const char* copyRouteStr(char* dst, char const* src);
-bool getCommonRoutes(char* dst, char const* src1, char const* src2);
-bool composeCommonRoutes(int type, char const *src1, char const *src2,
+PCSTR copyRouteStr(PSTR dst, PCSTR src);
+bool getCommonRoutes(PSTR dst, PCSTR src1, PCSTR src2);
+bool composeCommonRoutes(int type, PCSTR src1, PCSTR src2,
   char *dst, CPointS *dstPos, CPointS const *srcPos);
 
-char const * routesByType(TRANSFER_STOP const& stop, int type);
+PCSTR routesByType(TRANSFER_STOP const& stop, int type);
 void getNearestStopsByType(CStopArray &dstStops, CStopArray const& srcStops);
 
 bool calcCommonRoutes(TRANSFER_STOP const& transferStop,
   CStopArray const &stops, ROUTE_STAGE &routeStage, CPointS &pos);
 //int find_nearest_stops(CStopArray const& stops, OBSTOP* dst);
-void copyAttributeValue(mk_atrf& attributes, const char* attrName, char* dst);
+void copyAttributeValue(mk_atrf& attributes, PCSTR attrName, PSTR dst);
 void filterRouteEndingStops(CStopArray const& input, CStopArray& output);
 
 #endif

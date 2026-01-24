@@ -9,7 +9,7 @@
  * KLSt *
  ********/
 
-KLSt::KLSt(int attrIndex, char const *title) :
+KLSt::KLSt(int attrIndex, PCSTR title) :
   Big_Menu(150, 100, 470, 10, title, "", 1)
 {
   maxn = ATRN[attrIndex].ncod;
@@ -23,7 +23,7 @@ void KLSt::draw_one(int num)
   draw_one_str(ATCD + ATCDP[ATRN[_attrIndex].start + activ + num], num);
 }
 
-int KLSt::numinkl(char const *cod, int sim)
+int KLSt::numinkl(PCSTR cod, int sim)
 {
   for (int i = 0; i < maxn; i++)
     if (!strncmpi(cod, ATCD + ATCDP[ATRN[_attrIndex].start + i], sim))

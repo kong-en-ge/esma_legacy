@@ -126,7 +126,7 @@ void dr_st_n(CViewContext const& viewContext, F_SPR *spr, int *metr)
   }
   if (mo == (mst + 4))
     return;
-  if (length(*(mst + 4) - *(mo - 2), *(mst + 5) - *(mo - 1)) < 8 * dx)
+  if (hypot(*(mst + 4) - *(mo - 2), *(mst + 5) - *(mo - 1)) < 8 * dx)
     return;
   *mo = 0xc018;
   if (*(mst + 4) > *(mo - 2))

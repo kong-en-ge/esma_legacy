@@ -262,7 +262,7 @@ long poiskdbf_in_one(int nf, float x, float y, float dx, float dy)
     double yd = dbf.F_value(dbf.F_ref("Ycoord"));
     if ((yd < (y - dy)) || (yd > (y + dy)))
       continue;
-    double dd = length(x - xd, y - yd);
+    double dd = hypot(x - xd, y - yd);
     for (int j = 0; j < cfdb; j++)
     {
       if (dd < fdb[j].d)

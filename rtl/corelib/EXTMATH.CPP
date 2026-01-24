@@ -26,7 +26,7 @@ unsigned long ulongmul(unsigned m1, unsigned m2)
   }
 }
 
-double length(int deltaX, int deltaY)
+double hypot(int deltaX, int deltaY)
 {
   asm {
     FILD word ptr deltaX
@@ -35,18 +35,6 @@ double length(int deltaX, int deltaY)
     FMUL st, st
     FADD
     FSQRT
-  }
-}
-
-double length(double deltaX, double deltaY)
-{
-  asm {
-    fld qword ptr deltaX
-    fmul st, st
-    fld qword ptr deltaY
-    fmul st, st
-    fadd
-    fsqrt
   }
 }
 

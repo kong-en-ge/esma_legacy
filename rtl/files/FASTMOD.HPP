@@ -52,7 +52,7 @@ struct FAST_MODEL
 
   ~FAST_MODEL();
 
-  int open(const char *name, const char *model);
+  int open(PCSTR name, PCSTR model);
   int close();
   int readspr(F_SPR *spr, unsigned no);
   int readspr(F_SPR **spr, unsigned no);

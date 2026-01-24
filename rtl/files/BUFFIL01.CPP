@@ -19,7 +19,7 @@ XMSFiles::~XMSFiles(void)
   close();
 }
 
-int XMSFiles::open(const char far *path)
+int XMSFiles::open(PCSTR path)
 {
   int ret;
   ret = BufFiles::open(path);

@@ -116,7 +116,7 @@ void find_st(CViewContext const& viewContext)
     if (model.readspr(&spr, ret) != 1)
       break;
 
-    char const* code = flibrt[spr.numincl].clcod;
+    PCSTR code = flibrt[spr.numincl].clcod;
     if ((strStartCmp(code, "452")) && (strStartCmp(code, "453")) && (strStartCmp(code, "450")))
       continue;
 
@@ -160,7 +160,7 @@ void find_st(CViewContext const& viewContext)
   return;
 }
 
-bool find_bl(CViewContext const& viewContext, char const *st, int bl)
+bool find_bl(CViewContext const& viewContext, PCSTR st, int bl)
 {
   textsettingstype t;
   gettextsettings(&t);

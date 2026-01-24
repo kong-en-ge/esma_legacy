@@ -18,7 +18,7 @@ public:
   int tt;
 
   Big_Menu_path(int xl, int yt, int xr, int sizep,
-                const char *titl, const char *path, int rem);
+                PCSTR title, PCSTR path, int rem);
 
   int init();
   virtual int initf();
@@ -29,7 +29,7 @@ class Big_Menu_model : public Big_Menu_path
 {
 public:
   Big_Menu_model(int xl, int yt, int xr, int sizep,
-                 const char *titl, int rem);
+                 PCSTR title, int rem);
   int initf();
 };
 
@@ -43,7 +43,7 @@ public:
   int baza;
 
   Big_Menu_baza(int xl, int yt, int xr, int sizep,
-                const char *titl, int rem, const char *bazapath);
+                PCSTR title, int rem, PCSTR bazapath);
 
   int menu_key();
   virtual void mark_models();

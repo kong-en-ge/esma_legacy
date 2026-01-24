@@ -55,7 +55,7 @@ extern bool FULL_MAP;
 extern const int colordbf[];
 extern List_base *LBS;
 extern int LBSsize;
-extern char const * LBSFilename;
+extern PCSTR LBSFilename;
 extern int actdbf;
 
 extern CIndexMapImage indexMapImage;

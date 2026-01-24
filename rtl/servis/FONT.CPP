@@ -86,12 +86,12 @@ int FONT::checkfont(void)
   return !strncmp(prefptr->fontsignature, st, 6);
 }
 
-int FONT::stringlength(const char *s)
+int FONT::stringlength(PCSTR text)
 {
   int l = 0;
 
-  for (int i = 0; s[i]; i++)
-    l += symbolwidth(s[i]);
+  for (int i = 0; text[i]; i++)
+    l += symbolwidth(text[i]);
 
   l += gap * i;
 
@@ -181,7 +181,7 @@ void FONT::set_angle(void)
   }
 }
 
-void FONT::outstring(const char *s, void *metr, fonttype *f)
+void FONT::outstring(PCSTR text, PCVOID metr, fonttype *f)
 {
   // Строка, метрика, тип шрифта
   int i = 2, j = 0, k = 0, wd, sc, space = 0;
@@ -210,15 +210,15 @@ void FONT::outstring(const char *s, void *metr, fonttype *f)
   m[i] = m[i - 2] + b * (m[i] - m[i - 2]);
   m[i + 1] = m[i - 1] + b * (m[i + 1] - m[i - 1]);
 
-  for (i = 0; s[i]; i++)
-    a += symbolwidth(s[i]);
+  for (i = 0; text[i]; i++)
+    a += symbolwidth(text[i]);
   if (metrlen < a)
   {
     gap = 2;
     my = mx *= (float)metrlen / a;
   }
   else
-    gap = (metrlen - a) / strlen(s);
+    gap = (metrlen - a) / strlen(text);
   if ((!f->gaps) || (sc < 1))
     gap = 0;
   j = 0;
@@ -229,7 +229,7 @@ void FONT::outstring(const char *s, void *metr, fonttype *f)
   set_angle();
   setcolor(f->color);
   int t;
-  for (i = 0; (c = s[i]) != 0;)
+  for (i = 0; (c = text[i]) != 0;)
   {
     j += wd = symbolwidth(c) + gap;
     if (j > (w[k] + gap))
@@ -262,7 +262,7 @@ void FONT::outstring(const char *s, void *metr, fonttype *f)
   delete m;
 }
 
-void FONT::outstring(const char *s, int x1, int y1, int x2, int y2)
+void FONT::outstring(PCSTR s, int x1, int y1, int x2, int y2)
 {
   fonttype ft;
   ft.size = 0;
@@ -271,9 +271,9 @@ void FONT::outstring(const char *s, int x1, int y1, int x2, int y2)
   outstring(s, x1, y1, x2, y2, &ft);
 }
 
-void FONT::outstring(const char *s, int x1, int y1, int x2, int y2, fonttype *ft)
+void FONT::outstring(PCSTR text, int x1, int y1, int x2, int y2, fonttype *ft)
 {
-  if (!strlen(s))
+  if (!strlen(text))
     return;
 
   char c;
@@ -302,7 +302,7 @@ void FONT::outstring(const char *s, int x1, int y1, int x2, int y2, fonttype *ft
   mx = my = scales[ft->size] * Scales;
   setcolor(ft->color);
   gap = 0;
-  a = stringlength(s);
+  a = stringlength(text);
   x0 = x1;
   y0 = y1;
   if (a > h)
@@ -324,12 +324,12 @@ void FONT::outstring(const char *s, int x1, int y1, int x2, int y2, fonttype *ft
     y0 = (y2 + y1 - a * _sn) / 2;
     break;
   case 3:
-    if ((y1 = strlen(s) - 1) && (h > a))
+    if ((y1 = strlen(text) - 1) && (h > a))
       gap = (h - (float)a) / y1;
     break; //полностью
   }
   set_angle();
-  for (int i = 0; (c = s[i]) != 0; i++)
+  for (int i = 0; (c = text[i]) != 0; i++)
   {
     outsymbol(c);
     x1 = symbolwidth(c) + gap;
@@ -338,7 +338,7 @@ void FONT::outstring(const char *s, int x1, int y1, int x2, int y2, fonttype *ft
   }
 }
 
-void FONT::textxy(const char *s, int x, int y, int dir)
+void FONT::textxy(PCSTR text, int x, int y, int dir)
 {
   char c;
   int cn = 1;
@@ -351,7 +351,7 @@ void FONT::textxy(const char *s, int x, int y, int dir)
   x0 = x;
   y0 = y;
   int x1;
-  for (int i = 0; (c = s[i]) != 0; i++)
+  for (int i = 0; (c = text[i]) != 0; i++)
   {
     outsymbol(c);
     x1 = symbolwidth(c) + gap;
@@ -372,24 +372,24 @@ SCRIPT::~SCRIPT(void)
   delete f[1];
 }
 
-void SCRIPT::outstring(const char *s, int x1, int y1, int x2, int y2, int _font)
+void SCRIPT::outstring(PCSTR text, int x1, int y1, int x2, int y2, int _font)
 {
-  f[_font]->outstring(s, x1, y1, x2, y2);
+  f[_font]->outstring(text, x1, y1, x2, y2);
 }
 
-void SCRIPT::outstring(const char *s, void *metr, fonttype *ft)
+void SCRIPT::outstring(PCSTR text, void *metr, fonttype *ft)
 {
-  f[ft->font]->outstring(s, metr, ft);
+  f[ft->font]->outstring(text, metr, ft);
 }
 
-void SCRIPT::outstring(const char *s, int x1, int y1, int x2, int y2, fonttype *ft)
+void SCRIPT::outstring(PCSTR text, int x1, int y1, int x2, int y2, fonttype *ft)
 {
-  f[ft->font]->outstring(s, x1, y1, x2, y2, ft);
+  f[ft->font]->outstring(text, x1, y1, x2, y2, ft);
 }
 
-void SCRIPT::textxy(const char *s, int x, int y, int dir, int _font)
+void SCRIPT::textxy(PCSTR text, int x, int y, int dir, int _font)
 {
-  f[_font]->textxy(s, x, y, dir);
+  f[_font]->textxy(text, x, y, dir);
 }
 
 int SCRIPT::assign(int x1, int y1, int x2, int y2)

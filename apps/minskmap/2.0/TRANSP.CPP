@@ -99,7 +99,7 @@ CDirectRouteDescription::~CDirectRouteDescription()
 
 void CDirectRouteDescription::fillResultWindow(TEXT_PACK_MENUS *tp) const
 {
-  static const char *typeTitles[] =
+  static PCSTR typeTitles[] =
   {
     "Метро",
     "Автобусами",
@@ -113,7 +113,7 @@ void CDirectRouteDescription::fillResultWindow(TEXT_PACK_MENUS *tp) const
   { // yes
     for(int k = 1; k <= 4; k++)
     {
-      const char *stopType = k == 1 ? "ст." : "ост.";
+      PCSTR stopType = k == 1 ? "ст." : "ост.";
       isFirstLine = true;
       for (int i = 0; i < items.getCount(); i++)
       {
@@ -184,7 +184,7 @@ CRouteDescription::~CRouteDescription()
 
 void CRouteDescription::fillResultWindow(TEXT_PACK_MENUS *tp) const
 {
-  static const char *typeTitles[] =
+  static PCSTR typeTitles[] =
   {
     "Метро",
     "Автобусами",
@@ -220,7 +220,7 @@ void CRouteDescription::fillResultWindow(TEXT_PACK_MENUS *tp) const
   { // yes
     for(int k = 1; k <= 4; k++)
     {
-      const char *stopType = k == 1 ? "ст." : "ост.";
+      PCSTR stopType = k == 1 ? "ст." : "ост.";
       isFirstLine = true;
       for (int i = 0; i < items.getCount(); i++)
       {
@@ -514,7 +514,7 @@ void CTransportModule::putTargetPos(CViewContext const& viewContext)
     return;
   }
 
-  if (length(sourcePos, targetPos) <= 600)
+  if (hypot(sourcePos, targetPos) <= 600)
     routeDescription = new CWalkRouteDescription();
   else
   {
@@ -610,7 +610,7 @@ bool fillTransferStop(TRANSFER_STOP& stop, mk_atrf attributes)
   return (stop.title[0] || stop.nmu0[0]);
 }
 
-char const * routesByType(TRANSFER_STOP const& stop, int type)
+PCSTR routesByType(TRANSFER_STOP const& stop, int type)
 {
   switch(type)
   {
@@ -638,8 +638,8 @@ void CTransportModule::findTransferStops(CTransferStopArray &stops, int depth)
   for (int i = 0; i < stopNodes.getCount(); i++)
   {
     node = &stopNodes[i];
-    float distance = length(node->pos, sourcePos) +
-      length(node->pos, targetPos);
+    float distance = hypot(node->pos, sourcePos) +
+      hypot(node->pos, targetPos);
 
 
     for (j = 0; j < stops.getCount() && distance > stops[j].distance; j++);
@@ -666,7 +666,7 @@ void CTransportModule::findTransferStops(CTransferStopArray &stops, int depth)
 const struct
 {
   int type;
-  const char* code;
+  PCSTR code;
 } transportCodes[] =
 {
   {1, "62132"},
@@ -675,7 +675,7 @@ const struct
   {4, "653"}
 };
 
-int code2transportType(const char* code)
+int code2transportType(PCSTR code)
 {
   for (int i = 0; i < sizeof(transportCodes) / sizeof(transportCodes[0]); i++)
     if (!strStartCmp(code, transportCodes[i].code))
@@ -723,7 +723,7 @@ int CTransportFindObjectQuery::addObject(int index, double distance, FLIB const*
   return stops.getCount();
 }
 
-int transport_filter(const char* code, char loc)
+int transport_filter(PCSTR code, char loc)
 {
   return loc < 4 && code2transportType(code) > 0;
 }

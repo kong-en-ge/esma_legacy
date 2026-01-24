@@ -6,7 +6,7 @@
 class CMinskMap10Application : public CMinskMapApplication
 {
 protected:
-  virtual char const * getVersion(void) const;
+  virtual PCSTR getVersion(void) const;
   virtual void runMainMenu(void);
 public:
   CMinskMap10Application(int argc, char *argv[]);

@@ -1,6 +1,8 @@
 #ifndef FWRITEHPP
 #define FWRITEHPP
 
+#include "coretype.hpp"
+
 class FWRITE
 {
 public:
@@ -12,9 +14,9 @@ public:
   int current;
 
   ~FWRITE();
-  int open(char const *path, int h_size, int r_size, int b_size);
-  int w_head(void const *ptr);
-  int add(void *);
+  int open(PCSTR path, int h_size, int r_size, int b_size);
+  int w_head(PCVOID ptr);
+  int add(PVOID);
   int close(int n = 1);
 };
 

@@ -80,8 +80,8 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
         if (!composeCommonRoutes(type, srcRoutes, dstRoutes, routeDef.stages[3].routes, NULL, NULL))
           continue;
 
-        routeDef.distance = length(subwayStations[iv].pos, dstStopPos) +
-          length(subwayStations[iv].pos, pos);
+        routeDef.distance = hypot(subwayStations[iv].pos, dstStopPos) +
+          hypot(subwayStations[iv].pos, pos);
 
         int js;
         for (js = 0; js < routeDefs.getCount(); js++)

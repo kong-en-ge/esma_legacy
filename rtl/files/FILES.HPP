@@ -1,6 +1,8 @@
 #ifndef fileshpp
 #define fileshpp
 
+#include "coretype.hpp"
+
 class Files
 {
 private:
@@ -23,11 +25,11 @@ public:
 
   void Init(int _headsize, int _recsize, int _bufsize);
   int seek(unsigned no);
-  int open(const char *path, int readonly = 1);
+  int open(PCSTR path, int readonly = 1);
   int close();
   void flush();
-  int readhead(void *buf);
-  int writehead(const void *buf);
+  int readhead(PVOID buf);
+  int writehead(PCVOID buf);
   int readtobuf(unsigned _start, unsigned _end, void *buf);
   int read(unsigned _start, unsigned _end, void **buf);
   int write(unsigned _start, unsigned _len, const void *buf);

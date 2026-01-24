@@ -29,13 +29,13 @@ protected:
   virtual void drawIndexMapOverlay(void) const;
   virtual void executeApp(void) = 0;
   Menu_but* getActiveMenu(void) const;
-  virtual char const ** getErrorMessages(void) const;
+  virtual PCSTR* getErrorMessages(void) const;
   virtual int getErrorMessageCount(void) const;
-  virtual char const * getIndexMapFilename(void) const = 0;
-  virtual char const * getHelpFilename(void) const = 0;
-  virtual char const * getMainMapFilename(void) const = 0;
+  virtual PCSTR getIndexMapFilename(void) const = 0;
+  virtual PCSTR getHelpFilename(void) const = 0;
+  virtual PCSTR getMainMapFilename(void) const = 0;
   CViewContext const& getViewContext(void) const;
-  virtual char const ** getWarningMessages(void) const;
+  virtual PCSTR* getWarningMessages(void) const;
   virtual int getWarningMessageCount(void) const;
   virtual void handleCommand(int command);
   virtual int initializeApplication(void);

@@ -1,7 +1,9 @@
 #ifndef tpedithpp
 #define tpedithpp
 
-int ReadString(int Row, int Col, int MaxLen, int StringAttr, char *Str, int MaxEkLen = 0);
+#include "coretype.hpp"
+
+int ReadString(int Row, int Col, int MaxLen, int StringAttr, PSTR Str, int MaxEkLen = 0);
 void settwink(int, int);
 void nottwink(void);
 
@@ -32,7 +34,7 @@ extern int Inserting;
 extern int CursorToEnd;
 extern int ForceUpper;
 extern char SYNC;                          //Синхронизация с twinkle
-char *strncpyz(char *, const char *, int); // return dest
-char *delprb(char *);                      // return dest
+PSTR strncpyz(PSTR, PCSTR, int); // return dest
+PSTR delprb(PSTR);                      // return dest
 
 #endif

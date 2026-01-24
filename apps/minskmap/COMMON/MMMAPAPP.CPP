@@ -5,10 +5,10 @@
 #include "menuall2.hpp"
 #include "mmmaphn.hpp"
 
-char const * CMinskMapApplication::ston = "Вкл. N";
-char const * CMinskMapApplication::stoff = "Выкл. N";
+PCSTR CMinskMapApplication::ston = "Вкл. N";
+PCSTR CMinskMapApplication::stoff = "Выкл. N";
 
-CMinskMapApplication::CMinskMapApplication(int argc, char *argv[]) :
+CMinskMapApplication::CMinskMapApplication(int argc, PSTR argv[]) :
   CInfoMapApplication(argc, argv)
 {
   LBSFilename = "MINSK.LBS";
@@ -47,17 +47,17 @@ void CMinskMapApplication::executeApp(void)
   while (!confirmExit());
 }
 
-char const *CMinskMapApplication::getIndexMapFilename(void) const
+PCSTR CMinskMapApplication::getIndexMapFilename(void) const
 {
   return "MINSK.CWN";
 }
 
-char const *CMinskMapApplication::getHelpFilename(void) const
+PCSTR CMinskMapApplication::getHelpFilename(void) const
 {
   return "M_M.hlp";
 }
 
-char const *CMinskMapApplication::getMainMapFilename(void) const
+PCSTR CMinskMapApplication::getMainMapFilename(void) const
 {
   return "minsk";
 }

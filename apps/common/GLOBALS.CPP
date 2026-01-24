@@ -31,7 +31,7 @@ List_base *LBS;
 int LBSsize;
 int actdbf = 0;
 
-char const * LBSFilename;
+PCSTR LBSFilename;
 
 CIndexMapImage indexMapImage;
 

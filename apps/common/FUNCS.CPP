@@ -196,7 +196,7 @@ void rasst(CViewContext const& viewContext)
           }
           else
           {
-            sprintf(xn, "%9g", lz = length((xz1 - xz), (yz1 - yz)));
+            sprintf(xn, "%9g", lz = hypot((xz1 - xz), (yz1 - yz)));
             wnd.textxy(4, 4, xn);
             //		if (cp>1) {
             if (!vs)
@@ -856,19 +856,19 @@ int chooseObject(CViewContext const& viewContext, const OBJND *obj, int nobj)
   return retValue;
 }
 
-bool checkAttributeName(int index, char const* name)
+bool checkAttributeName(int index, PCSTR name)
 {
   atrname const* atrn = ATRN + index;
   return !strncmp(atrn->atr, name, 2);
 }
 
-bool checkAttributeDef(int index, char const* name, char type)
+bool checkAttributeDef(int index, PCSTR name, char type)
 {
   atrname const* atrn = ATRN + index;
   return (atrn->type == type) && checkAttributeName(index, name);
 }
 
-int getAttributeIndex(char const* name)
+int getAttributeIndex(PCSTR name)
 {
   for (int i = 0; i < ATRsize; i++)
     if (checkAttributeName(i, name))
@@ -877,7 +877,7 @@ int getAttributeIndex(char const* name)
   return -1;
 }
 
-char const * getLookupAttributeValue(int attrIndex, int valueIndex)
+PCSTR getLookupAttributeValue(int attrIndex, int valueIndex)
 {
   return ATCD + ATCDP[ATRN[attrIndex].start + valueIndex];
 }
@@ -893,7 +893,7 @@ bool findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
   int x2 = *metr++;
   int y2 = *metr++;
   l = d;
-  if ((D = length(x2 - xc, y2 - yc)) < l)
+  if ((D = hypot(x2 - xc, y2 - yc)) < l)
   {
     b = 1;
     l = D;
@@ -907,7 +907,7 @@ bool findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
     if (x2 == 0xc018)
       break;
     y2 = *metr++;
-    if ((l2 = length(x2 - x1, y2 - y1)) == 0)
+    if ((l2 = hypot(x2 - x1, y2 - y1)) == 0)
       continue;
     len = len + l2;
     if (x2 < x1)
@@ -943,7 +943,7 @@ bool findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
     float t7 = (a7 * (xc - x1) + b7 * (yc - y1)) / l2 / l2;
     if ((t7 > 0) && (t7 < 1))
     {
-      if ((D = length(x1 + t7 * a7 - xc, y1 + t7 * b7 - yc)) < l)
+      if ((D = hypot(x1 + t7 * a7 - xc, y1 + t7 * b7 - yc)) < l)
       {
         b = 1;
         l = D;
@@ -951,7 +951,7 @@ bool findDistanceToPolyline(int const* metr, int xc, int yc, int d, int &l)
     }
     else if (t7 >= 1)
     {
-      if ((D = length(x2 - xc, y2 - yc)) < l)
+      if ((D = hypot(x2 - xc, y2 - yc)) < l)
       {
         b = 1;
         l = D;
@@ -1037,7 +1037,7 @@ double CSearchResultCollector::maxDistance(void) const
     return 0;
 }
 
-int common_filter(const char* code, char loc)
+int common_filter(PCSTR code, char loc)
 {
   return loc < 4 &&
          strStartCmp(code, "451") &&

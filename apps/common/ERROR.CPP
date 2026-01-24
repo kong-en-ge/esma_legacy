@@ -7,7 +7,7 @@ enum MESSAGE_MODE
   mmWarning
 };
 
-static char const *windowTitles[] =
+static PCSTR windowTitles[] =
 {
   "Ошибка!",
   "Внимание!"
@@ -22,15 +22,15 @@ static int const windowColors[] =
 class CMessageKeeper
 {
 private:
- const char** _texts;
+ PCSTR *_texts;
  int _count;
 
- const char* getMessage(int aCode) const;
+ PCSTR getMessage(int aCode) const;
 public:
  CMessageKeeper();
 
- void displayMessage(int code, MESSAGE_MODE mode, char const *text) const;
- void setMessages(char const *texts[], int count);
+ void displayMessage(int code, MESSAGE_MODE mode, PCSTR text) const;
+ void setMessages(PCSTR texts[], int count);
 };
 
 CMessageKeeper::CMessageKeeper()
@@ -38,7 +38,7 @@ CMessageKeeper::CMessageKeeper()
   setMessages(NULL, 0);
 }
 
-const char* CMessageKeeper::getMessage(int aCode) const
+PCSTR CMessageKeeper::getMessage(int aCode) const
 {
   if ((aCode >=0) && (aCode < _count))
     return _texts[aCode];
@@ -46,13 +46,13 @@ const char* CMessageKeeper::getMessage(int aCode) const
     return "Unknown error code";
 }
 
-void CMessageKeeper::setMessages(char const *texts[], int count)
+void CMessageKeeper::setMessages(PCSTR texts[], int count)
 {
   _texts =  texts;
   _count = count;
 }
 
-void CMessageKeeper::displayMessage(int code, MESSAGE_MODE mode, char const *text) const
+void CMessageKeeper::displayMessage(int code, MESSAGE_MODE mode, PCSTR text) const
 {
   int delta = (text != NULL) ? 30 : 0;
 
@@ -69,22 +69,22 @@ void CMessageKeeper::displayMessage(int code, MESSAGE_MODE mode, char const *tex
 
 static CMessageKeeper gErrors, gWarnings;
 
-void setWarningMessages(char const *texts[], int count)
+void setWarningMessages(PCSTR texts[], int count)
 {
   gWarnings.setMessages(texts, count);
 }
 
-void setErrorMessages(char const *texts[], int count)
+void setErrorMessages(PCSTR texts[], int count)
 {
   gErrors.setMessages(texts, count);
 }
 
-void displayError(int code, char const *text)
+void displayError(int code, PCSTR text)
 {
   gErrors.displayMessage(code, mmError, text);
                                                                 }
 
-void displayWarning(int code, char const *text)
+void displayWarning(int code, PCSTR text)
 {
   gWarnings.displayMessage(code, mmWarning, text);
 }

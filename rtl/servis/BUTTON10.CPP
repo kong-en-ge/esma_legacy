@@ -2,7 +2,7 @@
 #include "button.hpp"
 
 Big_Menu_fadd::Big_Menu_fadd(int xl, int yt, int xr, int sizep_, int Maxn,
-                             int Maxlen, char const *titl, char const *first_str, int rem, int frst_str, int end_str) : Big_Menu(xl, yt, xr, sizep_, titl, first_str, rem, frst_str, end_str)
+                             int Maxlen, PCSTR title, PCSTR first_str, int rem, int frst_str, int end_str) : Big_Menu(xl, yt, xr, sizep_, title, first_str, rem, frst_str, end_str)
 {
   items = new char[Maxn * Maxlen];
   maxlen = Maxlen;
@@ -13,7 +13,7 @@ Big_Menu_fadd::~Big_Menu_fadd()
   delete items;
 }
 
-int Big_Menu_fadd::add(char *item)
+int Big_Menu_fadd::add(PCSTR item)
 {
   if (items == NULL)
     return -1;
