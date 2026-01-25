@@ -18,9 +18,8 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
 
   CStopArray stops, transferStops, targetStops;
   CPointS dstStopPos;
-  int ckot, ckkd, num, stopIndex;
+  int num, stopIndex;
   char srcRoutes[55], dstRoutes[55];
-
 
   int subwayIndex = -1;
 
@@ -57,22 +56,22 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
       if (stops[i].vt != 1) // subway2subway case already covered earlier
         transferStops.add(stops[i]);
 
-    for (ckot = 0; ckot < transferStops.getCount(); ckot++)
+    for (int iSrc = 0; iSrc < transferStops.getCount(); iSrc++)
     {
-      int type = transferStops[ckot].vt;
+      int type = transferStops[iSrc].vt;
 
-      if (!fetchStopData(type, transferStops[ckot].nobj, routeDef.stages[2].stopTitle, srcRoutes))
+      if (!fetchStopData(type, transferStops[iSrc].nobj, routeDef.stages[2].stopTitle, srcRoutes))
         continue;
 
       if (!routeDef.stages[2].stopTitle)
         continue;
 
-      for (ckkd = 0; ckkd < targetStops.getCount(); ckkd++)
+      for (int iDst = 0; iDst < targetStops.getCount(); iDst++)
       {
-        if (targetStops[ckkd].vt != type)
+        if (targetStops[iDst].vt != type)
           continue;
 
-        if (!fetchStopData(type, targetStops[ckkd].nobj, routeDef.stages[3].stopTitle,
+        if (!fetchStopData(type, targetStops[iDst].nobj, routeDef.stages[3].stopTitle,
           dstRoutes, &dstStopPos))
           continue;
 

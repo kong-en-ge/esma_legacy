@@ -4,28 +4,6 @@
 #include "funcs.hpp"
 #include "transp.hpp"
 
-void filterRouteEndingStops(CStopArray const& input, CStopArray& output)
-{
-  int subwayIndex = -1;
-  float minDistance = 1000000.0;
-  for(int i = 0; i < input.getCount(); i++)
-  {
-    if (input[i].vt == 1)
-    {
-      if (input[i].d < minDistance)
-      {
-        subwayIndex = i;
-        minDistance = input[i].d;
-      }
-    }
-    else
-      output.add(input[i]);
-  }
-
-  if (subwayIndex >= 0)
-    output.insert(0, input[subwayIndex]);
-}
-
 bool findCommonRoutes(TRANSFER_STOP const & transferStop,
   CStopArray const &srcStops, char *title, char *routes, CPointS &pos)
 {

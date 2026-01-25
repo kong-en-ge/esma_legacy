@@ -164,6 +164,5 @@ bool calcCommonRoutes(TRANSFER_STOP const& transferStop,
   CStopArray const &stops, ROUTE_STAGE &routeStage, CPointS &pos);
 //int find_nearest_stops(CStopArray const& stops, OBSTOP* dst);
 void copyAttributeValue(mk_atrf& attributes, PCSTR attrName, PSTR dst);
-void filterRouteEndingStops(CStopArray const& input, CStopArray& output);
 
 #endif

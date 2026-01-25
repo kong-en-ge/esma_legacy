@@ -15,6 +15,43 @@
 
 /*const*/ char szWalkRoute[] = "     èÖòäéå!   ";
 
+void filterRouteEndingStops(CStopArray const& input, CStopArray& output)
+{
+  int subwayIndex = -1;
+  float minDistance = 1000000.0;
+  for(int i = 0; i < input.getCount(); i++)
+  {
+    if (input[i].vt == 1)
+    {
+      if (input[i].d < minDistance)
+      {
+        subwayIndex = i;
+        minDistance = input[i].d;
+      }
+    }
+    else
+      output.add(input[i]);
+  }
+
+  if (subwayIndex >= 0) // put subway first
+    output.insert(0, input[subwayIndex]);
+}
+
+bool queryPointAndStops(CViewContext const &viewContext, CPointS &pos, CStopArray &stops)
+{
+  CStopArray tempStops;
+
+  stops.clear();
+  bool retValue = find_transport_stops(viewContext, tempStops, pos);
+
+  if (retValue)
+    filterRouteEndingStops(tempStops, stops);
+
+  setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
+
+  return retValue;
+}
+
 /* CRouteDefArray */
 
 bool CRouteDefArray::insertOrdered(ROUTE_DEF const &routeDef,
@@ -480,20 +517,8 @@ void CTransportModule::loadSubwayStations(void)
 
 void CTransportModule::putSourcePos(CViewContext const& viewContext)
 {
-  CStopArray stops;
-  sourceStops.clear();
-
-  if (!find_transport_stops(viewContext, stops, sourcePos))
-  {
-    setviewport(0, 0, getmaxx(), getmaxy(), 1);
-    setHasSourcePos(false);
-    return;
-  }
-
-  filterRouteEndingStops(stops, sourceStops);
-
-  setHasSourcePos(true);
-  setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
+  bool hasPoint = queryPointAndStops(viewContext, sourcePos, sourceStops);
+  setHasSourcePos(hasPoint);
 }
 
 void CTransportModule::putTargetPos(CViewContext const& viewContext)
@@ -501,24 +526,20 @@ void CTransportModule::putTargetPos(CViewContext const& viewContext)
   if (sourceStops.isEmpty())
     return;
 
-  F_SPR spr;
-  CStopArray stops;
   CStopArray dstStops;
+
+  if (!queryPointAndStops(viewContext, targetPos, dstStops))
+    return;
+
+  F_SPR spr;
   CRouteDefArray routeDefs;
 
   CCustomRouteDescription *routeDescription = NULL;
-
-  if (!find_transport_stops(viewContext, stops, targetPos))
-  {
-    setviewport(0, 0, XMAXMAPE, getmaxy(), 1);
-    return;
-  }
 
   if (hypot(sourcePos, targetPos) <= 600)
     routeDescription = new CWalkRouteDescription();
   else
   {
-    filterRouteEndingStops(stops, dstStops);
 
     if (!detectDirectRoute(dstStops, routeDefs) &&
       !detectSingleTransferRoute(viewContext, dstStops, routeDefs) &&
