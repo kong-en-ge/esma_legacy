@@ -6,8 +6,8 @@
 #include "textpack.hpp"
 #include "tpedit.hpp"
 #include "dbf.hpp"
+#include "coreutls.hpp"
 #include "apputils.hpp"
-#include "utils.hpp"
 
 char *DBFCOD;
 int *DBFCODP, DBFSIZE;

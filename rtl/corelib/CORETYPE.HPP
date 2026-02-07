@@ -5,6 +5,10 @@ typedef int bool;
 #define true 1
 #define false 0
 
+typedef unsigned char BYTE;
+typedef BYTE *PBYTE;
+typedef BYTE const *PCBYTE;
+
 typedef char *PSTR;
 typedef PSTR PTSTR;
 

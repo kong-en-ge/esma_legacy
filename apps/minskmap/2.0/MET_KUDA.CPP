@@ -1,14 +1,10 @@
-#include <stdio.h>
 #include <math.h>
 #include <string.h>
 
-#include "flibrt.hpp"
-#include "fatr.hpp"
-#include "globals.hpp"
+#include "coreutls.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"
 #include "transp.hpp"
-#include "utils.hpp"
 
 bool calcSubwayTransfer(CViewContext const& viewContext,
   CRouteDefArray &routeDefs, CStopArray const& dstStops, int subwayObj,
@@ -41,12 +37,7 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
   routeDef.stageCount = 4;
   strcpy(routeDef.stages[0].stopTitle, subwayStations[subwayIndex].title);
 
-  for (int k = 2/*1*/; k <= 4; k++)
-  {
-    stopIndex = findNearestStop(dstStops, k);
-    if (stopIndex != -1)
-      targetStops.add(dstStops[stopIndex]);
-  }
+  getNearestStopsByType(targetStops, dstStops);
 
   for (int iv = 0; iv < subwayStations.getCount(); iv++)
   { //
@@ -99,12 +90,9 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
         strcpy(routeDef.stages[1].stopTitle, subwayStations[iv].title);
         routeDef.type = type;
 
-/*        if (!fromSubway)
-        {
-          ROUTE_STAGE temp = routeDef.stages[0];
-          routeDef.stages[0] = routeDef.stages[2];
-          routeDef.stages[2] = temp;
-        }*/
+        if (!fromSubway)
+          reverseArray(routeDef.stages, sizeof(ROUTE_STAGE), 4);
+
         routeDefs.insertOrdered(routeDef, MAX_ROUTE_DEFS);
       }
     }

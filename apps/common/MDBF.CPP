@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <dos.h>
 
+#include "coreutls.hpp"
 #include "dbf.hpp"
 #include "button.hpp"
 #include "globals.hpp"

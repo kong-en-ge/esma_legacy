@@ -2,7 +2,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "coretype.hpp"
+#include "coreutls.hpp"
 #include "utils.hpp"
 #include "funcs.hpp"
 #include "transp.hpp"

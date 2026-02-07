@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include "coreutls.hpp"
 #include "fatr.hpp"
 #include "globals.hpp"
 #include "flibrt.hpp"

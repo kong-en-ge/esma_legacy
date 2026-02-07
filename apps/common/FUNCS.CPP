@@ -5,6 +5,7 @@
 #include <string.h>
 #include <math.h>
 
+#include "coreutls.hpp"
 #include "globals.hpp"
 #include "graphics.h"
 #include "files.hpp"

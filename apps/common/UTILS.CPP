@@ -31,13 +31,3 @@ bool findCommandLineParam(int argc, char *argv[], PCSTR param, PSTR value)
 
   return false;
 }
-
-int strStartCmp(PCSTR str, PCSTR pattern)
-{
-  return strncmp(str, pattern, strlen(pattern));
-}
-
-int strStartCmpI(PCSTR str, PCSTR pattern)
-{
-  return strncmpi(str, pattern, strlen(pattern));
-}

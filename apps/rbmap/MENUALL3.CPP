@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include "coreutls.hpp"
 #include "globals.hpp"
 #include "fatr.hpp"
 #include "apputils.hpp"

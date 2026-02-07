@@ -11,6 +11,7 @@
 #include "txtpacks.hpp"
 #include "drawpl.hpp"
 #include "fatr.hpp"
+#include "coreutls.hpp"
 #include "menuall2.hpp"
 #include "apputils.hpp"
 #include "funcs.hpp"

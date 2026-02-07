@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include "coreutls.hpp"
 #include "rbmaphn.hpp"
 #include "globals.hpp"
 #include "drawpl.hpp"
