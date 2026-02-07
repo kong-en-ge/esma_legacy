@@ -2,15 +2,13 @@
 #include <string.h>
 
 #include "coreutls.hpp"
-#include "apputils.hpp"
-#include "funcs.hpp"
 #include "transp.hpp"
 
 bool calcSubwayTransfer(CViewContext const& viewContext,
   CRouteDefArray &routeDefs, CStopArray const& dstStops, int subwayObj,
   CSubwayStationArray const& subwayStations, bool fromSubway)
 {
-  ROUTE_DEF routeDef;
+  ROUTE_DEF routeDef(4);
 
   CStopArray stops, transferStops, targetStops;
   CPointS dstStopPos;
@@ -27,14 +25,10 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
     }
 
   if (subwayIndex < 0)
-  {
-    displayError(1);
     return false;
-  }
+
   CPointS const &pos = subwayStations[subwayIndex].pos;
 
-  memset(&routeDef, 0, sizeof(routeDef));
-  routeDef.stageCount = 4;
   strcpy(routeDef.stages[0].stopTitle, subwayStations[subwayIndex].title);
 
   getNearestStopsByType(targetStops, dstStops);

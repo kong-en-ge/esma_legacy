@@ -16,13 +16,23 @@ typedef struct
   char routes[90];
 } ROUTE_STAGE;
 
-typedef struct
+struct ROUTE_DEF
 {
+private:
+  void init(void);
   unsigned stageCount;
+public:
   float distance;
   int type;
   ROUTE_STAGE stages[5];
-} ROUTE_DEF;
+
+  ROUTE_DEF(void);
+  ROUTE_DEF(unsigned _stageCount);
+  unsigned getStageCount(void) const
+  {
+    return stageCount;
+  }
+};
 
 class CRouteDefArray : public CCustomArray<ROUTE_DEF>
 {
@@ -69,15 +79,14 @@ bool calcCommonTransfer(CTransferStopArray const& transferStops,
   CStopArray const& srcStops, CStopArray const& dstStops,
   CRouteDefArray &routeDefs);
 
-int twoperes(CTransferStopArray const& transferStops,
-  CStopArray const& srcStops, CRouteDefArray &routeDefs,
-  CStopArray const& dstStops);
+bool calcTwoTransfers(CTransferStopArray const& transferStops,
+  CStopArray const& srcStops, CStopArray const& dstStops, 
+  CRouteDefArray &routeDefs);
 
-bool three(CTransferStopArray const& transferStops,
-  CStopArray const& srcStops, CRouteDefArray &routeDefs,
-  CStopArray const& dstStops);
+bool calcThreeTransfers(CTransferStopArray const& transferStops,
+  CStopArray const& srcStops, CStopArray const& dstStops, 
+  CRouteDefArray &routeDefs);
 
-int comuzel();
 int findNearestStop(CStopArray const& stops, int type);
 
 bool find_transport_stops(CViewContext const& viewContext, CStopArray& stops, CPointS& pos);
@@ -156,6 +165,8 @@ PCSTR copyRouteStr(PSTR dst, PCSTR src);
 bool getCommonRoutes(PSTR dst, PCSTR src1, PCSTR src2);
 bool composeCommonRoutes(int type, PCSTR src1, PCSTR src2,
   char *dst, CPointS *dstPos, CPointS const *srcPos);
+bool composeTransferStage(TRANSFER_STOP const &stop1,
+  TRANSFER_STOP const &stop2, ROUTE_STAGE &stage);
 
 PCSTR routesByType(TRANSFER_STOP const& stop, int type);
 void getNearestStopsByType(CStopArray &dstStops, CStopArray const& srcStops);

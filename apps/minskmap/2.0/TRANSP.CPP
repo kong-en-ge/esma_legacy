@@ -3,15 +3,29 @@
 #include <math.h>
 
 #include "coreutls.hpp"
-#include "utils.hpp"
 #include "funcs.hpp"
 #include "transp.hpp"
 #include "findobj.hpp"
 #include "apputils.hpp"
 #include "globals.hpp"
 #include "inmapapp.hpp"
-#include "extmath.hpp"
 #include "transp.hpp"
+
+ROUTE_DEF::ROUTE_DEF(void)
+{
+  init();
+}
+
+ROUTE_DEF::ROUTE_DEF(unsigned _stageCount)
+{
+  init();
+  stageCount = _stageCount;
+}
+
+void ROUTE_DEF::init(void)
+{
+  memset(this, 0, sizeof(*this));
+}
 
 /*const*/ char szWalkRoute[] = "     èÖòäéå!   ";
 
@@ -309,15 +323,13 @@ bool CTransportModule::detectDirectRoute(CStopArray const &targetStops,
 {
   int i;
   char sourceRoutes[100], targetRoutes[100];
-  ROUTE_DEF routeDef;
-
-  memset(&routeDef, 0, sizeof(routeDef));
-  routeDef.stageCount = 2;
+  ROUTE_DEF routeDef(2);
 
   for (i = 0; i < sourceStops.getCount(); i++)
   {
-    routeDef.type = sourceStops[i].vt;
-    if (!fetchStopData(routeDef.type, sourceStops[i].nobj, routeDef.stages[0].stopTitle,
+    OBSTOP const &srcStop = sourceStops[i];
+    routeDef.type = srcStop.vt;
+    if (!fetchStopData(routeDef.type, srcStop.nobj, routeDef.stages[0].stopTitle,
       sourceRoutes))
       continue;
 
@@ -329,10 +341,11 @@ bool CTransportModule::detectDirectRoute(CStopArray const &targetStops,
 
     for (int j = 0; j < targetStops.getCount(); j++)
     {
-      if (targetStops[j].vt != routeDef.type)
+      OBSTOP const &dstStop = targetStops[i];
+      if (dstStop.vt != routeDef.type)
         continue;
 
-      if (!fetchStopData(routeDef.type, targetStops[j].nobj,
+      if (!fetchStopData(routeDef.type, dstStop.nobj,
         routeDef.stages[1].stopTitle, targetRoutes))
         continue;
 
@@ -342,7 +355,7 @@ bool CTransportModule::detectDirectRoute(CStopArray const &targetStops,
       if (!strcmp(routeDef.stages[0].stopTitle, routeDef.stages[1].stopTitle))
         continue;
 
-      routeDef.distance = sourceStops[i].d + targetStops[j].d;
+      routeDef.distance = srcStop.d + dstStop.d;
 
       if (routeDef.type == 1 ||
           getCommonRoutes(routeDef.stages[0].routes, sourceRoutes, targetRoutes))
@@ -369,32 +382,20 @@ bool CTransportModule::detectMultiTransferRoute(CStopArray const &targetStops,
   getNearestStopsByType(toStops, targetStops);
 
   findTransferStops(transferStops, 50);
-  return twoperes(transferStops, fromStops, routeDefs, toStops) ||
-    three(transferStops, fromStops, routeDefs, toStops);
-
+  return calcTwoTransfers(transferStops, fromStops, toStops, routeDefs) ||
+    calcThreeTransfers(transferStops, fromStops, toStops, routeDefs);
 }
 
 bool CTransportModule::detectSingleTransferRoute(
   CViewContext const& viewContext, CStopArray const &targetStops,
   CRouteDefArray &routeDefs)
 {
-  int subwayStatus = 0;
-  char targetSubway[40] = "";
-
   if (sourceStops[0].vt == 1)
-  {
-    if (calcSubwayTransfer(viewContext, routeDefs, targetStops, sourceStops[0].nobj, subwayStations, true /*fromSubway*/))
-      subwayStatus = 1;
-  }
+    calcSubwayTransfer(viewContext, routeDefs, targetStops,
+      sourceStops[0].nobj, subwayStations, true /*fromSubway*/);
   else if (targetStops[0].vt == 1)
-  {
-    if (calcSubwayTransfer(viewContext, routeDefs, sourceStops, targetStops[0].nobj, subwayStations, false /*fromSubway*/))
-    {
-      subwayStatus = 2;
-      if (!fetchStopData(1, targetStops[0].nobj, targetSubway))
-        return NULL;
-    }
-  }
+    calcSubwayTransfer(viewContext, routeDefs, sourceStops,
+      targetStops[0].nobj, subwayStations, false /*fromSubway*/);
 
   CTransferStopArray transferStops;
   findTransferStops(transferStops, 40);

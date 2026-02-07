@@ -4,76 +4,24 @@
 #include "funcs.hpp"
 #include "transp.hpp"
 
-bool findCommonRoutes(TRANSFER_STOP const & transferStop,
-  CStopArray const &srcStops, char *title, char *routes, CPointS &pos)
+bool composeTransferStage(TRANSFER_STOP const &stop1,
+  TRANSFER_STOP const &stop2, ROUTE_STAGE &stage)
 {
-  char stopTitle[40], stopRoutes[55];
-  CPointS stopPos;
-
-  *routes = 0;
-  pos.x = UNDEFINED;
-  pos.y = UNDEFINED;
-
-  for (int type = 2/*1*/; type <= 4; type++)
+  stage.routes[0] = 0;
+  for (int type = 1; type <= 4; type++)
   {
-    CStopArray nearestStops;
-    getNearestStopsByType(nearestStops, srcStops);
-
-    PCSTR transerStopRoutes = routesByType(transferStop, type);
-
-    for (int i = 0; i < nearestStops.getCount(); i++)
+    PCSTR routes1 = routesByType(stop1, type);
+    PCSTR routes2 = routesByType(stop2, type);
+    if (type == 1)
     {
-      OBSTOP const &stop = nearestStops[i];
-      if (stop.vt != type)
-        continue;
-
-      if (!fetchStopData(type, stop.nobj, stopTitle, stopRoutes, &stopPos))
-        continue;
-
-      if (composeCommonRoutes(type, stopRoutes, transerStopRoutes,
-        routes, &pos, &stopPos))
-        strcpy(title, stopTitle);
+      if (*routes1 && *routes2)
+        strcat(stage.routes, "*");
     }
+    else
+      composeCommonRoutes(type, routes1, routes2, stage.routes, NULL, NULL);
   }
 
-  return *routes;
-}
-
-bool calcCommonTransfer(CTransferStopArray const& transferStops,
-  CStopArray const& srcStops, CStopArray const& dstStops,
-  CRouteDefArray &routeDefs)
-{
-  int i, j;
-  ROUTE_DEF routeDef;
-  CPointS fromPos, toPos;
-
-  memset(&routeDef, 0, sizeof(routeDef));
-  routeDef.stageCount = 3;
-
-  for (i = 0; i < transferStops.getCount(); i++)
-  {
-    TRANSFER_STOP const& stop = transferStops[i];
-    if (!findCommonRoutes(stop, srcStops, routeDef.stages[0].stopTitle,
-      routeDef.stages[0].routes, fromPos))
-      continue;
-
-    if (!findCommonRoutes(stop, dstStops, routeDef.stages[2].stopTitle,
-      routeDef.stages[2].routes, toPos))
-      continue;
-
-
-    float distance = hypot(stop.pos, fromPos) + hypot(stop.pos, toPos);
-    for (j = 0; j < routeDefs.getCount(); j++)
-      if (distance < routeDefs[j].distance)
-        break;
-
-    strcpy(routeDef.stages[1].stopTitle, stop.title);
-    routeDef.distance = distance;
-
-    routeDefs.insert(j, routeDef);
-  }
-
-  return !routeDefs.isEmpty();
+  return stage.routes[0];
 }
 
 typedef struct
@@ -83,7 +31,6 @@ typedef struct
   char trolleybus[55];
   char tram[55];
 } ROUTES;
-
 
 void parseRouteData(PCSTR src, ROUTES& routes)
 {
@@ -126,23 +73,23 @@ void putRouteData(TEXT_PACK_MENUS *tp, ROUTES const& routes)
 
   if (routes.subway)
   {
-    tp->add("Íà ìåòðî ");
+    tp->add("  ¬¥âà® ");
     if (routes.bus[0] || routes.trolleybus[0] || routes.tram[0])
-      tp->add("èëè");
+      tp->add("¨«¨");
   }
   if (routes.bus[0])
   {
-    sprintf(str, "Àâòîáóñàìè N %s", routes.bus);
+    sprintf(str, "€¢â®¡ãá ¬¨ N %s", routes.bus);
     tp->add(str);
   }
   if (routes.trolleybus[0])
   {
-    sprintf(str, "Òðîëëåéáóñàìè N %s", routes.trolleybus);
+    sprintf(str, "’à®««¥©¡ãá ¬¨ N %s", routes.trolleybus);
     tp->add(str);
   }
   if (routes.tram[0])
   {
-    sprintf(str, "Òðàìâàÿìè N %s", routes.tram);
+    sprintf(str, "’à ¬¢ ï¬¨ N %s", routes.tram);
     tp->add(str);
   }
 }
