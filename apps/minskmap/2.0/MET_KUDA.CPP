@@ -4,6 +4,8 @@
 #include "coreutls.hpp"
 #include "transp.hpp"
 
+#define TRANSFER_SCALE 2
+
 bool calcSubwayTransfer(CViewContext const& viewContext,
   CRouteDefArray &routeDefs, CStopArray const& dstStops, int subwayObj,
   CSubwayStationArray const& subwayStations, bool fromSubway)
@@ -11,14 +13,17 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
   ROUTE_DEF routeDef(4);
 
   CStopArray stops, transferStops, targetStops;
-  CPointS dstStopPos;
+  CPointS srcStopPos, dstStopPos;
   int num, stopIndex;
-  char srcRoutes[55], dstRoutes[55];
+  char subwayTitle[40], srcRoutes[55], dstRoutes[55];
+
+  if (!fetchStopData(1, subwayObj, subwayTitle, NULL, NULL))
+     return false;
 
   int subwayIndex = -1;
 
   for (int i = 0; i < subwayStations.getCount(); i++)
-    if (subwayStations[i].obj == subwayObj)
+    if (!strcmp(subwayStations[i].title, subwayTitle))
     {
       subwayIndex = i;
       break;
@@ -45,7 +50,8 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
     {
       int type = transferStops[iSrc].vt;
 
-      if (!fetchStopData(type, transferStops[iSrc].nobj, routeDef.stages[2].stopTitle, srcRoutes))
+      if (!fetchStopData(type, transferStops[iSrc].nobj, routeDef.stages[2].stopTitle,
+        srcRoutes, &srcStopPos))
         continue;
 
       if (!routeDef.stages[2].stopTitle)
@@ -64,8 +70,9 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
         if (!composeCommonRoutes(type, srcRoutes, dstRoutes, routeDef.stages[3].routes, NULL, NULL))
           continue;
 
-        routeDef.distance = hypot(subwayStations[iv].pos, dstStopPos) +
-          hypot(subwayStations[iv].pos, pos);
+        routeDef.distance = hypot(pos, subwayStations[iv].pos) +
+          hypot(subwayStations[iv].pos, srcStopPos) * TRANSFER_SCALE +
+          hypot(srcStopPos, dstStopPos);
 
         int js;
         for (js = 0; js < routeDefs.getCount(); js++)

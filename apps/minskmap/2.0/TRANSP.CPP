@@ -243,20 +243,24 @@ void CRouteDescription::fillResultWindow(TEXT_PACK_MENUS *tp) const
     "Трамваями"
   };
 
+  char s[50];
+
   for (int i = 0; i < routeDefs.getCount(); i++)
   {
     ROUTE_DEF const& item = routeDefs[i];
+    sprintf(s, "D=%8.1f", item.distance);
+    tp->add(s);
     for (int j = 0; j < 5; j++)
     {
       if (!item.stages[j].stopTitle[0])
         break;
 
-      tp->add((char*)item.stages[j].stopTitle);
+      tp->add(item.stages[j].stopTitle);
       if (item.stages[j].routes[0])
       {
         if (item.type >= 2 && item.type <=4)
-          tp->add((char*)typeTitles[item.type - 1]);
-        tp->add((char*)item.stages[j].routes);
+          tp->add(typeTitles[item.type - 1]);
+        tp->add(item.stages[j].routes);
       }
 //      else
 //        tp->add("SUBWAY");
@@ -341,7 +345,7 @@ bool CTransportModule::detectDirectRoute(CStopArray const &targetStops,
 
     for (int j = 0; j < targetStops.getCount(); j++)
     {
-      OBSTOP const &dstStop = targetStops[i];
+      OBSTOP const &dstStop = targetStops[j];
       if (dstStop.vt != routeDef.type)
         continue;
 
