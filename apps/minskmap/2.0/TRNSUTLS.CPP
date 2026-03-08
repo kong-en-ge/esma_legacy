@@ -144,8 +144,8 @@ int findNearestStop(CStopArray const& stops, int type)
   int index = -1;
 
   for(int i = 0; i < stops.getCount(); i++)
-    if (stops[i].vt == type &&
-      (index < 0 || stops[i].d < stops[index].d))
+    if (stops[i].type == type &&
+      (index < 0 || stops[i].distance < stops[index].distance))
       index = i;
 
   return index;
@@ -273,12 +273,12 @@ bool calcCommonRoutes(TRANSFER_STOP const& transferStop,
 
   for (int i = 0; i < stops.getCount(); i++)
   {
-    transferRoutes = routesByType(transferStop, stops[i].vt);
+    transferRoutes = routesByType(transferStop, stops[i].type);
 
-    if (!fetchStopData(stops[i].vt, stops[i].nobj, stopTitle, stopRoutes, &stopPos))
+    if (!fetchStopData(stops[i].type, stops[i].obj, stopTitle, stopRoutes, &stopPos))
       continue;
 
-    if (composeCommonRoutes(stops[i].vt, transferRoutes, stopRoutes,
+    if (composeCommonRoutes(stops[i].type, transferRoutes, stopRoutes,
       routeStage.routes, &pos, &stopPos) && !routeStage.stopTitle[0])
       strcpy(routeStage.stopTitle, stopTitle);
   }

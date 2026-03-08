@@ -60,14 +60,14 @@ typedef CCustomArray<TRANSFER_STOP> CTransferStopArray;
 typedef struct
 {
   CPointS pos;
-  int n;
-} STOP_NODE;
+  int obj;
+} TRANSFER_NODE;
 
 typedef struct
 {
-  int nobj;
-  float d;
-  char vt;
+  int obj;
+  float distance;
+  char type;
 } OBSTOP;
 typedef CCustomArray<OBSTOP> CStopArray;
 
@@ -106,7 +106,7 @@ private:
   CPointS targetPos;
   bool hasSourcePos;
 
-  CCustomArray<STOP_NODE> stopNodes;
+  CCustomArray<TRANSFER_NODE> transferNodes;
   CSubwayStationArray subwayStations;
 
   bool detectDirectRoute(CStopArray const &targetStops,

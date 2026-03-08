@@ -35,12 +35,12 @@ void filterRouteEndingStops(CStopArray const& input, CStopArray& output)
   float minDistance = 1000000.0;
   for(int i = 0; i < input.getCount(); i++)
   {
-    if (input[i].vt == 1)
+    if (input[i].type == 1)
     {
-      if (input[i].d < minDistance)
+      if (input[i].distance < minDistance)
       {
         subwayIndex = i;
-        minDistance = input[i].d;
+        minDistance = input[i].distance;
       }
     }
     else
@@ -332,8 +332,8 @@ bool CTransportModule::detectDirectRoute(CStopArray const &targetStops,
   for (i = 0; i < sourceStops.getCount(); i++)
   {
     OBSTOP const &srcStop = sourceStops[i];
-    routeDef.type = srcStop.vt;
-    if (!fetchStopData(routeDef.type, srcStop.nobj, routeDef.stages[0].stopTitle,
+    routeDef.type = srcStop.type;
+    if (!fetchStopData(routeDef.type, srcStop.obj, routeDef.stages[0].stopTitle,
       sourceRoutes))
       continue;
 
@@ -346,10 +346,10 @@ bool CTransportModule::detectDirectRoute(CStopArray const &targetStops,
     for (int j = 0; j < targetStops.getCount(); j++)
     {
       OBSTOP const &dstStop = targetStops[j];
-      if (dstStop.vt != routeDef.type)
+      if (dstStop.type != routeDef.type)
         continue;
 
-      if (!fetchStopData(routeDef.type, dstStop.nobj,
+      if (!fetchStopData(routeDef.type, dstStop.obj,
         routeDef.stages[1].stopTitle, targetRoutes))
         continue;
 
@@ -359,7 +359,7 @@ bool CTransportModule::detectDirectRoute(CStopArray const &targetStops,
       if (!strcmp(routeDef.stages[0].stopTitle, routeDef.stages[1].stopTitle))
         continue;
 
-      routeDef.distance = srcStop.d + dstStop.d;
+      routeDef.distance = srcStop.distance + dstStop.distance;
 
       if (routeDef.type == 1 ||
           getCommonRoutes(routeDef.stages[0].routes, sourceRoutes, targetRoutes))
@@ -394,20 +394,26 @@ bool CTransportModule::detectSingleTransferRoute(
   CViewContext const& viewContext, CStopArray const &targetStops,
   CRouteDefArray &routeDefs)
 {
-  if (sourceStops[0].vt == 1)
+  if (sourceStops[0].type == 1)
     calcSubwayTransfer(viewContext, routeDefs, targetStops,
-      sourceStops[0].nobj, subwayStations, true /*fromSubway*/);
-  else if (targetStops[0].vt == 1)
+      sourceStops[0].obj, subwayStations, true /*fromSubway*/);
+  else if (targetStops[0].type == 1)
     calcSubwayTransfer(viewContext, routeDefs, sourceStops,
-      targetStops[0].nobj, subwayStations, false /*fromSubway*/);
+      targetStops[0].obj, subwayStations, false /*fromSubway*/);
 
   CTransferStopArray transferStops;
   findTransferStops(transferStops, 40);
 
-  if (!stopNodes.isEmpty())
+  if (!transferNodes.isEmpty())
     calcCommonTransfer(transferStops, sourceStops, targetStops, routeDefs);
 
   return !routeDefs.isEmpty();
+}
+
+void drawStops(CViewContext const &viewContext, CStopArray const &stops, int color)
+{
+  for (int i = 0; i < stops.getCount(); i++)
+    gMapDataHandler->draw_one_obj(viewContext, stops[i].obj, color, 1);
 }
 
 void CTransportModule::findStopsAtPos(CViewContext const& viewContext) const
@@ -423,8 +429,7 @@ void CTransportModule::findStopsAtPos(CViewContext const& viewContext) const
     else
     {
       viewContext.updateViewPort();
-      for (int i = 0; i < filteredStops.getCount(); i++)
-        gMapDataHandler->draw_one_obj(viewContext, filteredStops[i].nobj, 12, 1);
+      drawStops(viewContext, filteredStops, 12);
       settwink(12, 15);
       ATRTR(&tp, filteredStops);
       tp.draw();
@@ -433,8 +438,7 @@ void CTransportModule::findStopsAtPos(CViewContext const& viewContext) const
       tp.restore();
       tp.del();
       nottwink();
-      for (int ii = 0; ii < filteredStops.getCount(); ii++)
-        gMapDataHandler->draw_one_obj(viewContext, filteredStops[ii].nobj, -1, 1);
+      drawStops(viewContext, filteredStops, -1);
       viewContext.updateViewPort();
     }
   }
@@ -449,7 +453,7 @@ void CTransportModule::initialize(void)
 void CTransportModule::loadTransferStops(void)
 {
   F_SPR spr;
-  STOP_NODE node;
+  TRANSFER_NODE node;
   int ret = 0;
   while ((ret = next_model(ret, 1)) > 0)
   { // who
@@ -466,8 +470,8 @@ void CTransportModule::loadTransferStops(void)
         continue;
       node.pos.x = spr.xmin;
       node.pos.y = spr.ymin;
-      node.n = i;
-      stopNodes.add(node);
+      node.obj = i;
+      transferNodes.add(node);
     }
   }
 }
@@ -656,14 +660,14 @@ PCSTR routesByType(TRANSFER_STOP const& stop, int type)
 void CTransportModule::findTransferStops(CTransferStopArray &stops, int depth)
 {
   mk_atrf maot;
-  STOP_NODE *node;
+  TRANSFER_NODE *node;
   TRANSFER_STOP transferStop;
   stops.clear();
   int j;
 
-  for (int i = 0; i < stopNodes.getCount(); i++)
+  for (int i = 0; i < transferNodes.getCount(); i++)
   {
-    node = &stopNodes[i];
+    node = &transferNodes[i];
     float distance = hypot(node->pos, sourcePos) +
       hypot(node->pos, targetPos);
 
@@ -673,13 +677,13 @@ void CTransportModule::findTransferStops(CTransferStopArray &stops, int depth)
     if (j >= depth)
       continue;
 
-    if (!loadAttributes(node->n, maot))
+    if (!loadAttributes(node->obj, maot))
       continue;
 
     if (fillTransferStop(transferStop, maot))
     {
       transferStop.pos = node->pos;
-      transferStop.obj = node->n;
+      transferStop.obj = node->obj;
       transferStop.distance = distance;
 
       if (stops.getCount() >= depth)
@@ -730,20 +734,20 @@ int CTransportFindObjectQuery::addObject(int index, double distance, FLIB const*
 {
   for (int i = 0; i < stops.getCount(); i++)
   {
-    if (distance < stops[i].d)
+    if (distance < stops[i].distance)
       break;
   }
   if (i < MAX_TRANSPORT_STOPS)
   {
     OBSTOP stop;
-    stop.d = distance;
-    stop.nobj = index;
-    stop.vt = code2transportType(fl->clcod);
+    stop.distance = distance;
+    stop.obj = index;
+    stop.type = code2transportType(fl->clcod);
     while (stops.getCount() >= MAX_TRANSPORT_STOPS)
       stops.removeLast();
     stops.insert(i, stop);
     if (stops.getCount() >= MAX_TRANSPORT_STOPS)
-      updateThreshold(stops.getLast().d, deltaCommon, deltaPoints);
+      updateThreshold(stops.getLast().distance, deltaCommon, deltaPoints);
   }
 
   return stops.getCount();

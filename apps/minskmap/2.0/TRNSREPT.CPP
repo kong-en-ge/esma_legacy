@@ -18,10 +18,10 @@ void ATRTR(TEXT_PACK_MENUS *tp, CStopArray const &stops)
     fl = 0;
     for (ck = 0; ck < stops.getCount(); ck++)
     {
-      if (stops[ck].vt != k)
+      if (stops[ck].type != k)
         continue;
 
-      if (!loadAttributes(stops[ck].nobj, ma))
+      if (!loadAttributes(stops[ck].obj, ma))
         continue;
 
       mr[0] = 0;

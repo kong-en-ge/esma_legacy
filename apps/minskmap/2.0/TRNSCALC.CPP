@@ -23,10 +23,10 @@ bool findCommonRoutes(TRANSFER_STOP const & transferStop,
     for (int i = 0; i < nearestStops.getCount(); i++)
     {
       OBSTOP const &stop = nearestStops[i];
-      if (stop.vt != type)
+      if (stop.type != type)
         continue;
 
-      if (!fetchStopData(type, stop.nobj, stopTitle, stopRoutes, &stopPos))
+      if (!fetchStopData(type, stop.obj, stopTitle, stopRoutes, &stopPos))
         continue;
 
       if (composeCommonRoutes(type, stopRoutes, transerStopRoutes,

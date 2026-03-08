@@ -43,14 +43,14 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
     find_transport_stops_at_pos(viewContext, subwayStations[iv].pos, stops);
 
     for (int i = 0; i < stops.getCount(); i++)
-      if (stops[i].vt != 1) // subway2subway case already covered earlier
+      if (stops[i].type != 1) // subway2subway case already covered earlier
         transferStops.add(stops[i]);
 
     for (int iSrc = 0; iSrc < transferStops.getCount(); iSrc++)
     {
-      int type = transferStops[iSrc].vt;
+      int type = transferStops[iSrc].type;
 
-      if (!fetchStopData(type, transferStops[iSrc].nobj, routeDef.stages[2].stopTitle,
+      if (!fetchStopData(type, transferStops[iSrc].obj, routeDef.stages[2].stopTitle,
         srcRoutes, &srcStopPos))
         continue;
 
@@ -59,10 +59,10 @@ bool calcSubwayTransfer(CViewContext const& viewContext,
 
       for (int iDst = 0; iDst < targetStops.getCount(); iDst++)
       {
-        if (targetStops[iDst].vt != type)
+        if (targetStops[iDst].type != type)
           continue;
 
-        if (!fetchStopData(type, targetStops[iDst].nobj, routeDef.stages[3].stopTitle,
+        if (!fetchStopData(type, targetStops[iDst].obj, routeDef.stages[3].stopTitle,
           dstRoutes, &dstStopPos))
           continue;
 
